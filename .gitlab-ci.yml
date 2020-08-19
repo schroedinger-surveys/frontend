@@ -1,0 +1,10 @@
+stages:
+  - lint
+
+image: node:alpine
+
+lint-frontend:
+  stage: lint
+  script:
+    - npm install
+    - npm run lint
