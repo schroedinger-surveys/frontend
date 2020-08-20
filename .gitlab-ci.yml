@@ -1,10 +1,24 @@
+image: node:14.8.0-stretch
+
 stages:
-  - lint
+  - test
+  - deploy
 
-image: node:alpine
-
-lint-frontend:
-  stage: lint
+test-stage:
+  stage: test
   script:
     - npm install
     - npm run lint
+
+deploy-stage:
+  stage: deploy
+  script:
+    - apt-get update -qq
+    - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - ssh $USER_AND_HOST "cd $CI_PROJECT_NAME && git stash && git pull && docker-compose up -d --build"
+  only:
+    - master

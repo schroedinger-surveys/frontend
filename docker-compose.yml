@@ -1,0 +1,10 @@
+version: "3"
+services:
+  schroedinger-frontend:
+    build: ./frontend
+    container_name: schroedinger-frontend
+    restart: always
+    ports:
+      - 3011:80
+    volumes:
+      - schroedinger-frontend-node_modules:/app/node_modules
