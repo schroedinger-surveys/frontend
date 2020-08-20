@@ -3,5 +3,5 @@ node_modules
 .eslintrc.json
 .gitignore
 .gitlab-ci.yml
-gitlab-ci.yml
+.gitlab-ci.yml
 README.md
