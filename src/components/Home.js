@@ -11,15 +11,15 @@ const Home = () => {
     return (
         <Container style={{height: "100vh", width: "100%"}}>
             <Row>
-                <Col md={6}>Welcome to Schroedinger</Col>
-                <Col md={6}>
+                <Col md={8}>Welcome to Schroedinger</Col>
+                <Col md={4}>
                     {loginVisibility && (
                         <Login/>
                     )}
                     {!loginVisibility && (
                         <Register/>
                     )}
-                    <button onClick={() => setLoginVisibility(!loginVisibility)}>{loginVisibility ? "Register" : "Login"}</button>
+                    <a style={{cursor: "pointer"}} onClick={() => setLoginVisibility(!loginVisibility)}>{loginVisibility ? "Register" : "Login"}</a>
                 </Col>
 
             </Row>

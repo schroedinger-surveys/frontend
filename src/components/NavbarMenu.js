@@ -16,7 +16,7 @@ const NavbarMenu = () => {
     }
 
     return (
-        <Navbar expand="lg" style={{ boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)"}}>
+        <Navbar expand="lg" style={{ boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)", marginBottom: "100px"}}>
             <Navbar.Brand href="/" style={{color: "#065535", fontWeight: "bolder"}}>Schrödinger-Survey</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
