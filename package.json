@@ -12,6 +12,7 @@
     "bootstrap": "^4.5.2",
     "chalk": "^4.1.0",
     "http-proxy-middleware": "^1.0.5",
+    "jsonwebtoken": "^8.5.1",
     "loglevel": "^1.6.8",
     "loglevel-plugin-prefix": "^0.8.4",
     "react": "^16.13.1",

@@ -1,10 +1,12 @@
 import React, {useState} from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import log from "../log/Logger";
-import Message from "./Message";
 import axios from "axios";
 import {withRouter} from 'react-router-dom';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+
+import log from "../log/Logger";
+import Message from "./Message";
+import storageManager from "../storage/LocalStorageManager";
 
 const Login = (props) => {
     const [values, setValues] = useState({
@@ -37,7 +39,7 @@ const Login = (props) => {
             if(response.status === 200){
                 const userToken = response.data.jwt;
                 if(rememberUser){
-                    // TODO localStorageManager to persist the jwt
+                    storageManager.saveJWTToken(userToken);
                 }
                 try{
                     history.push("/dashboard");
