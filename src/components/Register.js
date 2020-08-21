@@ -12,10 +12,9 @@ const Register = (props) => {
         email: "",
         password: ""
     });
-    const [showSuccess, setShowSuccess] = useState(false);
-    const [successMessage, setSuccessMessage] = useState("");
-    const [showError, setShowError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [showMessage, setShowMessage] = useState(false);
+    const [messageText, setMessageText] = useState("");
+    const [messageType, setMessageType] = useState("");
     const {username, email, password} = values;
     const {single} = props;
 
@@ -35,22 +34,23 @@ const Register = (props) => {
             }
         }).then((response) => {
             if(response.status === 201){
-                setShowSuccess(true);
-                setSuccessMessage("Your account was created, you can login now.");
+                setShowMessage(true);
+                setMessageText("Your account was created, you can login now.");
+                setMessageType("success");
             }
             log.debug("registered new user", response.status);
         }).catch((error) => {
             if(error.response.status === 409){
-                setShowError(true);
-                setErrorMessage(error.response.statusText);
+                setShowMessage(true);
+                setMessageText(error.response.statusText);
+                setMessageType("danger");
             }
             log.debug("user could not be registered", error.response.status, error.response);
         })
     }
 
     const handleUserInput = (valueName) => (event) => {
-        setShowError(false);
-        setShowSuccess(false);
+        setShowMessage(false);
         setValues({...values, [valueName]: event.target.value})
     }
 
@@ -76,11 +76,8 @@ const Register = (props) => {
                     Register
                 </Button>
             </Form>
-            {showSuccess && (
-                <Message message={successMessage} type={"success"}/>
-            )}
-            {showError && (
-                <Message message={errorMessage} type={"danger"}/>
+            {showMessage && (
+                <Message message={messageText} type={messageType}/>
             )}
         </div>
 
