@@ -14,10 +14,10 @@ const Home = () => {
                 <Col md={8}>Welcome to Schroedinger</Col>
                 <Col md={4}>
                     {loginVisibility && (
-                        <Login/>
+                        <Login single={false}/>
                     )}
                     {!loginVisibility && (
-                        <Register/>
+                        <Register single={false}/>
                     )}
                     <a style={{cursor: "pointer"}} onClick={() => setLoginVisibility(!loginVisibility)}>{loginVisibility ? "Register" : "Login"}</a>
                 </Col>

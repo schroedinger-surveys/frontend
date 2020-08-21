@@ -66,6 +66,7 @@
         "react/no-unused-prop-types": "error",
         "react/no-did-update-set-state": "error",
         "react/no-unknown-property": "error",
-        "object-shorthand": [2, "always"]
+        "object-shorthand": [2, "always"],
+        "react/prop-types": "off"
     }
 }

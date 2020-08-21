@@ -17,8 +17,8 @@ function App() {
           <NavbarMenu/>
           <Switch>
               <Route exact path="/" component={Home}/>
-              <Route path="/register" component={Register}/>
-              <Route path="/login" component={Login}/>
+              <Route path="/register"><Register single={true}/></Route>
+              <Route path="/login"><Login single={true}/></Route>
               <Route path="/dashboard" component={Dashboard}/>
               <Route exact path="/survey/create" component={CreateSurvey}/>
               <Route exact path="/survey/submission" component={SubmitSurvey}/>

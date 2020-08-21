@@ -21,10 +21,10 @@ const NavbarMenu = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link><Link to="/" style={activePage("/")}>Home</Link></Nav.Link>
-                    <Nav.Link><Link to="/register" style={activePage("/register")}>Register</Link></Nav.Link>
-                    <Nav.Link><Link to="/login" style={activePage("/login")}>Login</Link></Nav.Link>
-                    <Nav.Link><Link to="/dashboard" style={activePage("/dashboard")}>Dashboard</Link></Nav.Link>
+                    <Nav.Link href="/" style={activePage("/")}>Home</Nav.Link>
+                    <Nav.Link href="/register" style={activePage("/register")}>Register</Nav.Link>
+                    <Nav.Link href="/login" style={activePage("/login")}>Login</Nav.Link>
+                    <Nav.Link href="/dashboard" style={activePage("/dashboard")}>Dashboard</Nav.Link>
                     <Nav.Link><Link to="/survey/create" style={activePage("/survey/create")}>CreateSurvey</Link></Nav.Link>
                     <Nav.Link><Link to="/survey/submission" style={activePage("/survey/submission")}>SubmitSurvey</Link></Nav.Link>
                     <Nav.Link><Link to="/survey/search" style={activePage("/survey/search")}>Search</Link></Nav.Link>
