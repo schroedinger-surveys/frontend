@@ -9,15 +9,15 @@ const NavbarMenu = () => {
 
     const activePage = (path) => {
         if (location.pathname === path) {
-            return {color: "#305496", fontWeight: "bolder"};
+            return {color: "#f5c050", fontWeight: "bolder"};
         } else {
             return {color: "grey"};
         }
     }
 
     return (
-        <Navbar expand="lg">
-            <Navbar.Brand href="/" style={{color: "#2C45A8", fontWeight: "bolder"}}>Schrödinger-Survey</Navbar.Brand>
+        <Navbar expand="lg" style={{ boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)"}}>
+            <Navbar.Brand href="/" style={{color: "#065535", fontWeight: "bolder"}}>Schrödinger-Survey</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
