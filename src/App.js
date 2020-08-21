@@ -1,4 +1,5 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
 import Home from "./components/Home";
@@ -6,14 +7,14 @@ import Dashboard from "./components/Dashboard";
 import CreateSurvey from "./components/CreateSurvey";
 import SubmitSurvey from "./components/SubmitSurvey";
 import Search from "./components/Search";
-import Navbar from "./components/Navbar";
+import NavbarMenu from "./components/NavbarMenu";
 import Register from "./components/Register";
 import Login from "./components/Login";
 
 function App() {
   return (
       <Router>
-          <Navbar/>
+          <NavbarMenu/>
           <Switch>
               <Route exact path="/" component={Home}/>
               <Route path="/register" component={Register}/>
