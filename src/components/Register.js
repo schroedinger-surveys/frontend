@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import axios from "axios";
+
 import log from "../log/Logger";
 
 const Register = (props) => {
@@ -15,19 +17,35 @@ const Register = (props) => {
     const registerNewUser = (event) => {
         event.preventDefault();
         log.debug("Someone wants to register a user account");
-
+        axios({
+            method: "POST",
+            url: "/api/v1/user",
+            headers: {
+                "content-type": "application/json"
+            },
+            data: {
+                username,
+                email,
+                password
+            }
+        }).then((response) => {
+            log.debug("registered new user", response.status);
+        }).catch((error) => {
+            log.debug("user could not be registerd", error.response.status);
+        })
     }
 
     const handleUserInput = (valueName) => (event) => {
         setValues({...values, [valueName]: event.target.value})
     }
 
-    return(
+    return (
         <Form style={{width: single ? "30%" : "100%"}}>
             <h3>Register a new user account</h3>
             <Form.Group controlId="username">
                 <Form.Label>Username*</Form.Label>
-                <Form.Control type="username" placeholder="Enter username" value={username} onChange={handleUserInput("username")}/>
+                <Form.Control type="username" placeholder="Enter username" value={username}
+                              onChange={handleUserInput("username")}/>
             </Form.Group>
             <Form.Group controlId="email">
                 <Form.Label>Email address*</Form.Label>
@@ -35,7 +53,8 @@ const Register = (props) => {
             </Form.Group>
             <Form.Group controlId="password">
                 <Form.Label>Password*</Form.Label>
-                <Form.Control type="password" placeholder="Password" value={password} onChange={handleUserInput("password")}/>
+                <Form.Control type="password" placeholder="Password" value={password}
+                              onChange={handleUserInput("password")}/>
             </Form.Group>
             <Button style={{width: "100%"}} variant="success" type="submit" onClick={registerNewUser}>
                 Register

@@ -19,7 +19,7 @@ const Home = () => {
                     {!loginVisibility && (
                         <Register single={false}/>
                     )}
-                    <a style={{cursor: "pointer"}} onClick={() => setLoginVisibility(!loginVisibility)}>{loginVisibility ? "Register" : "Login"}</a>
+                    <button style={{cursor: "pointer"}} onClick={() => setLoginVisibility(!loginVisibility)}>{loginVisibility ? "Register" : "Login"}</button>
                 </Col>
 
             </Row>

@@ -1,5 +1,5 @@
 import React from "react";
-import {Link, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 
@@ -25,9 +25,9 @@ const NavbarMenu = () => {
                     <Nav.Link href="/register" style={activePage("/register")}>Register</Nav.Link>
                     <Nav.Link href="/login" style={activePage("/login")}>Login</Nav.Link>
                     <Nav.Link href="/dashboard" style={activePage("/dashboard")}>Dashboard</Nav.Link>
-                    <Nav.Link><Link to="/survey/create" style={activePage("/survey/create")}>CreateSurvey</Link></Nav.Link>
-                    <Nav.Link><Link to="/survey/submission" style={activePage("/survey/submission")}>SubmitSurvey</Link></Nav.Link>
-                    <Nav.Link><Link to="/survey/search" style={activePage("/survey/search")}>Search</Link></Nav.Link>
+                    <Nav.Link href="/survey/create" style={activePage("/survey/create")}>CreateSurvey</Nav.Link>
+                    <Nav.Link href="/survey/submission" style={activePage("/survey/submission")}>SubmitSurvey</Nav.Link>
+                    <Nav.Link href="/survey/search" style={activePage("/survey/search")}>Search</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
