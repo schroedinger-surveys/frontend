@@ -77,10 +77,10 @@ const Register = (props) => {
                 </Button>
             </Form>
             {showSuccess && (
-                <Message message={successMessage}/>
+                <Message message={successMessage} type={"success"}/>
             )}
             {showError && (
-                <Message message={errorMessage}/>
+                <Message message={errorMessage} type={"danger"}/>
             )}
         </div>
 

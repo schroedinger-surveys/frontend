@@ -1,10 +1,11 @@
 import React from "react";
+import Alert from "react-bootstrap/Alert";
 
 const Message = (props) => {
-    const {message} = props;
+    const {message, type} = props;
 
     return (
-        <p>{message}</p>
+        <Alert variant={type}>{message}</Alert>
     )
 }
 
