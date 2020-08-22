@@ -39,7 +39,9 @@ const Login = (props) => {
             if(response.status === 200){
                 const userToken = response.data.jwt;
                 if(rememberUser){
-                    storageManager.saveJWTToken(userToken);
+                    storageManager.saveJWTTokenLocal(userToken);
+                } else {
+                    storageManager.saveJWTTokenSession(userToken);
                 }
                 try{
                     history.push("/dashboard");

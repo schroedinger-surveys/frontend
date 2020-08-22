@@ -13,7 +13,7 @@ import Login from "./components/Login";
 
 function App() {
   return (
-      <Router>
+      <Router basename="ui">
           <NavbarMenu/>
           <Switch>
               <Route exact path="/" component={Home}/>
