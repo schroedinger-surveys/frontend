@@ -8,21 +8,42 @@ import log from "../log/Logger";
 import Message from "./Message";
 import storageManager from "../storage/LocalStorageManager";
 
+/**
+ * Login provides functionalities for a user to log in to the application
+ * @param props:
+ * (prop) single - if component is used as parent or child component - true || false
+ * (prop) history - together with the HOC withRouter from React Router allows changes to current url path
+ * @returns {JSX.Element} Form and Message Component
+ * @constructor
+ */
 const Login = (props) => {
+    const {single, history} = props;
     const [values, setValues] = useState({
         username: "",
         password: ""
     });
+    const {username, password} = values;
+
+    /**
+     * Used as props for the child Component Message
+     * showMessage: state of visibility of component Message
+     * messageText: string containing the message to be displayed
+     * messageType: "danger" || "success" - based off of bootstrap colors
+     */
     const [showMessage, setShowMessage] = useState(false);
     const [messageText, setMessageText] = useState("");
     const [messageType, setMessageType] = useState("");
-    const {username, password} = values;
-    const {single, history} = props;
 
+    /**
+     * Provides logic to log in user meaning
+     * user credentials are sent to backend api
+     * valid credentials get a request containing the jwt token, that is then being stored via storageManager
+     * invalid credentials trigger the Message Component, show error message
+     * @param event - click
+     */
     const login = (event) => {
         event.preventDefault();
-        const rememberUser = document.getElementById("rememberMe").checked;
-        log.debug("user wants to login", username, password, rememberUser);
+
         axios({
             method: "POST",
             url: "/api/v1/user/login",
@@ -37,22 +58,27 @@ const Login = (props) => {
             log.debug("User logged into his account");
             log.debug("Backend data response", response.data);
             if(response.status === 200){
-                const userToken = response.data.jwt;
+                const userToken = response.data.jwt; // The jwt token belonging to the user
+                const rememberUser = document.getElementById("rememberMe").checked; // Based on this the jwt token will be saved to local or session storage
                 if(rememberUser){
                     storageManager.saveJWTTokenLocal(userToken);
                 } else {
                     storageManager.saveJWTTokenSession(userToken);
                 }
-                try{
+
+                try{ // Try to redirect to dashboard after successful login
                     history.push("/dashboard");
                 } catch (e) {
                     log.debug("Redirection from Home/Login to users Dashboard failed", e.stack);
+                    setMessageText("Sorry, that did not work. Please try again.");
+                    setShowMessage(true);
+                    setMessageType("danger")
                 }
             }
         }).catch((error) => {
-            if(error.response.status === 404 || 403){
+            if(error.response.status === 404 || error.response.status === 403){
                 setMessageText("Wrong credentials");
-            }else {
+            }else { // 500
                 setMessageText("Something went wrong. Please try again.")
             }
             setShowMessage(true);
@@ -61,6 +87,11 @@ const Login = (props) => {
         });
     }
 
+    /**
+     * Takes the changed values from the form and updates the state of the specific value
+     * @param valueName is the name of the state variable
+     * @returns {function(...[*]=)}
+     */
     const handleUserInput = (valueName) => (event) => {
         setShowMessage(false);
         setValues({...values, [valueName]: event.target.value})
@@ -68,7 +99,7 @@ const Login = (props) => {
 
     return (
         <div>
-            <Form style={{width: single ? "30%" : "100%"}}>
+            <Form style={{width: single ? "30%" : "100%"}}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
                 <h3>Login to your user account</h3>
                 <Form.Group controlId="username">
                     <Form.Label>Username*</Form.Label>
