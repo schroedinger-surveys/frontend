@@ -4,9 +4,9 @@ import {withRouter} from 'react-router-dom';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-import log from "../log/Logger";
-import Message from "./Message";
-import storageManager from "../storage/LocalStorageManager";
+import log from "../../log/Logger";
+import Message from "../utils/Message";
+import storageManager from "../../storage/LocalStorageManager";
 
 /**
  * Login provides functionalities for a user to log in to the application
@@ -69,7 +69,7 @@ const Login = (props) => {
                 try{ // Try to redirect to dashboard after successful login
                     history.push("/dashboard");
                 } catch (e) {
-                    log.debug("Redirection from Home/Login to users Dashboard failed", e.stack);
+                    log.debug("Redirection from home/Login to users dashboard failed", e.stack);
                     setMessageText("Sorry, that did not work. Please try again.");
                     setShowMessage(true);
                     setMessageType("danger")

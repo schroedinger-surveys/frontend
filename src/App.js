@@ -2,14 +2,14 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
-import Home from "./components/Home";
-import Dashboard from "./components/Dashboard";
-import CreateSurvey from "./components/CreateSurvey";
-import SubmitSurvey from "./components/SubmitSurvey";
-import Search from "./components/Search";
-import NavbarMenu from "./components/NavbarMenu";
-import Register from "./components/Register";
-import Login from "./components/Login";
+import Home from "./components/home/Home";
+import Dashboard from "./components/dashboard/Dashboard";
+import CreateSurvey from "./components/survey/CreateSurvey";
+import SubmitSurvey from "./components/survey/SubmitSurvey";
+import Search from "./components/Search/Search";
+import NavbarMenu from "./components/menu/NavbarMenu";
+import Register from "./components/home/Register";
+import Login from "./components/home/Login";
 
 function App() {
   return (
