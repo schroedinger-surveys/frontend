@@ -16,7 +16,7 @@ const UserPrompt = (props) => {
     }
 
     return (
-        <div>
+        <div style={{width: "100%", padding: "5px", border: "1px solid lightgrey", borderRadius: "8px"}}>
             {size === "small" && (
                 smallPrompt()
             )}

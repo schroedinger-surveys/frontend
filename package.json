@@ -2,7 +2,7 @@
   "name": "schroedinger-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://schroedinger-survey.de/ui",
+  "homepage": "https://schroedinger-survey.de",
   "proxy": "https://schroedinger-survey.de",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",

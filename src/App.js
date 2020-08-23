@@ -17,7 +17,7 @@ import Store from "./redux/store/Store";
 function App() {
     return (
         <Provider store={Store}>
-            <Router basename="ui">
+            <Router>
                 <NavbarMenu/>
                 <Switch>
                     <Route exact path="/" component={Home}/>
