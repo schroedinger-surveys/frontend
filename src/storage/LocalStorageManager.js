@@ -33,16 +33,34 @@ class LocalStorageManager {
      * scenario: http request demand an Authorization header containing the jwt token
      * @returns {string} as in the jwt token as a string
      */
-    getJWTToken(){
+    getJWTToken() {
         const tokenLocal = localStorage.getItem(this.JWT_STORAGE_KEY);
         const tokenSession = sessionStorage.getItem(this.JWT_STORAGE_KEY);
-        if(tokenLocal !== null && this.validateToken(tokenLocal)){
+        if (tokenLocal !== null && this.validateToken(tokenLocal)) {
             return JSON.parse(tokenLocal);
-        } else if (tokenSession !== null && this.validateToken(tokenSession)){
+        } else if (tokenSession !== null && this.validateToken(tokenSession)) {
             return JSON.parse(tokenSession);
-        } else {
-            return "Invalid";
         }
+    }
+
+    /**
+     * Get the user data from the jwt body
+     * like id and username
+     * @returns {any}
+     */
+    getUserData() {
+        const tokenLocal = localStorage.getItem(this.JWT_STORAGE_KEY);
+        const tokenSession = sessionStorage.getItem(this.JWT_STORAGE_KEY);
+        let token;
+        if (tokenLocal !== null) {
+            token = tokenLocal;
+        } else if (tokenSession !== null) {
+            token = tokenSession;
+        }
+        const tokenParts = token.split(".");
+        const tokenBody = tokenParts[1];
+        const decodedTokenBody = atob(tokenBody);
+        return JSON.parse(decodedTokenBody)
     }
 
     /**
@@ -52,13 +70,13 @@ class LocalStorageManager {
      * if yes it redirects to user dashboard instead of rendering home
      * @returns {boolean} token was found - true || false
      */
-    searchForJWTToken(){
+    searchForJWTToken() {
         const tokenLocal = localStorage.getItem(this.JWT_STORAGE_KEY);
         const tokenSession = sessionStorage.getItem(this.JWT_STORAGE_KEY);
         let valid = false;
-        if(tokenLocal !== null){
+        if (tokenLocal !== null) {
             valid = this.validateToken(tokenLocal);
-        } else if (tokenSession !== null){
+        } else if (tokenSession !== null) {
             valid = this.validateToken(tokenSession);
         }
         return valid;
@@ -69,7 +87,7 @@ class LocalStorageManager {
      * @param token as in jwt token - as a string
      * @returns {boolean} token is valid (expiration date is bigger than current date) - true || false
      */
-    validateToken(token){
+    validateToken(token) {
         const tokenParts = token.split(".");
         const tokenBody = tokenParts[1];
         const decodedTokenBody = atob(tokenBody);
