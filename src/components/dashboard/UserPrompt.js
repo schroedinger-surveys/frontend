@@ -1,8 +1,29 @@
 import React from "react";
 
-const UserPrompt = () => {
-    return(
-        <div>Prompt the user to create a first survey if no surveys exist</div>
+const UserPrompt = (props) => {
+    const {size} = props;
+
+    const smallPrompt = () => {
+        return (
+            <h1>SMALL prompt</h1>
+        )
+    }
+
+    const largePrompt = () => {
+        return (
+            <h1>LARGE prompt</h1>
+        )
+    }
+
+    return (
+        <div>
+            {size === "small" && (
+                smallPrompt()
+            )}
+            {size === "large" && (
+                largePrompt()
+            )}
+        </div>
     )
 }
 

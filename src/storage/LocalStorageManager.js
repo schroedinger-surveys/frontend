@@ -29,6 +29,23 @@ class LocalStorageManager {
     }
 
     /**
+     * Returns the jwt token, either from local or session storage
+     * scenario: http request demand an Authorization header containing the jwt token
+     * @returns {string} as in the jwt token as a string
+     */
+    getJWTToken(){
+        const tokenLocal = localStorage.getItem(this.JWT_STORAGE_KEY);
+        const tokenSession = sessionStorage.getItem(this.JWT_STORAGE_KEY);
+        if(tokenLocal !== null && this.validateToken(tokenLocal)){
+            return JSON.parse(tokenLocal);
+        } else if (tokenSession !== null && this.validateToken(tokenSession)){
+            return JSON.parse(tokenSession);
+        } else {
+            return "Invalid";
+        }
+    }
+
+    /**
      * Searches for JWT token in Local and Session Storage
      * if found validate it with func validateToken
      * scenario: App renders, then checks if token exists,
@@ -49,7 +66,7 @@ class LocalStorageManager {
 
     /**
      * Validates a given token based on the property "exp" that is saved in the body of the jwt token
-     * @param token as in jwt token
+     * @param token as in jwt token - as a string
      * @returns {boolean} token is valid (expiration date is bigger than current date) - true || false
      */
     validateToken(token){
