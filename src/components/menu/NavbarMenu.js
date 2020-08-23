@@ -2,7 +2,7 @@ import React from "react";
 import {useLocation} from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import storageManager from "../storage/LocalStorageManager";
+import storageManager from "../../storage/LocalStorageManager";
 
 /**
  * The Navbar that will be displayed at every page
@@ -39,7 +39,7 @@ const NavbarMenu = () => {
 
     /**
      * Returns the version of the Nav meant for logged OUT users
-     * @returns {JSX.Element} Nav with Nav.Links to Home, Register, Login and Search Component
+     * @returns {JSX.Element} Nav with Nav.Links to home, Register, Login and Search Component
      */
     const loggedOut = () => {
         return (
@@ -54,17 +54,15 @@ const NavbarMenu = () => {
 
     /**
      * Returns the version of the Nav meant for logged IN users
-     * @returns {JSX.Element} Nav with Nav.Links to Dashboard, CreateSurvey, SubmitSurvey, Search and Home Component
+     * @returns {JSX.Element} Nav with Nav.Links to dashboard, CreateSurvey, SubmitSurvey, Search and home Component
      */
     const loggedIn = () => {
         return (
             <Nav className="mr-auto">
                 <Nav.Link href="/dashboard" style={activePage("/dashboard")}>Dashboard</Nav.Link>
                 <Nav.Link href="/survey/create" style={activePage("/survey/create")}>CreateSurvey</Nav.Link>
-                <Nav.Link href="/survey/submission"
-                          style={activePage("/survey/submission")}>SubmitSurvey</Nav.Link>
                 <Nav.Link href="/survey/search" style={activePage("/survey/search")}>Search</Nav.Link>
-                <Nav.Link href="/" style={activePage("/")} onClick={logoutUser}>Logout</Nav.Link> {/** If clicked, the logoutUser function is called and the nav-link redirects to Home **/}
+                <Nav.Link href="/" style={activePage("/")} onClick={logoutUser}>Logout</Nav.Link> {/** If clicked, the logoutUser function is called and the nav-link redirects to home **/}
             </Nav>
         )
     }

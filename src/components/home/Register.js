@@ -3,8 +3,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 
-import log from "../log/Logger";
-import Message from "./Message";
+import log from "../../log/Logger";
+import Message from "../utils/Message";
 
 /**
  * Register provides functionalities for a user to register a new user account

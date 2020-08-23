@@ -35,7 +35,6 @@
         "no-unsafe-negation": "error",
         "array-callback-return": "error",
         "block-scoped-var": "error",
-        "consistent-return": "error",
         "default-case": "error",
         "dot-notation": "error",
         "eqeqeq": "error",
