@@ -12,7 +12,7 @@ const Profile = () => {
 
     return(
         <Container>
-            <Row style={{border: "1px solid lightgrey", padding: "5px", borderRadius: "8px"}}>
+            <Row style={{border: "1px solid lightgrey", padding: "5px", borderRadius: "8px 8px 0 0"}}>
                 <Col xs={3}>
                     <RandomIcon/>
                 </Col>

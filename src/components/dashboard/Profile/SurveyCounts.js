@@ -8,23 +8,11 @@ const SurveyCounts = () => {
     const counts = useSelector(state => state.SurveyCountReducer)
 
     return(
-        <Row>
-            <Col>
-                <Row>surveys overall:</Row>
-                <Row>{counts.overallSurveys}</Row>
-            </Col>
-            <Col>
-                <Row>active surveys:</Row>
-                <Row>0</Row>
-            </Col>
-            <Col>
-                <Row>pending surveys:</Row>
-                <Row>0</Row>
-            </Col>
-            <Col>
-                <Row>closed surveys:</Row>
-                <Row>0</Row>
-            </Col>
+        <Row style={{border: "1px solid lightgrey", padding: "5px", borderRadius: "0 0 8px 8px"}}>
+            <Col style={{textAlign: "center"}}>overall:{counts.overallSurveys}</Col>
+            <Col style={{textAlign: "center"}}>active: 0</Col>
+            <Col style={{textAlign: "center"}}>pending 0</Col>
+            <Col style={{textAlign: "center"}}>closed: 0</Col>
         </Row>
     )
 }

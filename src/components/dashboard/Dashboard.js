@@ -26,7 +26,6 @@ const Dashboard = () => {
         } catch (e) {
             log.error(e);
         }
-
     }
 
     useEffect(() => {
