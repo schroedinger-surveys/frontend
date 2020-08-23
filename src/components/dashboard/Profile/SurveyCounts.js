@@ -24,3 +24,5 @@ const SurveyCounts = () => {
         </Row>
     )
 }
+
+export default SurveyCounts;

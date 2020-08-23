@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import storageManager from "../../../storage/LocalStorageManager";
 import RandomIcon from "./RandomIcon";
+import SurveyCounts from "./SurveyCounts";
 
 const Profile = () => {
     const userData = storageManager.getUserData();
@@ -19,7 +20,7 @@ const Profile = () => {
                     <h2 style={{lineHeight: "70px"}}>Welcome back, {username}!</h2>
                 </Col>
             </Row>
-
+            <SurveyCounts/>
         </Container>
     )
 }
