@@ -1,30 +1,29 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import log from "../../../log/Logger";
-import store from "../../../redux/store/Store";
+import {useSelector} from "react-redux";
 
 const SurveyCounts = () => {
-    const {overallSurveys, activeSurveys, pendingSurveys, closedSurveys} = store.getState().surveyCount;
-    log.debug(store.getState());
+    const counts = useSelector(state => state.SurveyCountReducer)
+
     return(
         <Row>
             <Col>
                 <Row>surveys overall:</Row>
-                <Row>{overallSurveys}</Row>
+                <Row>{counts.overallSurveys}</Row>
             </Col>
             <Col>
                 <Row>active surveys:</Row>
-                <Row>{activeSurveys}</Row>
+                <Row>0</Row>
             </Col>
             <Col>
                 <Row>pending surveys:</Row>
-                <Row>{pendingSurveys}</Row>
+                <Row>0</Row>
             </Col>
             <Col>
                 <Row>closed surveys:</Row>
-                <Row>{closedSurveys}</Row>
+                <Row>0</Row>
             </Col>
         </Row>
     )
