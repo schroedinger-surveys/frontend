@@ -1,7 +1,6 @@
 import axios from "axios";
 
 import storageManager from "../../storage/LocalStorageManager";
-import log from "../../log/Logger";
 
 const privateSurveyCount = async () => {
     const jwt = storageManager.getJWTToken();
@@ -12,7 +11,6 @@ const privateSurveyCount = async () => {
             "Authorization": jwt
         }
     });
-    log.debug("Count response for private surveys:", response.data);
     return response.data[0].count;
 }
 
@@ -25,7 +23,6 @@ const publicSurveyCount = async () => {
             "Authorization": jwt
         }
     });
-    log.debug("Count response for public surveys:", response.data);
     return response.data[0].count;
 }
 
