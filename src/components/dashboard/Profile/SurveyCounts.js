@@ -2,25 +2,17 @@ import React from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
+import {useSelector} from "react-redux";
+
 const SurveyCounts = () => {
+    const counts = useSelector(state => state.SurveyCountReducer)
+
     return(
-        <Row>
-            <Col>
-                <Row>surveys overall:</Row>
-                <Row>12</Row>
-            </Col>
-            <Col>
-                <Row>active surveys:</Row>
-                <Row>8</Row>
-            </Col>
-            <Col>
-                <Row>pending surveys:</Row>
-                <Row>3</Row>
-            </Col>
-            <Col>
-                <Row>closed surveys:</Row>
-                <Row>1</Row>
-            </Col>
+        <Row style={{border: "1px solid lightgrey", padding: "5px", borderRadius: "0 0 8px 8px", marginBottom: "10px"}}>
+            <Col style={{textAlign: "center"}}>overall: {counts.overallSurveys}</Col>
+            <Col style={{textAlign: "center"}}>active: 0</Col>
+            <Col style={{textAlign: "center"}}>pending: 0</Col>
+            <Col style={{textAlign: "center"}}>closed: 0</Col>
         </Row>
     )
 }

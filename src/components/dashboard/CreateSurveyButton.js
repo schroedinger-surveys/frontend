@@ -1,8 +1,15 @@
 import React from "react";
+import Button from "react-bootstrap/Button";
+import { useHistory } from "react-router-dom";
 
 const CreateSurveyButton = () => {
+    const history = useHistory();
+
     return(
-        <div>This button will lead you to page to create new survey</div>
+        <div style={{width: "100%", border: "1px solid lightgrey", padding: "5px", borderRadius: "8px", textAlign: "center", marginTop: "10px"}}>
+            <h3>Create A New Survey:</h3>
+            <Button variant="success" onClick={() => history.push("/survey/create")}>New Survey</Button>
+        </div>
     )
 }
 

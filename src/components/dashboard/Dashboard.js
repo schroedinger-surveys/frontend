@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { useDispatch, useSelector} from "react-redux";
 
 import log from "../../log/Logger";
 import Profile from "./Profile/Profile";
@@ -11,16 +12,17 @@ import UserPrompt from "./UserPrompt";
 import SideMenu from "../menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
 import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
+import {setOverallCount} from "../../redux/actions/SurveyCount";
 
 const Dashboard = () => {
-
-    const [overallSurveyCount, setOverallSurveyCount] = useState(0);
+    const counts = useSelector(state => state.SurveyCountReducer)
+    const dispatch = useDispatch();
 
     const getSurveyCounts = async () => {
         try {
             const privateSurveys = await privateSurveyCount();
             const publicSurveys = await publicSurveyCount();
-            setOverallSurveyCount(privateSurveys + publicSurveys);
+            dispatch(setOverallCount(privateSurveys + publicSurveys));
         } catch (e) {
             log.error(e);
         }
@@ -41,10 +43,10 @@ const Dashboard = () => {
                         <Profile/>
                     </Row>
                     <Row>
-                        {overallSurveyCount > 0 && (
+                        {counts.overallSurveys > 0 && (
                             <SurveyList/>
                         )}
-                        {overallSurveyCount === 0 && (
+                        {counts.overallSurveys === 0 && (
                             <UserPrompt size={"small"}/>
                         )}
                     </Row>
@@ -53,10 +55,10 @@ const Dashboard = () => {
                     </Row>
                 </Col>
                 <Col xs={6}>
-                    {overallSurveyCount > 0 && (
+                    {counts.overallSurveys > 0 && (
                         <SurveySpotlight/>
                     )}
-                    {overallSurveyCount === 0 && (
+                    {counts.overallSurveys === 0 && (
                         <UserPrompt size={"large"}/>
                     )}
                 </Col>
@@ -64,5 +66,7 @@ const Dashboard = () => {
         </Container>
     )
 }
+
+
 
 export default Dashboard;
