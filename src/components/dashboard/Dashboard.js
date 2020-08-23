@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import log from "../../log/Logger";
-import Profile from "./Profile";
+import Profile from "./Profile/Profile";
 import SurveyList from "./SurveyList";
 import SurveySpotlight from "./SurveySpotlight";
 import UserPrompt from "./UserPrompt";
@@ -13,6 +13,7 @@ import CreateSurveyButton from "./CreateSurveyButton";
 import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
 
 const Dashboard = () => {
+
     const [overallSurveyCount, setOverallSurveyCount] = useState(0);
 
     const getSurveyCounts = async () => {
