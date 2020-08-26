@@ -5,13 +5,15 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import log from "../../log/Logger";
+import Message from "../utils/Message";
+import SurveyValidator from "../utils/SurveyValidator";
 
 const CreateSurvey = () => {
     const [constrainedQuestions, setConstrainedQuestions] = useState([]);
     const [freestyleQuestions, setFreestyleQuestions] = useState([]);
     const [questionIndex, setQuestionIndex] = useState(0);
-    const [constrainedOptions, setConstrainedOptions] = useState([]);
-    const [optionsIndex, setOptionsIndex] = useState(0);
+    const [constrainedOptions, setConstrainedOptions] = useState([{number: 0}, {number: 1}]);
+    const [optionsIndex, setOptionsIndex] = useState(2);
     const [values, setValues] = useState({
         title: "",
         description: "",
@@ -23,12 +25,19 @@ const CreateSurvey = () => {
     });
     const {title, description, secured, start_date, end_date, constrainedQuestionText, freestyleQuestionText} = values;
 
-    const handleInputChange = (name) => (event) => {
-        setValues({...values, [name]: event.target.value})
-    }
+    /**
+     * Used as props for the child Component Message
+     * showMessage: state of visibility of component Message
+     * messageText: string containing the message to be displayed
+     * messageType: "danger" || "success" - based off of bootstrap colors
+     */
+    const [showMessage, setShowMessage] = useState(false);
+    const [messageText, setMessageText] = useState("");
+    const [messageType, setMessageType] = useState("");
 
-    const createSurvey = (event) => {
-        event.preventDefault();
+    const handleInputChange = (name) => (event) => {
+        setShowMessage(false);
+        setValues({...values, [name]: event.target.value})
     }
 
     const constrainedQuestion = () => {
@@ -39,13 +48,17 @@ const CreateSurvey = () => {
                     <Form.Control type="text" placeholder="Enter question" value={constrainedQuestionText}
                                   onChange={handleInputChange("constrainedQuestionText")}/>
                 </Form.Group>
-                {constrainedOptions.map((option, i) => (
-                    <Form.Group key={i}>
-                        <Form.Label>Option {i + 1}</Form.Label>
-                        <Form.Control type="text" placeholder="Enter option" className={"allOptions"}/>
-                    </Form.Group>
-                ))}
-                <Button variant={"dark"} onClick={addConstrainedOption}>Add option</Button>
+                <Row>
+                    {constrainedOptions.map((option, i) => (
+                        <Col xs={4} key={i}>
+                            <Form.Group>
+                                <Form.Label>Option {i + 1}</Form.Label>
+                                <Form.Control type="text" placeholder="Enter option" className={"allOptions"}/>
+                            </Form.Group>
+                        </Col>
+                    ))}
+                </Row>
+                <Button variant={"light"} onClick={addConstrainedOption}>Add option</Button>
             </Form>
         )
     }
@@ -69,23 +82,32 @@ const CreateSurvey = () => {
             }
         }
 
-        const question = {question_text: constrainedQuestionText, position: questionIndex, options: optionValues};
-        const currentQuestions = constrainedQuestions;
-        currentQuestions.push(question);
-        setConstrainedQuestions(currentQuestions);
+        if (optionValues.length >= 2){
+            const question = {question_text: constrainedQuestionText, position: questionIndex, options: optionValues};
+            const currentQuestions = constrainedQuestions;
+            currentQuestions.push(question);
+            setConstrainedQuestions(currentQuestions);
 
-        setQuestionIndex(questionIndex + 1)
-        setOptionsIndex(0);
-        setConstrainedOptions([]);
+            setQuestionIndex(questionIndex + 1)
+            setOptionsIndex(2);
+            setConstrainedOptions([{number: 0}, {number: 1}]);
+        } else {
+            setShowMessage(true);
+            setMessageType("warning");
+            setMessageText("You must have at least TWO options!")
+
+        }
     }
 
     const freestyleQuestion = () => {
         return (
-            <Form.Group controlId="freestyleQuestionForm">
-                <Form.Label>Freestyle Question</Form.Label>
-                <Form.Control type="text" placeholder="Enter question" value={freestyleQuestionText}
-                              onChange={handleInputChange("freestyleQuestionText")}/>
-            </Form.Group>
+            <Form>
+                <Form.Group controlId="freestyleQuestionForm">
+                    <Form.Label>Freestyle Question</Form.Label>
+                    <Form.Control type="text" placeholder="Enter question" value={freestyleQuestionText}
+                                  onChange={handleInputChange("freestyleQuestionText")}/>
+                </Form.Group>
+            </Form>
         )
     }
 
@@ -101,7 +123,7 @@ const CreateSurvey = () => {
         return (
             <Form style={{width: "70%", margin: "0 auto"}}>
                 <Form.Group controlId="surveyTitle">
-                    <Form.Label>Title</Form.Label>
+                    <Form.Label>Title*</Form.Label>
                     <Form.Control type="text" placeholder="Enter title" value={title}
                                   onChange={handleInputChange("title")}/>
                     <Form.Text className="text-muted">
@@ -110,7 +132,7 @@ const CreateSurvey = () => {
                 </Form.Group>
 
                 <Form.Group controlId="surveyDescription">
-                    <Form.Label>Description</Form.Label>
+                    <Form.Label>Description*</Form.Label>
                     <Form.Control as="textarea" rows="3" placeholder="Description" value={description}
                                   onChange={handleInputChange("description")}/>
                     <Form.Text className="text-muted">
@@ -121,7 +143,7 @@ const CreateSurvey = () => {
                 <Row>
                     <Col>
                         <Form.Group controlId="surveyStartDate">
-                            <Form.Label>Start Date</Form.Label>
+                            <Form.Label>Start Date*</Form.Label>
                             <Form.Control type="date" value={start_date} onChange={handleInputChange("start_date")}/>
                             <Form.Text className="text-muted">
                                 The date your survey starts taking submissions.
@@ -130,7 +152,7 @@ const CreateSurvey = () => {
                     </Col>
                     <Col>
                         <Form.Group controlId="surveyEndDate">
-                            <Form.Label>End Date</Form.Label>
+                            <Form.Label>End Date*</Form.Label>
                             <Form.Control type="date" value={end_date} onChange={handleInputChange("end_date")}/>
                             <Form.Text className="text-muted">
                                 The date your survey closes for submissions.
@@ -143,21 +165,35 @@ const CreateSurvey = () => {
                     <Form.Check type="checkbox" label="Make Survey Public"/>
                 </Form.Group>
 
-                <Button variant="success" type="submit" onClick={createSurvey}>
+                <Button variant="success" type="submit" onClick={createNewSurvey}>
                     Create Survey
                 </Button>
             </Form>
         )
     }
 
-    const createNewSurvey = () => {
-        log.debug("title:", title);
-        log.debug("description:", description);
-        log.debug("start_date", start_date);
-        log.debug("end_date", end_date);
-        log.debug("secured:", secured);
-        log.debug("constrained_questions:", constrainedQuestions);
-        log.debug("freestyle_questions:", freestyleQuestions);
+    const createNewSurvey = (event) => {
+        event.preventDefault();
+        log.debug(constrainedQuestions.length, freestyleQuestions.length);
+        const validSurveyInput = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions);
+        log.debug(validSurveyInput);
+        if (validSurveyInput[0]){
+            log.debug("title:", title);
+            log.debug("description:", description);
+            log.debug("start_date", start_date);
+            log.debug("end_date", end_date);
+            log.debug("secured:", secured);
+            log.debug("constrained_questions:", constrainedQuestions);
+            log.debug("freestyle_questions:", freestyleQuestions);
+            setShowMessage(true);
+            setMessageType("success");
+            setMessageText("Survey is valid")
+        } else{
+            setShowMessage(true);
+            setMessageType("danger");
+            setMessageText(validSurveyInput[1]);
+        }
+
     }
 
     return (
@@ -167,15 +203,33 @@ const CreateSurvey = () => {
                     {basicDataFormInput()}
                 </Col>
                 <Col>
-                    {constrainedQuestion()}
-                    <Button variant="primary" onClick={addConstrainedQuestion}>Add Constrained Question</Button>
-                    <br/>
-                    <br/><br/>
-                    {freestyleQuestion()}
-                    <Button variant="warning" onClick={addFreestyleQuestion}>Add Freestyle Question</Button>
+                    {showMessage && (
+                        <Message message={messageText} type={messageType}/>
+                    )}
+                    <Row>
+                        <Col>
+                            {constrainedQuestion()}
+                            <Button variant="warning" onClick={addConstrainedQuestion}>Add Constrained Question</Button>
+                            {constrainedQuestions.map((question, i) => (
+                                <div key={i}>
+                                    <h4>{question.question_text}</h4>
+                                    {question.options.map((option, j) => (
+                                        <p key={j}>{option.answer}</p>
+                                    ))}
+                                </div>
+
+                            ))}
+                        </Col>
+                        <Col>
+                            {freestyleQuestion()}
+                            <Button variant="warning" onClick={addFreestyleQuestion}>Add Freestyle Question</Button>
+                            {freestyleQuestions.map((question, i) => (
+                                <div key={i}><h4>{question.question_text}</h4></div>
+                            ))}
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
-            <Button variant={"light"} onClick={createNewSurvey}>Create Survey</Button>
         </Container>
     )
 }
