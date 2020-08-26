@@ -7,19 +7,21 @@ import Container from "react-bootstrap/Container";
 import log from "../../log/Logger";
 
 const CreateSurvey = () => {
-    const [questions, setQuestions] = useState([]);
+    const [constrainedQuestions, setConstrainedQuestions] = useState([]);
+    const [freestyleQuestions, setFreestyleQuestions] = useState([]);
     const [questionIndex, setQuestionIndex] = useState(0);
+    const [constrainedOptions, setConstrainedOptions] = useState([]);
+    const [optionsIndex, setOptionsIndex] = useState(0);
     const [values, setValues] = useState({
         title: "",
         description: "",
-        start_date: Date.now(),
-        end_date: Date.now() + 800,
+        start_date: 0,
+        end_date: 0,
         secured: true,
         constrainedQuestionText: "",
-        freestyleQuestionText: "",
-        optionOne: ""
+        freestyleQuestionText: ""
     });
-    const {title, description, secured, start_date, end_date, constrainedQuestionText, freestyleQuestionText, optionOne} = values;
+    const {title, description, secured, start_date, end_date, constrainedQuestionText, freestyleQuestionText} = values;
 
     const handleInputChange = (name) => (event) => {
         setValues({...values, [name]: event.target.value})
@@ -32,35 +34,55 @@ const CreateSurvey = () => {
     const constrainedQuestion = () => {
         return (
             <Form>
-                <Form.Group controlId="surveyTitle">
-                    <Form.Label>Constrained Questions</Form.Label>
+                <Form.Group controlId="constrainedQuestionForm">
+                    <Form.Label>Constrained Question</Form.Label>
                     <Form.Control type="text" placeholder="Enter question" value={constrainedQuestionText}
                                   onChange={handleInputChange("constrainedQuestionText")}/>
                 </Form.Group>
-                <Form.Group controlId="surveyTitle">
-                    <Form.Label>Option 1</Form.Label>
-                    <Form.Control type="text" placeholder="Enter option 1" value={optionOne}
-                                  onChange={handleInputChange("optionOne")}/>
-                </Form.Group>
+                {constrainedOptions.map((option, i) => (
+                    <Form.Group key={i}>
+                        <Form.Label>Option {i + 1}</Form.Label>
+                        <Form.Control type="text" placeholder="Enter option" className={"allOptions"}/>
+                    </Form.Group>
+                ))}
+                <Button variant={"dark"} onClick={addConstrainedOption}>Add option</Button>
             </Form>
-
         )
     }
 
+    const addConstrainedOption = () => {
+        const currentOptions = constrainedOptions;
+        currentOptions.push({number: optionsIndex});
+        setConstrainedOptions(currentOptions);
+        setOptionsIndex(optionsIndex + 1)
+        log.debug(constrainedOptions);
+    }
+
     const addConstrainedQuestion = () => {
-        const question = {index: questionIndex, type: "constrained", question: constrainedQuestionText, options: [optionOne]};
-        log.debug("added question", question);
-        const currentQuestions = questions;
+        const options = document.getElementsByClassName("allOptions");
+        const optionValues = [];
+        let position = 0;
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value !== "") {
+                optionValues.push({answer: options[i].value, position});
+                position++;
+            }
+        }
+
+        const question = {question_text: constrainedQuestionText, position: questionIndex, options: optionValues};
+        const currentQuestions = constrainedQuestions;
         currentQuestions.push(question);
-        setQuestions(currentQuestions);
-        setQuestionIndex(questionIndex+1)
-        log.debug(questions);
+        setConstrainedQuestions(currentQuestions);
+
+        setQuestionIndex(questionIndex + 1)
+        setOptionsIndex(0);
+        setConstrainedOptions([]);
     }
 
     const freestyleQuestion = () => {
         return (
-            <Form.Group controlId="surveyTitle">
-                <Form.Label>Freestyle Questions</Form.Label>
+            <Form.Group controlId="freestyleQuestionForm">
+                <Form.Label>Freestyle Question</Form.Label>
                 <Form.Control type="text" placeholder="Enter question" value={freestyleQuestionText}
                               onChange={handleInputChange("freestyleQuestionText")}/>
             </Form.Group>
@@ -68,13 +90,11 @@ const CreateSurvey = () => {
     }
 
     const addFreestyleQuestion = () => {
-        const question = {index: questionIndex, type: "freestyle", question: freestyleQuestionText};
-        log.debug("added question", question);
-        const currentQuestions = questions;
+        const question = {question_text: freestyleQuestionText, position: questionIndex};
+        const currentQuestions = freestyleQuestions;
         currentQuestions.push(question);
-        setQuestions(currentQuestions);
-        setQuestionIndex(questionIndex+1)
-        log.debug(questions);
+        setFreestyleQuestions(currentQuestions);
+        setQuestionIndex(questionIndex + 1)
     }
 
     const basicDataFormInput = () => {
@@ -130,6 +150,16 @@ const CreateSurvey = () => {
         )
     }
 
+    const createNewSurvey = () => {
+        log.debug("title:", title);
+        log.debug("description:", description);
+        log.debug("start_date", start_date);
+        log.debug("end_date", end_date);
+        log.debug("secured:", secured);
+        log.debug("constrained_questions:", constrainedQuestions);
+        log.debug("freestyle_questions:", freestyleQuestions);
+    }
+
     return (
         <Container fluid>
             <Row>
@@ -139,14 +169,13 @@ const CreateSurvey = () => {
                 <Col>
                     {constrainedQuestion()}
                     <Button variant="primary" onClick={addConstrainedQuestion}>Add Constrained Question</Button>
-                    {constrainedQuestionText}
                     <br/>
                     <br/><br/>
                     {freestyleQuestion()}
                     <Button variant="warning" onClick={addFreestyleQuestion}>Add Freestyle Question</Button>
-                    {freestyleQuestionText}
                 </Col>
             </Row>
+            <Button variant={"light"} onClick={createNewSurvey}>Create Survey</Button>
         </Container>
     )
 }
