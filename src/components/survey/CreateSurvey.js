@@ -54,7 +54,7 @@ const CreateSurvey = () => {
                 </Form.Group>
                 <Row>
                     {constrainedOptions.map((option, i) => (
-                        <Col xs={4} key={i}>
+                        <Col xs={6} key={i}>
                             <Form.Group>
                                 <Form.Label>Option {i + 1}</Form.Label>
                                 <Form.Control type="text" placeholder="Enter option" className={"allOptions"}/>
