@@ -14,15 +14,26 @@ import CreateSurveyButton from "./CreateSurveyButton";
 import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
 import {setOverallCount} from "../../redux/actions/SurveyCount";
 
+/**
+ * User Dashboard containing multiple elements to give user an overview of his acocunt
+ * Child Components:
+ * SideMenu - Shows Page to navigate to
+ * Profile - greets the user, shows cute icon and displays the survey counts
+ * SurveyList - a list of the users surveys, click opens them in SurveySpotlight
+ * SurveySpotlight - Shows one Survey, its questions and all submitted answers
+ * CreateSurveyButton - Redirects to the CreateSurvey Component
+ * UserPrompt - in case user has no surveys yet it prompts him to create some
+ * @returns {JSX.Element}
+ */
 const Dashboard = () => {
-    const counts = useSelector(state => state.SurveyCountReducer)
+    const counts = useSelector(state => state.SurveyCountReducer) // Gets the count of the surveys from the redux store
     const dispatch = useDispatch();
 
     const getSurveyCounts = async () => {
         try {
             const privateSurveys = await privateSurveyCount();
             const publicSurveys = await publicSurveyCount();
-            dispatch(setOverallCount(privateSurveys + publicSurveys));
+            dispatch(setOverallCount(privateSurveys + publicSurveys)); // Sets the count of overall survey belonging to the user
         } catch (e) {
             log.error(e);
         }
@@ -30,7 +41,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         getSurveyCounts();
-    }, [])
+    }, []);
 
     return (
         <Container fluid>
@@ -66,7 +77,5 @@ const Dashboard = () => {
         </Container>
     )
 }
-
-
 
 export default Dashboard;

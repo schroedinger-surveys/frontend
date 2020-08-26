@@ -4,6 +4,16 @@ import Row from "react-bootstrap/Row";
 
 import {useSelector} from "react-redux";
 
+/**
+ * Displays the count of surveys, taken from Redux store
+ * Filtered by criteria:
+ * privat - secured = true
+ * public - secured = false
+ * active - star_date <= today && end_date >= today
+ * pending - star_date > today
+ * closed - end_date < today
+ * @returns {JSX.Element}
+ */
 const SurveyCounts = () => {
     const counts = useSelector(state => state.SurveyCountReducer)
 

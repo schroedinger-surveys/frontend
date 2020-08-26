@@ -110,7 +110,7 @@ const Login = (props) => {
                     <Form.Control type="password" placeholder="Password" value={password} onChange={handleUserInput("password")}/>
                 </Form.Group>
                 <Form.Group controlId="rememberMe">
-                    <Form.Check type="checkbox" label="Remember me" />
+                    <Form.Check type="checkbox" label="Remember me"/>
                 </Form.Group>
                 <Button style={{width: "100%"}} variant="success" type="submit" onClick={login}>
                     Login
