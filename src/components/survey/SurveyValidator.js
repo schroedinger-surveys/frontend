@@ -1,9 +1,5 @@
-import log from "../../log/Logger";
-
 const SurveyValidator = (title, description, start_date, end_date, constrainedQuestions, freestyleQuestions) => {
-    log.debug("length", constrainedQuestions.length + freestyleQuestions.length);
-    log.debug(DateValidation(start_date, end_date));
-    if (DateValidation(start_date, end_date)){
+    if (DateValidation(start_date, end_date)) {
         if (title === "" || description === "") {
             return [false, "Title and Description can not be empty"];
         } else if ((constrainedQuestions.length + freestyleQuestions.length) < 1) {
@@ -34,6 +30,4 @@ const DateValidation = (start_date, end_date) => {
 
     return ((startDay >= currentDay && startYear >= currentYear && startMonth >= currentMonth) || (startYear > currentYear)) &&
         ((startYear < endYear) || (startYear === endYear && startMonth < endMonth) || (startYear === endYear && startMonth === endMonth && startDay < endDay));
-
-
 }

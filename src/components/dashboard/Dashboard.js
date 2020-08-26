@@ -30,7 +30,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         getSurveyCounts();
-    })
+    }, []);
 
     return (
         <Container fluid>

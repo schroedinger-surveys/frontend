@@ -4,11 +4,15 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
+import axios from "axios";
 import log from "../../log/Logger";
 import Message from "../utils/Message";
-import SurveyValidator from "../utils/SurveyValidator";
+import SurveyValidator from "./SurveyValidator";
+import storageManager from "../../storage/LocalStorageManager";
+import TimeConverter from "../utils/TimeConverter";
 
 const CreateSurvey = () => {
+    const today = new Date();
     const [constrainedQuestions, setConstrainedQuestions] = useState([]);
     const [freestyleQuestions, setFreestyleQuestions] = useState([]);
     const [questionIndex, setQuestionIndex] = useState(0);
@@ -17,8 +21,8 @@ const CreateSurvey = () => {
     const [values, setValues] = useState({
         title: "",
         description: "",
-        start_date: 0,
-        end_date: 0,
+        start_date: TimeConverter(new Date()),
+        end_date: TimeConverter(new Date(today.getFullYear(), today.getMonth(), today.getDate() +7)),
         secured: true,
         constrainedQuestionText: "",
         freestyleQuestionText: ""
@@ -82,7 +86,7 @@ const CreateSurvey = () => {
             }
         }
 
-        if (optionValues.length >= 2){
+        if (optionValues.length >= 2) {
             const question = {question_text: constrainedQuestionText, position: questionIndex, options: optionValues};
             const currentQuestions = constrainedQuestions;
             currentQuestions.push(question);
@@ -172,28 +176,42 @@ const CreateSurvey = () => {
         )
     }
 
-    const createNewSurvey = (event) => {
+    const createNewSurvey = async (event) => {
         event.preventDefault();
-        log.debug(constrainedQuestions.length, freestyleQuestions.length);
-        const validSurveyInput = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions);
-        log.debug(validSurveyInput);
-        if (validSurveyInput[0]){
-            log.debug("title:", title);
-            log.debug("description:", description);
-            log.debug("start_date", start_date);
-            log.debug("end_date", end_date);
-            log.debug("secured:", secured);
-            log.debug("constrained_questions:", constrainedQuestions);
-            log.debug("freestyle_questions:", freestyleQuestions);
-            setShowMessage(true);
-            setMessageType("success");
-            setMessageText("Survey is valid")
-        } else{
+        const validationResponse = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions);
+        if (validationResponse[0]) {
+            const createSurveyResponse = await axios({
+                method: "POST",
+                url: "/api/v1/survey",
+                headers: {
+                    "content-type": "application/json",
+                    "Authorization": storageManager.getJWTToken()
+                },
+                data: {
+                    title,
+                    description,
+                    start_date,
+                    end_date,
+                    secured,
+                    constrained_questions: constrainedQuestions,
+                    freestyle_questions: freestyleQuestions
+                }
+            });
+            if (createSurveyResponse.status === 201){
+                setShowMessage(true);
+                setMessageType("success");
+                setMessageText("Survey was successfully created.")
+            } else {
+                setShowMessage(true);
+                setMessageType("warning");
+                setMessageText(`${createSurveyResponse.status} ${createSurveyResponse.statusText}`);
+            }
+
+        } else {
             setShowMessage(true);
             setMessageType("danger");
-            setMessageText(validSurveyInput[1]);
+            setMessageText(validationResponse[1]);
         }
-
     }
 
     return (
@@ -217,7 +235,6 @@ const CreateSurvey = () => {
                                         <p key={j}>{option.answer}</p>
                                     ))}
                                 </div>
-
                             ))}
                         </Col>
                         <Col>
