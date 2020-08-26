@@ -6,6 +6,13 @@ import storageManager from "../../../storage/LocalStorageManager";
 import RandomIcon from "./RandomIcon";
 import SurveyCounts from "./SurveyCounts";
 
+/**
+ * Component greets the User by name (data from jwt in storage)
+ * Shows random icon of cat
+ * shows count of surveys belonging to the user (filtered by criterias: public, private, active, pending, closed)
+ * Child components: RandomIcon and SurveyCount
+ * @returns {JSX.Element}
+ */
 const Profile = () => {
     const userData = storageManager.getUserData();
     const {username} = userData;

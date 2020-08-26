@@ -2,6 +2,10 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import { useHistory } from "react-router-dom";
 
+/**
+ * A Component that redirects to the CreateSurvey Page
+ * @returns {JSX.Element}
+ */
 const CreateSurveyButton = () => {
     const history = useHistory();
 

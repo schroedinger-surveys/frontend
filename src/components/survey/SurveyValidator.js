@@ -1,3 +1,17 @@
+/**
+ * Validates the user input from CreateSurvey
+ * checks if:
+ *  title and description are not empty
+ *  at least one question was supplied
+ *  the start and end_date are valid (start >= today && start < end)
+ * @param title
+ * @param description
+ * @param start_date
+ * @param end_date
+ * @param constrainedQuestions
+ * @param freestyleQuestions
+ * @returns {[boolean, string]} if input is valid, success/error message
+ */
 const SurveyValidator = (title, description, start_date, end_date, constrainedQuestions, freestyleQuestions) => {
     if (DateValidation(start_date, end_date)) {
         if (title === "" || description === "") {
@@ -13,6 +27,12 @@ const SurveyValidator = (title, description, start_date, end_date, constrainedQu
 }
 export default SurveyValidator;
 
+/**
+ * Checks if start and end_date are valid (start >= today && start < end)
+ * @param start_date
+ * @param end_date
+ * @returns {boolean|boolean}
+ */
 const DateValidation = (start_date, end_date) => {
     const currentDay = new Date().getDate();
     const currentMonth = new Date().getMonth();

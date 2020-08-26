@@ -1,8 +1,12 @@
 import axios from "axios";
 
 import storageManager from "../../storage/LocalStorageManager";
-import log from "../../log/Logger";
 
+/**
+ * Fetched the count of private (secured = true) surveys
+ * scenario: Dashboard displays the number of surveys belonging to the user
+ * @returns {Promise<*>}
+ */
 const privateSurveyCount = async () => {
     const jwt = storageManager.getJWTToken();
     const response = await axios({
@@ -15,6 +19,11 @@ const privateSurveyCount = async () => {
     return response.data.count;
 }
 
+/**
+ * Fetched the count of public (secured = false) surveys
+ * scenario: Dashboard displays the number of surveys belonging to the user
+ * @returns {Promise<*>}
+ */
 const publicSurveyCount = async () => {
     const jwt = storageManager.getJWTToken();
     const response = await axios({
