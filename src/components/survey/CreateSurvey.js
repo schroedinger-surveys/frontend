@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -12,12 +12,45 @@ import storageManager from "../../storage/LocalStorageManager";
 import TimeConverter from "../utils/TimeConverter";
 
 const CreateSurvey = () => {
-    const today = new Date();
+    const today = new Date(); // Used to set the default value of start_date and end_date
+    const minimumOptionsAmount = 2; // At least two options must be given per constrained question
+    /**
+     * A List of all constrained and freestyle questions,
+     * they are sent in separate arrays with the request to the api
+     * but need to be in the order of creation,
+     * the Index keeps track of the order as it is used to indicate the "position"
+     */
     const [constrainedQuestions, setConstrainedQuestions] = useState([]);
     const [freestyleQuestions, setFreestyleQuestions] = useState([]);
     const [questionIndex, setQuestionIndex] = useState(0);
-    const [constrainedOptions, setConstrainedOptions] = useState([{number: 0}, {number: 1}]);
-    const [optionsIndex, setOptionsIndex] = useState(2);
+
+    /**
+     * Each constrained question must have options
+     * they are temporarily saved in this array
+     * which is reset when a constrainedQuestion is added/created
+     * The object in this array a placeholders with no further meaning
+     */
+    const [constrainedOptions, setConstrainedOptions] = useState([]);
+    const [optionsIndex, setOptionsIndex] = useState(minimumOptionsAmount);
+
+    const fillDefaultOptionsArray = () => {
+        const defaultOptions = [];
+        for (let i = 0; i < minimumOptionsAmount; i++){
+            defaultOptions.push({index: i})
+        }
+        setConstrainedOptions(defaultOptions);
+    }
+
+    useEffect(() => {
+        fillDefaultOptionsArray();
+    }, []);
+
+    /**
+     * ALl the Values (besides questions) needed to create a Survey
+     * start_date: by default is the current day
+     * end_date: by default 7 days after the current day
+     * ...Text: used as placeholders for question Input field (reset to "" when question is added)
+     */
     const [values, setValues] = useState({
         title: "",
         description: "",
@@ -39,11 +72,23 @@ const CreateSurvey = () => {
     const [messageText, setMessageText] = useState("");
     const [messageType, setMessageType] = useState("");
 
+    /**
+     * Hide Message if it is visible when starting to change Input
+     * Set the variables based on Input field value
+     * @param name as is name of the variable/state (see above)
+     * @returns {function(...[*]=)}
+     */
     const handleInputChange = (name) => (event) => {
         setShowMessage(false);
         setValues({...values, [name]: event.target.value})
     }
 
+    /**
+     * Template for the ConstrainedQuestions Form
+     * contains the Input Group for the question_text
+     * and Input fields for the answer_options
+     * @returns {JSX.Element}
+     */
     const constrainedQuestion = () => {
         return (
             <Form>
@@ -67,42 +112,62 @@ const CreateSurvey = () => {
         )
     }
 
+    /**
+     * Adds another Input Field to the ConstrainedQuestion Form
+     * by adding an object to the constrainedOptions array
+     * and incrementing the optionsIndex
+     */
     const addConstrainedOption = () => {
         const currentOptions = constrainedOptions;
         currentOptions.push({number: optionsIndex});
         setConstrainedOptions(currentOptions);
         setOptionsIndex(optionsIndex + 1)
-        log.debug(constrainedOptions);
     }
 
+    /**
+     * Adds a question based on the ConstrainedQuestions Form to the array of constrainedQuestions
+     * If at least two options are given the question is added and a success message is shown
+     * otherwise a warning is displayed
+     */
     const addConstrainedQuestion = () => {
-        const options = document.getElementsByClassName("allOptions");
+        const options = document.getElementsByClassName("allOptions"); // Get all Option Elements from the ConstrainedQuestion Form
         const optionValues = [];
-        let position = 0;
+        let position = 0; // In case an Input Field was left empty the index representing the position of the Option is incremented separately
         for (let i = 0; i < options.length; i++) {
-            if (options[i].value !== "") {
+            if (options[i].value !== "") { // Check that Input Field was not left empty
                 optionValues.push({answer: options[i].value, position});
-                position++;
+                position++; // Increment position marker
             }
         }
 
-        if (optionValues.length >= 2) {
-            const question = {question_text: constrainedQuestionText, position: questionIndex, options: optionValues};
+        if (optionValues.length >= minimumOptionsAmount) { // Two Options must be supplied
+            const question = {question_text: constrainedQuestionText, position: questionIndex, options: optionValues}; // Build the Question according to API
             const currentQuestions = constrainedQuestions;
             currentQuestions.push(question);
             setConstrainedQuestions(currentQuestions);
 
-            setQuestionIndex(questionIndex + 1)
-            setOptionsIndex(2);
-            setConstrainedOptions([{number: 0}, {number: 1}]);
+            setQuestionIndex(questionIndex + 1); // Increment Index used to track creation order/position of all Questions (Freestyle and Constrained)
+            setOptionsIndex(minimumOptionsAmount); // Set Options Index back to 2, which is default
+            fillDefaultOptionsArray(); // Refill the optionsArray with default objects
+
+            /**
+             * Clear the Input fields for the question and the options
+             */
+            setValues({...values, constrainedQuestionText: ""});
+            for(let i = 0; i < minimumOptionsAmount; i ++){
+                options[i].value = "";
+            }
         } else {
             setShowMessage(true);
             setMessageType("warning");
             setMessageText("You must have at least TWO options!")
-
         }
     }
 
+    /**
+     * Form to create a freestyle question, that provides no sort of answer options
+     * @returns {JSX.Element}
+     */
     const freestyleQuestion = () => {
         return (
             <Form>
@@ -115,6 +180,10 @@ const CreateSurvey = () => {
         )
     }
 
+    /**
+     * Adds the Freestyle Question to the freestyleQuestions Array
+     * Increments the Index, that tracks the creation order of all questions (freestyle and constrained)
+     */
     const addFreestyleQuestion = () => {
         const question = {question_text: freestyleQuestionText, position: questionIndex};
         const currentQuestions = freestyleQuestions;
@@ -123,6 +192,11 @@ const CreateSurvey = () => {
         setQuestionIndex(questionIndex + 1)
     }
 
+    /**
+     * Left side of the page, to set the base information of the survey
+     * Input Groups for: title, description, star and end_date, secured status
+     * @returns {JSX.Element}
+     */
     const basicDataFormInput = () => {
         return (
             <Form style={{width: "70%", margin: "0 auto"}}>
@@ -178,8 +252,8 @@ const CreateSurvey = () => {
 
     const createNewSurvey = async (event) => {
         event.preventDefault();
-        const validationResponse = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions);
-        if (validationResponse[0]) {
+        const validationResponse = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions); // Validates Survey based on user input
+        if (validationResponse[0]) { // Indicates if Survey data is valid - true || false
             const createSurveyResponse = await axios({
                 method: "POST",
                 url: "/api/v1/survey",
@@ -206,11 +280,10 @@ const CreateSurvey = () => {
                 setMessageType("warning");
                 setMessageText(`${createSurveyResponse.status} ${createSurveyResponse.statusText}`);
             }
-
         } else {
             setShowMessage(true);
             setMessageType("danger");
-            setMessageText(validationResponse[1]);
+            setMessageText(validationResponse[1]); // The error message supplied by the SurveyValidator
         }
     }
 
