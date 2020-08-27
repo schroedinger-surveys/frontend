@@ -11,10 +11,17 @@ import SurveySpotlight from "./SurveySpotlight";
 import UserPrompt from "./UserPrompt";
 import SideMenu from "../menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
-import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
-import {setOverallCount, setPrivateCount, setPublicCount} from "../../redux/actions/SurveyCount";
+import {privateSurveyCount, publicSurveyCount, setAllSurveyCounts} from "../utils/CountFunctions";
+import {
+    setActiveCount, setClosedCount,
+    setOverallCount,
+    setPendingCount,
+    setPrivateCount,
+    setPublicCount
+} from "../../redux/actions/SurveyCount";
 import LoadingScreen from "../utils/LoadingScreen";
-import {getPrivateSurveys, getPublicSurveys} from "../../redux/actions/SurveyList";
+import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
+import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 
 /**
  * User Dashboard containing multiple elements to give user an overview of his acocunt
@@ -37,8 +44,16 @@ const Dashboard = () => {
         try {
             setLoading(true);
 
-            await getPrivateSurveys();
-            await getPublicSurveys();
+            const listPrivateSurveys = await getPrivateSurveys();
+            log.debug("Dashboard",listPrivateSurveys);
+            dispatch(setPrivateSurveys(listPrivateSurveys));
+            const listPublicSurveys = await getPublicSurveys();
+            dispatch(setPublicSurveys(listPublicSurveys));
+
+            const allCounts = setAllSurveyCounts(listPrivateSurveys, listPublicSurveys);
+            dispatch(setActiveCount(allCounts[0]));
+            dispatch(setPendingCount(allCounts[1]));
+            dispatch(setClosedCount(allCounts[2]));
 
             const privateSurveys = await privateSurveyCount();
             dispatch(setPrivateCount(privateSurveys));
