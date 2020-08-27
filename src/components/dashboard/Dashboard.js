@@ -12,8 +12,9 @@ import UserPrompt from "./UserPrompt";
 import SideMenu from "../menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
 import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
-import {setOverallCount} from "../../redux/actions/SurveyCount";
+import {setOverallCount, setPrivateCount, setPublicCount} from "../../redux/actions/SurveyCount";
 import LoadingScreen from "../utils/LoadingScreen";
+import {getPrivateSurveys, getPublicSurveys} from "../../redux/actions/SurveyList";
 
 /**
  * User Dashboard containing multiple elements to give user an overview of his acocunt
@@ -32,12 +33,21 @@ const Dashboard = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const getSurveyCounts = async () => {
+    const getSurveysAndCounts = async () => {
         try {
             setLoading(true);
+
+            await getPrivateSurveys();
+            await getPublicSurveys();
+
             const privateSurveys = await privateSurveyCount();
+            dispatch(setPrivateCount(privateSurveys));
+
             const publicSurveys = await publicSurveyCount();
+            dispatch(setPublicCount(publicSurveys));
+
             dispatch(setOverallCount(privateSurveys + publicSurveys)); // Sets the count of overall survey belonging to the user
+
             setLoading(false);
         } catch (e) {
             log.error(e);
@@ -45,7 +55,7 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        getSurveyCounts();
+        getSurveysAndCounts();
     }, []);
 
     return (
