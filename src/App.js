@@ -7,7 +7,7 @@ import Home from "./components/home/Home";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateSurvey from "./components/survey/CreateSurvey";
 import SubmitSurvey from "./components/survey/SubmitSurvey";
-import Search from "./components/Search/Search";
+import Search from "./components/search/Search";
 import NavbarMenu from "./components/menu/NavbarMenu";
 import Register from "./components/home/Register";
 import Login from "./components/home/Login";

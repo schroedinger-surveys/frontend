@@ -9,6 +9,7 @@ import Message from "../utils/Message";
 import SurveyValidator from "./SurveyValidator";
 import storageManager from "../../storage/LocalStorageManager";
 import {TimeConverter} from "../utils/TimeConverter";
+import log from "../../log/Logger";
 
 const CreateSurvey = () => {
     const today = new Date(); // Used to set the default value of start_date and end_date
@@ -55,11 +56,10 @@ const CreateSurvey = () => {
         description: "",
         start_date: TimeConverter(new Date()),
         end_date: TimeConverter(new Date(today.getFullYear(), today.getMonth(), today.getDate() +7)),
-        secured: true,
         constrainedQuestionText: "",
         freestyleQuestionText: ""
     });
-    const {title, description, secured, start_date, end_date, constrainedQuestionText, freestyleQuestionText} = values;
+    const {title, description, start_date, end_date, constrainedQuestionText, freestyleQuestionText} = values;
 
     /**
      * Used as props for the child Component Message
@@ -238,8 +238,8 @@ const CreateSurvey = () => {
                     </Col>
                 </Row>
 
-                <Form.Group controlId="securedStatus">
-                    <Form.Check type="checkbox" label="Make Survey Public"/>
+                <Form.Group>
+                    <Form.Check id={"securedStatus"} type="checkbox" label="Make Survey Private"/>
                 </Form.Group>
 
                 <Button variant="success" type="submit" onClick={createNewSurvey}>
@@ -251,6 +251,10 @@ const CreateSurvey = () => {
 
     const createNewSurvey = async (event) => {
         event.preventDefault();
+
+        const securedInput = document.getElementById("securedStatus").checked;
+        log.debug(securedInput);
+
         const validationResponse = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions); // Validates Survey based on user input
         if (validationResponse[0]) { // Indicates if Survey data is valid - true || false
             const createSurveyResponse = await axios({
@@ -265,7 +269,7 @@ const CreateSurvey = () => {
                     description,
                     start_date,
                     end_date,
-                    secured,
+                    secured: securedInput,
                     constrained_questions: constrainedQuestions,
                     freestyle_questions: freestyleQuestions
                 }

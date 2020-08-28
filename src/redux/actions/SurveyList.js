@@ -1,5 +1,4 @@
 const setPrivateSurveys = (surveys) => {
-    console.log("Motherfuckers",surveys);
     return {
         type: "SET_PRIVATE_SURVEYS",
         payload: [...surveys]

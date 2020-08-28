@@ -39,7 +39,7 @@ const NavbarMenu = () => {
 
     /**
      * Returns the version of the Nav meant for logged OUT users
-     * @returns {JSX.Element} Nav with Nav.Links to home, Register, Login and Search Component
+     * @returns {JSX.Element} Nav with Nav.Links to home, Register, Login and search Component
      */
     const loggedOut = () => {
         return (
@@ -54,7 +54,7 @@ const NavbarMenu = () => {
 
     /**
      * Returns the version of the Nav meant for logged IN users
-     * @returns {JSX.Element} Nav with Nav.Links to dashboard, CreateSurvey, SubmitSurvey, Search and home Component
+     * @returns {JSX.Element} Nav with Nav.Links to dashboard, CreateSurvey, SubmitSurvey, search and home Component
      */
     const loggedIn = () => {
         return (

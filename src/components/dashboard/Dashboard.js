@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import {connect, useDispatch, useSelector} from "react-redux";
+import {connect} from "react-redux";
 
 import log from "../../log/Logger";
 import Profile from "./Profile/Profile";
@@ -22,6 +22,7 @@ import {
 import LoadingScreen from "../utils/LoadingScreen";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
 import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
+import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 
 /**
  * User Dashboard containing multiple elements to give user an overview of his acocunt
@@ -60,6 +61,12 @@ const Dashboard = (props) => {
 
             props.setOverallCount(privateSurveys + publicSurveys); // Sets the count of overall survey belonging to the user
 
+            const allSurveys = [...listPrivateSurveys, ...listPublicSurveys];
+            if (allSurveys.length > 1){
+                props.setSurveySpotlight(allSurveys[0]);
+            }
+
+
             setLoading(false);
         } catch (e) {
             log.error(e);
@@ -97,7 +104,7 @@ const Dashboard = (props) => {
                         </Row>
                     </Col>
                     <Col xs={6}>
-                        {props.counts.overallSurveys > 0 && ( //check submission count, NOT Survey Count
+                        {props.counts.overallSurveys > 0 && ( // Check submission count, NOT Survey Count
                             <SurveySpotlight/>
                         )}
                         {props.counts.overallSurveys === 0 && (
@@ -125,5 +132,6 @@ export default connect(mapStateToProps, {
     setPublicSurveys,
     setActiveCount,
     setPendingCount,
-    setClosedCount
+    setClosedCount,
+    setSurveySpotlight
 })(Dashboard);
