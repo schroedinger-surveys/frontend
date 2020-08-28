@@ -38,7 +38,7 @@ const Dashboard = () => {
     const counts = useSelector(state => state.SurveyCountReducer) // Gets the count of the surveys from the redux store
     const dispatch = useDispatch();
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const getSurveysAndCounts = async () => {
         try {
