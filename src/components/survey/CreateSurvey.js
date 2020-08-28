@@ -5,11 +5,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
-import log from "../../log/Logger";
 import Message from "../utils/Message";
 import SurveyValidator from "./SurveyValidator";
 import storageManager from "../../storage/LocalStorageManager";
-import TimeConverter from "../utils/TimeConverter";
+import {TimeConverter} from "../utils/TimeConverter";
 
 const CreateSurvey = () => {
     const today = new Date(); // Used to set the default value of start_date and end_date

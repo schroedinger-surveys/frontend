@@ -1,6 +1,9 @@
 import axios from "axios";
 
 import storageManager from "../../storage/LocalStorageManager";
+import {useSelector} from "react-redux";
+import {UnixToHumanTime} from "./TimeConverter";
+import log from "../../log/Logger";
 
 /**
  * Fetched the count of private (secured = true) surveys
@@ -36,4 +39,32 @@ const publicSurveyCount = async () => {
     return response.data.count;
 }
 
-export {privateSurveyCount, publicSurveyCount};
+const setAllSurveyCounts = (privateSurveys, publicSurveys) => {
+    const allSurveys = [...privateSurveys, ...publicSurveys];
+
+    let active = 0;
+    let pending = 0;
+    let closed = 0;
+
+    const today = Date.now();
+
+    for (let i = 0; i < allSurveys.length; i++){
+        const startDate = new Date(allSurveys[i].start_date).getTime();
+        const endDate = new Date(allSurveys[i].end_date).getTime();
+        if(startDate > today){
+            pending++;
+        } else if(endDate < today){
+            closed++
+        } else if (startDate <= today && endDate >= today){
+            active++;
+        }
+    }
+
+    return[active, pending, closed];
+}
+
+export {
+    privateSurveyCount,
+    publicSurveyCount,
+    setAllSurveyCounts
+};

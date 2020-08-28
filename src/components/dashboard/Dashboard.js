@@ -11,9 +11,17 @@ import SurveySpotlight from "./SurveySpotlight";
 import UserPrompt from "./UserPrompt";
 import SideMenu from "../menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
-import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
-import {setOverallCount} from "../../redux/actions/SurveyCount";
+import {privateSurveyCount, publicSurveyCount, setAllSurveyCounts} from "../utils/CountFunctions";
+import {
+    setActiveCount, setClosedCount,
+    setOverallCount,
+    setPendingCount,
+    setPrivateCount,
+    setPublicCount
+} from "../../redux/actions/SurveyCount";
 import LoadingScreen from "../utils/LoadingScreen";
+import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
+import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 
 /**
  * User Dashboard containing multiple elements to give user an overview of his acocunt
@@ -32,12 +40,29 @@ const Dashboard = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const getSurveyCounts = async () => {
+    const getSurveysAndCounts = async () => {
         try {
             setLoading(true);
+
+            const listPrivateSurveys = await getPrivateSurveys();
+            log.debug("Dashboard",listPrivateSurveys);
+            dispatch(setPrivateSurveys(listPrivateSurveys));
+            const listPublicSurveys = await getPublicSurveys();
+            dispatch(setPublicSurveys(listPublicSurveys));
+
+            const allCounts = setAllSurveyCounts(listPrivateSurveys, listPublicSurveys);
+            dispatch(setActiveCount(allCounts[0]));
+            dispatch(setPendingCount(allCounts[1]));
+            dispatch(setClosedCount(allCounts[2]));
+
             const privateSurveys = await privateSurveyCount();
+            dispatch(setPrivateCount(privateSurveys));
+
             const publicSurveys = await publicSurveyCount();
+            dispatch(setPublicCount(publicSurveys));
+
             dispatch(setOverallCount(privateSurveys + publicSurveys)); // Sets the count of overall survey belonging to the user
+
             setLoading(false);
         } catch (e) {
             log.error(e);
@@ -45,7 +70,7 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        getSurveyCounts();
+        getSurveysAndCounts();
     }, []);
 
     return (

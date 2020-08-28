@@ -11,4 +11,15 @@ const TimeConverter = (date) => {
     return `${year}-${month}-${day}`;
 }
 
-export default TimeConverter;
+const UnixToHumanTime = (date) => {
+    const dateParts = date.split("-");
+    const year = dateParts[0];
+    const month = dateParts[1];
+    const day = dateParts[2];
+    return new Date(Date.UTC(year, month, day)).getTime();
+}
+
+export {
+    TimeConverter,
+    UnixToHumanTime
+};
