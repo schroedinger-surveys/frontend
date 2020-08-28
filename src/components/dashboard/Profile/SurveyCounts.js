@@ -15,14 +15,14 @@ import {useSelector} from "react-redux";
  * @returns {JSX.Element}
  */
 const SurveyCounts = () => {
-    const counts = useSelector(state => state.SurveyCountReducer)
+    const counts = useSelector(state => state.SurveyCountReducer);
 
     return(
         <Row style={{border: "1px solid lightgrey", padding: "5px", borderRadius: "0 0 8px 8px", marginBottom: "10px"}}>
             <Col style={{textAlign: "center"}}>overall: {counts.overallSurveys}</Col>
-            <Col style={{textAlign: "center"}}>active: 0</Col>
-            <Col style={{textAlign: "center"}}>pending: 0</Col>
-            <Col style={{textAlign: "center"}}>closed: 0</Col>
+            <Col style={{textAlign: "center"}}>active: {counts.activeCount}</Col>
+            <Col style={{textAlign: "center"}}>pending: {counts.pendingCount}</Col>
+            <Col style={{textAlign: "center"}}>closed: {counts.closedCount}</Col>
         </Row>
     )
 }
