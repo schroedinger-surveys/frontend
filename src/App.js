@@ -12,11 +12,13 @@ import NavbarMenu from "./components/menu/NavbarMenu";
 import Register from "./components/home/Register";
 import Login from "./components/home/Login";
 import storageManager from "./storage/LocalStorageManager";
-import Store from "./redux/store/Store";
+import {createStore} from "redux";
+import RootReducer from "./redux/reducer/RootReducer";
+
 
 function App() {
     return (
-        <Provider store={Store}>
+        <Provider store={createStore(RootReducer)}>
             <Router>
                 <NavbarMenu/>
                 <Switch>

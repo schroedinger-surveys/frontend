@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useDispatch, useSelector} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 
 import log from "../../log/Logger";
 import Profile from "./Profile/Profile";
@@ -34,34 +34,31 @@ import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
  * UserPrompt - in case user has no surveys yet it prompts him to create some
  * @returns {JSX.Element}
  */
-const Dashboard = () => {
-    const counts = useSelector(state => state.SurveyCountReducer) // Gets the count of the surveys from the redux store
-    const dispatch = useDispatch();
-
-    const [loading, setLoading] = useState(true);
+const Dashboard = (props) => {
+    const [loading, setLoading] = useState(false);
 
     const getSurveysAndCounts = async () => {
+
         try {
             setLoading(true);
 
             const listPrivateSurveys = await getPrivateSurveys();
-            log.debug("Dashboard",listPrivateSurveys);
-            dispatch(setPrivateSurveys(listPrivateSurveys));
+            props.setPrivateSurveys(listPrivateSurveys);
             const listPublicSurveys = await getPublicSurveys();
-            dispatch(setPublicSurveys(listPublicSurveys));
+            props.setPublicSurveys(listPublicSurveys);
 
             const allCounts = setAllSurveyCounts(listPrivateSurveys, listPublicSurveys);
-            dispatch(setActiveCount(allCounts[0]));
-            dispatch(setPendingCount(allCounts[1]));
-            dispatch(setClosedCount(allCounts[2]));
+            props.setActiveCount(allCounts[0]);
+            props.setPendingCount(allCounts[1]);
+            props.setClosedCount(allCounts[2]);
 
             const privateSurveys = await privateSurveyCount();
-            dispatch(setPrivateCount(privateSurveys));
+            props.setPrivateCount(privateSurveys);
 
             const publicSurveys = await publicSurveyCount();
-            dispatch(setPublicCount(publicSurveys));
+            props.setPublicCount(publicSurveys);
 
-            dispatch(setOverallCount(privateSurveys + publicSurveys)); // Sets the count of overall survey belonging to the user
+            props.setOverallCount(privateSurveys + publicSurveys); // Sets the count of overall survey belonging to the user
 
             setLoading(false);
         } catch (e) {
@@ -88,10 +85,10 @@ const Dashboard = () => {
                             <Profile/>
                         </Row>
                         <Row>
-                            {counts.overallSurveys > 0 && (
+                            {props.counts.overallSurveys > 0 && (
                                 <SurveyList/>
                             )}
-                            {counts.overallSurveys === 0 && (
+                            {props.counts.overallSurveys === 0 && (
                                 <UserPrompt size={"small"}/>
                             )}
                         </Row>
@@ -100,10 +97,10 @@ const Dashboard = () => {
                         </Row>
                     </Col>
                     <Col xs={6}>
-                        {counts.overallSurveys > 0 && (
+                        {props.counts.overallSurveys > 0 && ( //check submission count, NOT Survey Count
                             <SurveySpotlight/>
                         )}
-                        {counts.overallSurveys === 0 && (
+                        {props.counts.overallSurveys === 0 && (
                             <UserPrompt size={"large"}/>
                         )}
                     </Col>
@@ -113,4 +110,20 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard;
+const mapStateToProps = (state) => {
+    return {
+        counts: state.surveyCounts,
+        surveys: state.surveyLists
+    }
+}
+
+export default connect(mapStateToProps, {
+    setOverallCount,
+    setPrivateCount,
+    setPublicCount,
+    setPrivateSurveys,
+    setPublicSurveys,
+    setActiveCount,
+    setPendingCount,
+    setClosedCount
+})(Dashboard);

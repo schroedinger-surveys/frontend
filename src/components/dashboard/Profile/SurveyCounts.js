@@ -2,7 +2,7 @@ import React from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import {useSelector} from "react-redux";
+import {connect} from "react-redux";
 
 /**
  * Displays the count of surveys, taken from Redux store
@@ -14,17 +14,20 @@ import {useSelector} from "react-redux";
  * closed - end_date < today
  * @returns {JSX.Element}
  */
-const SurveyCounts = () => {
-    const counts = useSelector(state => state.SurveyCountReducer);
+const SurveyCounts = (props) => {
 
     return(
         <Row style={{border: "1px solid lightgrey", padding: "5px", borderRadius: "0 0 8px 8px", marginBottom: "10px"}}>
-            <Col style={{textAlign: "center"}}>overall: {counts.overallSurveys}</Col>
-            <Col style={{textAlign: "center"}}>active: {counts.activeCount}</Col>
-            <Col style={{textAlign: "center"}}>pending: {counts.pendingCount}</Col>
-            <Col style={{textAlign: "center"}}>closed: {counts.closedCount}</Col>
+            <Col style={{textAlign: "center"}}>overall: {props.counts.overallSurveys}</Col>
+            <Col style={{textAlign: "center"}}>active: {props.counts.activeCount}</Col>
+            <Col style={{textAlign: "center"}}>pending: {props.counts.pendingCount}</Col>
+            <Col style={{textAlign: "center"}}>closed: {props.counts.closedCount}</Col>
         </Row>
     )
 }
 
-export default SurveyCounts;
+const mapStateToProps = (state) => {
+    return {counts: state.surveyCounts}
+}
+
+export default connect(mapStateToProps)(SurveyCounts);
