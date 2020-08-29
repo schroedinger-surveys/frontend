@@ -15,11 +15,11 @@ const getPrivateSurveys = async (page_number = 0, page_size = 3) => {
     return response.data;
 }
 
-const getPublicSurveys = async () => {
+const getPublicSurveys = async (page_number = 0, page_size = 3) => {
     const jwt = storageManager.getJWTToken();
     const response = await axios({
         method: "GET",
-        url: "/api/v1/survey/public",
+        url: "/api/v1/survey/public" + "?page_number=" + page_number + "&page_size=" + page_size,
         headers: {
             "Authorization": jwt
         }
