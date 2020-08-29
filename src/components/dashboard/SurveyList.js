@@ -11,7 +11,7 @@ const SurveyList = (props) => {
         pageCountPublic: 0,
         itemsPerPage: 3
     });
-    const {pagePrivate, pagePublic, pageCountPrivate, pageCountPublic, itemsPerPage} = pagination;
+    const { pageCountPrivate, pageCountPublic, itemsPerPage} = pagination;
 
     const getCurrentStatus = (start_date, end_date) => {
         const today = Date.now();
