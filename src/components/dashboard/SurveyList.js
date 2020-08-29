@@ -4,6 +4,7 @@ import {ListGroup} from "react-bootstrap";
 import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
+import {getCurrentStatus} from "../utils/SurveyStatus";
 
 const SurveyList = (props) => {
     const [pagination, setPagination] = useState({
@@ -12,19 +13,6 @@ const SurveyList = (props) => {
         itemsPerPage: 3
     });
     const {pageCountPrivate, pageCountPublic, itemsPerPage} = pagination;
-
-    const getCurrentStatus = (start_date, end_date) => {
-        const today = Date.now();
-        const startDate = new Date(start_date).getTime();
-        const endDate = new Date(end_date).getTime();
-        if (startDate > today) {
-            return "pending"
-        } else if (endDate < today) {
-            return "closed"
-        } else if (startDate <= today && endDate >= today) {
-            return "active"
-        }
-    }
 
     const privatePagination = () => {
         const changePage = async (index) => {
@@ -75,29 +63,32 @@ const SurveyList = (props) => {
     }, [])
 
     return (
-        <div style={{width: "100%"}}>
-            <br/>
-            <h4>Private Surveys - {props.counts.privateCount}</h4>
-            {props.counts.privateCount && privatePagination()}
-            <ListGroup>
-                {
-                    props.surveys.privateSurveys.map((survey, i) => (
-                        <ListGroup.Item style={{cursor: "pointer"}} onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
-                            status: {getCurrentStatus(survey.start_date, survey.end_date)} - {survey.secured === true ? "private" : "public"}</ListGroup.Item>
-                    ))
-                }
-            </ListGroup>
-            <br/>
-            <h4>Public Surveys - {props.counts.publicCount}</h4>
-            {props.counts.publicCount > itemsPerPage && publicPagination()}
-            <ListGroup>
-                {
-                    props.surveys.publicSurveys.map((survey, i) => (
-                        <ListGroup.Item style={{cursor: "pointer"}}  onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
-                            status: {getCurrentStatus(survey.start_date, survey.end_date)} - {survey.secured === true ? "private" : "public"}</ListGroup.Item>
-                    ))
-                }
-            </ListGroup>
+        <div style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+            <div>
+                <h5>Private Surveys - {props.counts.privateCount}</h5>
+                {props.counts.privateCount && privatePagination()}
+                <ListGroup>
+                    {
+                        props.surveys.privateSurveys.map((survey, i) => (
+                            <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}} onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
+                                status: {getCurrentStatus(survey.start_date, survey.end_date)}</ListGroup.Item>
+                        ))
+                    }
+                </ListGroup>
+            </div>
+            <hr/>
+            <div>
+                <h5>Public Surveys - {props.counts.publicCount}</h5>
+                {props.counts.publicCount > itemsPerPage && publicPagination()}
+                <ListGroup>
+                    {
+                        props.surveys.publicSurveys.map((survey, i) => (
+                            <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}}  onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
+                                status: {getCurrentStatus(survey.start_date, survey.end_date)} </ListGroup.Item>
+                        ))
+                    }
+                </ListGroup>
+            </div>
         </div>
     )
 }

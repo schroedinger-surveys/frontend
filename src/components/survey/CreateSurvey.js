@@ -54,7 +54,7 @@ const CreateSurvey = () => {
     const [values, setValues] = useState({
         title: "",
         description: "",
-        start_date: TimeConverter(new Date()),
+        start_date: TimeConverter(new Date(today.getFullYear(), today.getMonth(), today.getDate())),
         end_date: TimeConverter(new Date(today.getFullYear(), today.getMonth(), today.getDate() +7)),
         constrainedQuestionText: "",
         freestyleQuestionText: ""
