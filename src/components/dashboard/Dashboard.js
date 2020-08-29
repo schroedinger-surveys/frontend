@@ -36,7 +36,7 @@ import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
  * @returns {JSX.Element}
  */
 const Dashboard = (props) => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const getSurveysAndCounts = async () => {
 
