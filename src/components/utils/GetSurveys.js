@@ -2,11 +2,11 @@ import storageManager from "../../storage/LocalStorageManager";
 import axios from "axios";
 import log from "../../log/Logger";
 
-const getPrivateSurveys = async () => {
+const getPrivateSurveys = async (page_number = 0, page_size = 3) => {
     const jwt = storageManager.getJWTToken();
     const response = await axios({
         method: "GET",
-        url: "/api/v1/survey/secured",
+        url: "/api/v1/survey/secured" + "?page_number=" + page_number + "&page_size=" + page_size,
         headers: {
             "Authorization": jwt
         }
