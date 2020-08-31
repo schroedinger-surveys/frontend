@@ -12,7 +12,6 @@ import {TimeConverter} from "../utils/TimeConverter";
 import log from "../../log/Logger";
 
 const CreateSurvey = () => {
-    const today = new Date(); // Used to set the default value of start_date and end_date
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
     /**
      * A List of all constrained and freestyle questions,
@@ -54,8 +53,8 @@ const CreateSurvey = () => {
     const [values, setValues] = useState({
         title: "",
         description: "",
-        start_date: TimeConverter(new Date(today.getFullYear(), today.getMonth(), today.getDate())),
-        end_date: TimeConverter(new Date(today.getFullYear(), today.getMonth(), today.getDate() +7)),
+        start_date: TimeConverter(new Date()),
+        end_date: TimeConverter(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() +7)),
         constrainedQuestionText: "",
         freestyleQuestionText: ""
     });
@@ -253,7 +252,6 @@ const CreateSurvey = () => {
         event.preventDefault();
 
         const securedInput = document.getElementById("securedStatus").checked;
-        log.debug(securedInput);
 
         const validationResponse = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions); // Validates Survey based on user input
         if (validationResponse[0]) { // Indicates if Survey data is valid - true || false
