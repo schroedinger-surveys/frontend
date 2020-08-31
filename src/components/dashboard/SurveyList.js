@@ -37,7 +37,7 @@ const SurveyList = (props) => {
     const publicPagination = () => {
         const changePage = async(index) => {
             const surveys = await getPublicSurveys(index)
-            props.setPrivateSurveys(surveys);
+            props.setPublicSurveys(surveys);
         }
 
         let li = []
