@@ -1,9 +1,6 @@
 import axios from "axios";
 
 import storageManager from "../../storage/LocalStorageManager";
-import {useSelector} from "react-redux";
-import {UnixToHumanTime} from "./TimeConverter";
-import log from "../../log/Logger";
 
 /**
  * Fetched the count of private (secured = true) surveys

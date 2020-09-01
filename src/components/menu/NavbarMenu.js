@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useLocation} from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -68,20 +68,24 @@ const NavbarMenu = () => {
     }
 
     return (
-        <Navbar expand="lg" style={{boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)", marginBottom: "100px"}}>
+        <Navbar expand="lg" style={{boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)", marginBottom: "30px"}}>
             <Navbar.Brand href="/" style={{color: "#065535", fontWeight: "bolder"}}>Schrödinger-Survey</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-            <Navbar.Collapse id="basic-navbar-nav">
-                {/** Check if a jwt token is in local or session storage
-                 * call functions that render different versions based on answer
-                 */}
-                {storageManager.searchForJWTToken() && (
-                    loggedIn()
-                )}
-                {!storageManager.searchForJWTToken() && (
-                    loggedOut()
-                )}
-            </Navbar.Collapse>
+            {(location.pathname.split("/")[1] !== "s" && location.pathname.split("/")[1] !== "pub") && (
+                <div>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        {/** Check if a jwt token is in local or session storage
+                         * call functions that render different versions based on answer
+                         */}
+                        {storageManager.searchForJWTToken() && (
+                            loggedIn()
+                        )}
+                        {!storageManager.searchForJWTToken() && (
+                            loggedOut()
+                        )}
+                    </Navbar.Collapse>
+                </div>
+            )}
         </Navbar>
     )
 }
