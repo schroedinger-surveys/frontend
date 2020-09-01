@@ -14,6 +14,7 @@ import Login from "./components/home/Login";
 import storageManager from "./storage/LocalStorageManager";
 import {createStore} from "redux";
 import RootReducer from "./redux/reducer/RootReducer";
+import PublicSurvey from "./components/survey/PublicSurvey";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                     <ProtectedRoute path={"/survey/create"} component={CreateSurvey}/>
                     <Route exact path="/survey/submission" component={SubmitSurvey}/>
                     <Route exact path="/survey/search" component={Search}/>
+                    <Route path={"/pub/:id"} component={PublicSurvey}/>
                 </Switch>
             </Router>
         </Provider>
