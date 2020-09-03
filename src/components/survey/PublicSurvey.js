@@ -6,12 +6,23 @@ import log from "../../log/Logger";
 import LoadingScreen from "../utils/LoadingScreen";
 import Form from "react-bootstrap/Form";
 import {Button} from "react-bootstrap";
+import Message from "../utils/Message";
 
 const PublicSurvey = () => {
     const {id} = useParams();
     const [survey, setSurvey] = useState({});
     const [loadedSurvey, setLoadedSurvey] = useState(false);
     const [loading, setLoading] = useState(true);
+
+    /**
+     * Used as props for the child Component Message
+     * showMessage: state of visibility of component Message
+     * messageText: string containing the message to be displayed
+     * messageType: "danger" || "success" - based off of bootstrap colors
+     */
+    const [showMessage, setShowMessage] = useState(false);
+    const [messageText, setMessageText] = useState("");
+    const [messageType, setMessageType] = useState("");
 
     const getSurvey = () => {
         axios({
@@ -80,14 +91,14 @@ const PublicSurvey = () => {
                 });
             }
         }
-        log.debug("survey id", survey.id);
-        log.debug("constrained answers", constrainedAnswers);
-        log.debug("freestyle answers", freestyleAnswers);
         const validationCheck = validateSubmission(constrainedAnswers, freestyleAnswers);
         if (validationCheck.valid){
             submitAnsweredSurvey(constrainedAnswers, freestyleAnswers);
         } else {
             log.debug("Submission is not valid",validationCheck.message);
+            setMessageType("danger");
+            setMessageText(validationCheck.message);
+            setShowMessage(true);
         }
     }
 
@@ -116,7 +127,27 @@ const PublicSurvey = () => {
         return {valid: true, message: "Survey is valid, your Submission will be processed"};
     }
 
-    const submitAnsweredSurvey = (constrainedAnswers, freestyleAnswers) => {
+    const submitAnsweredSurvey = async(constrainedAnswers, freestyleAnswers) => {
+        try {
+            const submitResponse = await axios({
+                method: "POST",
+                url: "/api/v1/submission",
+                data: {
+                    survey_id: survey.id,
+                    constrained_answers: constrainedAnswers,
+                    freestyle_answers: freestyleAnswers
+                }
+            });
+            if (submitResponse.status === 201){
+                log.debug("Submission of survey successful");
+                setShowMessage(true);
+                setMessageType("success");
+                setMessageText("Your answers were submitted");
+            }
+            log.debug("Response of submitting the submission", submitResponse);
+        } catch (e) {
+            log.debug("Submission could not be submit", e.message);
+        }
         log.debug("Survey Submission was submitted", survey.id, constrainedAnswers, freestyleAnswers);
     }
 
@@ -159,6 +190,9 @@ const PublicSurvey = () => {
                         )
                     }
                 })}
+                {showMessage && (
+                    <Message message={messageText} type={messageType}/>
+                )}
                 <Button style={{width: "100%", margin: "15px 0 30px 0"}} onClick={collectAnswers}
                         variant={"success"}>Submit</Button>
             </div>
