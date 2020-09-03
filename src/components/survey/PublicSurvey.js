@@ -60,19 +60,25 @@ const PublicSurvey = () => {
         const sortedQuestions = sortQuestions();
         const constrainedAnswers = [];
         const freestyleAnswers = [];
-        for (let i = 0; i < sortedQuestions.length; i++){
+        for (let i = 0; i < sortedQuestions.length; i++) {
             const question = document.getElementById(`${i}answer`);
             //log.debug(question);
-            if (question.hasChildNodes()){ // ChildNodes are the radio buttons in the constrainedQuestions
+            if (question.hasChildNodes()) { // ChildNodes are the radio buttons in the constrainedQuestions
                 const children = question.childNodes;
                 //log.debug("Children of question", children);
-                for (let j = 0 ; j < children.length; j++){
-                    if (children[j].firstChild.type === "radio" && children[j].firstChild.checked){
-                     constrainedAnswers.push({question_text: sortedQuestions[i].question.question_text, answer: children[j].childNodes[1].innerText})
+                for (let j = 0; j < children.length; j++) {
+                    if (children[j].firstChild.type === "radio" && children[j].firstChild.checked) {
+                        constrainedAnswers.push({
+                            constrained_question_id: sortedQuestions[i].question.id,
+                            constrained_questions_option_id: sortedQuestions[i].question.options[j - 1].id
+                        })
                     }
                 }
             } else {
-                freestyleAnswers.push({question_text: sortedQuestions[i].question.question_text, answer: question.value});
+                freestyleAnswers.push({
+                    freestyle_question_id: sortedQuestions[i].question.id,
+                    answer: question.value
+                });
             }
         }
         log.debug("constrained answers", constrainedAnswers);
@@ -89,11 +95,12 @@ const PublicSurvey = () => {
                     <p>{survey.description}</p>
                 </div>
                 {sortedQuestions.map((item, i) => {
-                    if (item.type === "constrained"){
+                    if (item.type === "constrained") {
                         return (
                             <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
                                 <Form.Group id={`${i}answer`}>
-                                    <Form.Label style={{fontWeight: "bold"}}>{item.question.position+1}. {item.question.question_text}</Form.Label>
+                                    <Form.Label
+                                        style={{fontWeight: "bold"}}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
                                     {item.question.options.map((option, j) => (
                                         <Form.Check
                                             key={j}
@@ -109,14 +116,16 @@ const PublicSurvey = () => {
                         return (
                             <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
                                 <Form.Group>
-                                    <Form.Label style={{fontWeight: "bold"}}>{item.question.position+1}. {item.question.question_text}</Form.Label>
+                                    <Form.Label
+                                        style={{fontWeight: "bold"}}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
                                     <Form.Control id={`${i}answer`} type="text" placeholder="Your Answer..."/>
                                 </Form.Group>
                             </div>
                         )
                     }
                 })}
-                <Button style={{width: "100%", margin: "15px 0 30px 0"}} onClick={collectAnswers} variant={"success"}>Submit</Button>
+                <Button style={{width: "100%", margin: "15px 0 30px 0"}} onClick={collectAnswers}
+                        variant={"success"}>Submit</Button>
             </div>
         )
     }
@@ -126,9 +135,9 @@ const PublicSurvey = () => {
         // Sort questions based on position property
         const allQuestions = [...survey.freestyle_questions, ...survey.constrained_questions];
         allQuestions.sort((a, b) => (a.position > b.position) ? 1 : -1);
-        for (let i = 0; i < allQuestions.length; i++){
+        for (let i = 0; i < allQuestions.length; i++) {
             let temp = allQuestions[i];
-            if (allQuestions[i].hasOwnProperty("options")){
+            if (allQuestions[i].hasOwnProperty("options")) {
                 allQuestions[i] = {
                     type: "constrained",
                     question: temp
