@@ -56,9 +56,31 @@ const PublicSurvey = () => {
         }
     }
 
+    const collectAnswers = () => {
+        const sortedQuestions = sortQuestions();
+        const constrainedAnswers = [];
+        const freestyleAnswers = [];
+        for (let i = 0; i < sortedQuestions.length; i++){
+            const question = document.getElementById(`${i}answer`);
+            //log.debug(question);
+            if (question.hasChildNodes()){ // ChildNodes are the radio buttons in the constrainedQuestions
+                const children = question.childNodes;
+                //log.debug("Children of question", children);
+                for (let j = 0 ; j < children.length; j++){
+                    if (children[j].firstChild.type === "radio" && children[j].firstChild.checked){
+                     constrainedAnswers.push({question_text: sortedQuestions[i].question.question_text, answer: children[j].childNodes[1].innerText})
+                    }
+                }
+            } else {
+                freestyleAnswers.push({question_text: sortedQuestions[i].question.question_text, answer: question.value});
+            }
+        }
+        log.debug("constrained answers", constrainedAnswers);
+        log.debug("freestyle answers", freestyleAnswers);
+    }
+
     const submissionForm = () => {
         const sortedQuestions = sortQuestions();
-        log.debug(sortedQuestions);
         return (
             <div style={{width: "60%", margin: "0 auto"}}>
                 <h2>{survey.title}</h2>
@@ -70,15 +92,14 @@ const PublicSurvey = () => {
                     if (item.type === "constrained"){
                         return (
                             <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-                                <Form.Group>
+                                <Form.Group id={`${i}answer`}>
                                     <Form.Label style={{fontWeight: "bold"}}>{item.question.position+1}. {item.question.question_text}</Form.Label>
                                     {item.question.options.map((option, j) => (
                                         <Form.Check
                                             key={j}
                                             type="radio"
                                             label={option.answer}
-                                            name="answerOption"
-                                            id="AnswerRadioButton"
+                                            name={`answerOptionToQuestion${i}`}
                                         />
                                     ))}
                                 </Form.Group>
@@ -89,13 +110,13 @@ const PublicSurvey = () => {
                             <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
                                 <Form.Group>
                                     <Form.Label style={{fontWeight: "bold"}}>{item.question.position+1}. {item.question.question_text}</Form.Label>
-                                    <Form.Control type="text" placeholder="Your Answer..."/>
+                                    <Form.Control id={`${i}answer`} type="text" placeholder="Your Answer..."/>
                                 </Form.Group>
                             </div>
                         )
                     }
                 })}
-                <Button style={{width: "100%", margin: "15px 0 30px 0"}} variant={"success"}>Submit</Button>
+                <Button style={{width: "100%", margin: "15px 0 30px 0"}} onClick={collectAnswers} variant={"success"}>Submit</Button>
             </div>
         )
     }
