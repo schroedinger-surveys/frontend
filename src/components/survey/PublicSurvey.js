@@ -65,7 +65,6 @@ const PublicSurvey = () => {
             //log.debug(question);
             if (question.hasChildNodes()) { // ChildNodes are the radio buttons in the constrainedQuestions
                 const children = question.childNodes;
-                //log.debug("Children of question", children);
                 for (let j = 0; j < children.length; j++) {
                     if (children[j].firstChild.type === "radio" && children[j].firstChild.checked) {
                         constrainedAnswers.push({
@@ -81,8 +80,44 @@ const PublicSurvey = () => {
                 });
             }
         }
+        log.debug("survey id", survey.id);
         log.debug("constrained answers", constrainedAnswers);
         log.debug("freestyle answers", freestyleAnswers);
+        const validationCheck = validateSubmission(constrainedAnswers, freestyleAnswers);
+        if (validationCheck.valid){
+            submitAnsweredSurvey(constrainedAnswers, freestyleAnswers);
+        } else {
+            log.debug("Submission is not valid",validationCheck.message);
+        }
+    }
+
+    const validateSubmission = (constrainedAnswers, freestyleAnswers) => {
+        const constrained = survey.constrained_questions;
+        const freestyle = survey.freestyle_questions;
+        if (constrained.length !== constrainedAnswers.length || freestyle.length !== freestyleAnswers.length){
+            return { valid: false, message: "Please answer all questions!"};
+        } else {
+            for (let i = 0; i < constrained.length; i++){
+                if (constrained[i].id !== constrainedAnswers[i].constrained_question_id){
+                    log.debug("ID of submitted constrained question does not match surveys constrained question id", i, constrained[i].id, constrainedAnswers.constrained_question_id)
+                    return { valid: false, message: "Something went wrong, please try again"};
+                }
+            }
+            for (let i = 0; i < freestyle.length; i++){
+                if (freestyle[i].id !== freestyleAnswers[i].freestyle_question_id){
+                    log.debug("ID of submitted freestyle question does not match surveys freestyle question id")
+                    return {valid: false, message: "Something went wrong, please try again"};
+                }
+                if (freestyleAnswers[i].answer === ""){
+                    return {valid: false, message: "Please answer all freestyle questions with a text!"};
+                }
+            }
+        }
+        return {valid: true, message: "Survey is valid, your Submission will be processed"};
+    }
+
+    const submitAnsweredSurvey = (constrainedAnswers, freestyleAnswers) => {
+        log.debug("Survey Submission was submitted", survey.id, constrainedAnswers, freestyleAnswers);
     }
 
     const submissionForm = () => {
