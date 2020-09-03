@@ -143,6 +143,14 @@ const PublicSurvey = () => {
                 setShowMessage(true);
                 setMessageType("success");
                 setMessageText("Your answers were submitted");
+            } else if (submitResponse.status === 400){
+                setShowMessage(true);
+                setMessageType("warning");
+                setMessageText("We could not submit your answers, please try again!");
+            } else if (submitResponse.status === 500){
+                setShowMessage(true);
+                setMessageType("danger");
+                setMessageText("Something went wrong. Please try again!");
             }
             log.debug("Response of submitting the submission", submitResponse);
         } catch (e) {
