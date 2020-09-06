@@ -1,4 +1,4 @@
-FROM node:alpine AS build
+FROM node:14.8.0-stretch AS build
 
 WORKDIR /app
 
