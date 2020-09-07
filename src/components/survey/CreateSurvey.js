@@ -9,8 +9,6 @@ import Message from "../utils/Message";
 import SurveyValidator from "./SurveyValidator";
 import storageManager from "../../storage/LocalStorageManager";
 import {TimeConverter} from "../utils/TimeConverter";
-import log from "../../log/Logger";
-
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
     /**

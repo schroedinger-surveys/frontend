@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import log from "../../log/Logger";
 import Profile from "./Profile/Profile";
 import SurveyList from "./SurveyList";
-import SurveySpotlight from "./SurveySpotlight";
+import SurveySpotlight from "./SurveySpotlight/SurveySpotlight";
 import UserPrompt from "./UserPrompt";
 import SideMenu from "../menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
