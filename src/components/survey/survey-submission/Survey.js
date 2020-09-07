@@ -1,6 +1,7 @@
 import Form from "react-bootstrap/Form";
 import React from "react";
-import {sortQuestions} from "./Utils";
+import {sortQuestions} from "../../utils/SortQuestions";
+
 
 /**
  * Form used to display a survey for users that want to submit a submission
@@ -9,7 +10,7 @@ import {sortQuestions} from "./Utils";
  * @constructor
  */
 export const SurveyForm = (survey) => {
-    const sortedQuestions = sortQuestions(survey);
+    const sortedQuestions = sortQuestions(survey.constrained_questions, survey.freestyle_questions);
     return(
         <div>
             <h2>{survey.title}</h2>
