@@ -125,10 +125,10 @@ const ShareLinks = (props) => {
 
     return (
         <div>
-            {props.selectedSurvey.secured && (
+            {props.selectedSurvey && props.selectedSurvey.secured && (
                 privateSurvey()
             )}
-            {!props.selectedSurvey.secured && (
+            {props.selectedSurvey && !props.selectedSurvey.secured && (
                 publicSurvey()
             )}
         </div>
