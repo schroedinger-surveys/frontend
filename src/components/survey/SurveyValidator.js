@@ -1,28 +1,29 @@
 /**
  * Validates the user input from CreateSurvey
  * checks if:
- *  title and description are not empty
- *  at least one question was supplied
- *  the start and end_date are valid (start >= today && start < end)
+ * title and description are not empty
+ * at least one question was supplied
+ * the start and end_date are valid (start >= today && start < end)
  * @param title
  * @param description
  * @param start_date
  * @param end_date
  * @param constrainedQuestions
  * @param freestyleQuestions
- * @returns {[boolean, string]} if input is valid, success/error message
+ * @returns {{message: string, status: boolean}}
+ * @constructor
  */
 const SurveyValidator = (title, description, start_date, end_date, constrainedQuestions, freestyleQuestions) => {
     if (DateValidation(start_date, end_date)) {
         if (title === "" || description === "") {
-            return [false, "Title and Description can not be empty"];
+            return {status: false, message: "Title and Description can not be empty"};
         } else if ((constrainedQuestions.length + freestyleQuestions.length) < 1) {
-            return [false, "Add at least ONE question"];
+            return {status: false, message: "Add at least ONE question"};
         } else {
-            return [true, "Survey is valid, we'll try to create it for you now"];
+            return {status: true, message: "Survey is valid, we'll try to create it for you now"};
         }
     } else {
-        return [false, "Start day should not be in past and must be before end date"];
+        return {status: false, message: "Start day should not be in past and must be before end date"};
     }
 }
 export default SurveyValidator;

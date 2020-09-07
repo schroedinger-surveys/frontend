@@ -9,6 +9,8 @@ import Message from "../utils/Message";
 import SurveyValidator from "./SurveyValidator";
 import storageManager from "../../storage/LocalStorageManager";
 import {TimeConverter} from "../utils/TimeConverter";
+import {sortQuestions} from "../utils/SortQuestions";
+
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
     /**
@@ -253,7 +255,7 @@ const CreateSurvey = () => {
         const securedInput = document.getElementById("securedStatus").checked;
 
         const validationResponse = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions); // Validates Survey based on user input
-        if (validationResponse[0]) { // Indicates if Survey data is valid - true || false
+        if (validationResponse.status) { // Indicates if Survey data is valid - true || false
             const createSurveyResponse = await axios({
                 method: "POST",
                 url: "/api/v1/survey",
@@ -283,7 +285,7 @@ const CreateSurvey = () => {
         } else {
             setShowMessage(true);
             setMessageType("danger");
-            setMessageText(validationResponse[1]); // The error message supplied by the SurveyValidator
+            setMessageText(validationResponse.message); // The error message supplied by the SurveyValidator
         }
     }
 
@@ -300,23 +302,34 @@ const CreateSurvey = () => {
                     <Row>
                         <Col>
                             {constrainedQuestion()}
-                            <Button variant="warning" onClick={addConstrainedQuestion}>Add Constrained Question</Button>
-                            {constrainedQuestions.map((question, i) => (
-                                <div key={i}>
-                                    <h4>{question.question_text}</h4>
-                                    {question.options.map((option, j) => (
-                                        <p key={j}>{option.answer}</p>
-                                    ))}
-                                </div>
-                            ))}
+                            <Button variant="warning" onClick={addConstrainedQuestion} style={{marginBottom: "15px"}}>Add Constrained Question</Button>
                         </Col>
                         <Col>
                             {freestyleQuestion()}
-                            <Button variant="warning" onClick={addFreestyleQuestion}>Add Freestyle Question</Button>
-                            {freestyleQuestions.map((question, i) => (
-                                <div key={i}><h4>{question.question_text}</h4></div>
-                            ))}
+                            <Button variant="warning" onClick={addFreestyleQuestion} style={{marginBottom: "15px"}}>Add Freestyle Question</Button>
                         </Col>
+                    </Row>
+                    <Row>
+                        {sortQuestions(constrainedQuestions, freestyleQuestions).map((item, i) => {
+                            if (item.question.hasOwnProperty("options")){
+                                return(
+                                    <div key={i} style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px", margin: "0 15px"}}>
+                                        <label>Question {i+1}: <span style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
+                                        <ul>
+                                            {item.question.options.map((option, j) => (
+                                                <li key={j}>{option.answer}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )
+                            } else {
+                                return (
+                                    <div key={i} style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px", margin: "0 15px"}}>
+                                        <label>Question {i+1}: <span style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
+                                    </div>
+                                )
+                            }
+                        })}
                     </Row>
                 </Col>
             </Row>
