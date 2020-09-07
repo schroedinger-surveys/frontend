@@ -62,7 +62,7 @@ const Dashboard = (props) => {
             props.setOverallCount(privateSurveys + publicSurveys); // Sets the count of overall survey belonging to the user
 
             const allSurveys = [...listPrivateSurveys, ...listPublicSurveys];
-            if (allSurveys.length > 1){
+            if (allSurveys.length >= 1){
                 props.setSurveySpotlight(allSurveys[0]);
             }
 

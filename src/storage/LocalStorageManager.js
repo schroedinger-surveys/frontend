@@ -40,6 +40,8 @@ class LocalStorageManager {
             return JSON.parse(tokenLocal);
         } else if (tokenSession !== null && this.validateToken(tokenSession)) {
             return JSON.parse(tokenSession);
+        } else if (tokenLocal === null && tokenSession === null){
+            return "";
         }
     }
 
@@ -56,6 +58,8 @@ class LocalStorageManager {
             token = tokenLocal;
         } else if (tokenSession !== null) {
             token = tokenSession;
+        } else {
+            return null;
         }
         const tokenParts = token.split(".");
         const tokenBody = tokenParts[1];

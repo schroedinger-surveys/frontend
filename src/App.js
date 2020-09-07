@@ -6,7 +6,6 @@ import {Provider} from 'react-redux';
 import Home from "./components/home/Home";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateSurvey from "./components/survey/CreateSurvey";
-import SubmitSurvey from "./components/survey/SubmitSurvey";
 import Search from "./components/search/Search";
 import NavbarMenu from "./components/menu/NavbarMenu";
 import Register from "./components/home/Register";
@@ -14,7 +13,8 @@ import Login from "./components/home/Login";
 import storageManager from "./storage/LocalStorageManager";
 import {createStore} from "redux";
 import RootReducer from "./redux/reducer/RootReducer";
-import PublicSurvey from "./components/survey/PublicSurvey";
+import PublicSurvey from "./components/survey/survey-submission/PublicSurvey";
+import PrivateSurvey from "./components/survey/survey-submission/PrivateSurvey";
 
 
 function App() {
@@ -28,9 +28,9 @@ function App() {
                     <Route path="/login"><Login single={true}/></Route>
                     <ProtectedRoute path={"/dashboard"} component={Dashboard}/>
                     <ProtectedRoute path={"/survey/create"} component={CreateSurvey}/>
-                    <Route exact path="/survey/submission" component={SubmitSurvey}/>
                     <Route exact path="/survey/search" component={Search}/>
                     <Route path={"/pub/:id"} component={PublicSurvey}/>
+                    <Route path={"/s/:id"} component={PrivateSurvey}/>
                 </Switch>
             </Router>
         </Provider>
