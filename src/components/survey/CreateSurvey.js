@@ -185,7 +185,8 @@ const CreateSurvey = () => {
         const currentQuestions = freestyleQuestions;
         currentQuestions.push(question);
         setFreestyleQuestions(currentQuestions);
-        setQuestionIndex(questionIndex + 1)
+        setQuestionIndex(questionIndex + 1);
+       setValues({...values, freestyleQuestionText: ""});
     }
 
     /**

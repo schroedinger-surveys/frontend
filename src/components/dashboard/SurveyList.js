@@ -66,7 +66,7 @@ const SurveyList = (props) => {
         <div style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
             <div>
                 <h5>Private Surveys - {props.counts.privateCount}</h5>
-                {props.counts.privateCount && privatePagination()}
+                {props.counts.privateCount > itemsPerPage && privatePagination()}
                 <ListGroup>
                     {
                         props.surveys.privateSurveys.map((survey, i) => (
