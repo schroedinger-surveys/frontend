@@ -17,9 +17,11 @@ const getPrivateSurveys = async (page_number = 0, page_size = 3) => {
 
 const getPublicSurveys = async (page_number = 0, page_size = 3) => {
     const jwt = storageManager.getJWTToken();
+    const userData = storageManager.getUserData();
+    log.debug(userData);
     const response = await axios({
         method: "GET",
-        url: "/api/v1/survey/public" + "?page_number=" + page_number + "&page_size=" + page_size,
+        url: "/api/v1/survey/public" + "?page_number=" + page_number + "&page_size=" + page_size + "&user_id=" + userData.id,
         headers: {
             "Authorization": jwt
         }

@@ -1,0 +1,9 @@
+.side_nav_link:hover{
+    color: #f5c050 !important;
+    font-weight: bold;
+}
+
+.side_nav_logout_link:hover{
+    color: darkred !important;
+    font-weight: bold;
+}

@@ -68,12 +68,10 @@ const NavbarMenu = () => {
     }
 
     return (
-        <Navbar expand="lg" style={{boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)", marginBottom: "30px"}}>
+        <Navbar  style={{boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)"}}>
             <Navbar.Brand href="/" style={{color: "#065535", fontWeight: "bolder"}}>Schrödinger-Survey</Navbar.Brand>
             {(location.pathname.split("/")[1] !== "s" && location.pathname.split("/")[1] !== "pub") && (
                 <div>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                    <Navbar.Collapse id="basic-navbar-nav">
                         {/** Check if a jwt token is in local or session storage
                          * call functions that render different versions based on answer
                          */}
@@ -83,7 +81,6 @@ const NavbarMenu = () => {
                         {!storageManager.searchForJWTToken() && (
                             loggedOut()
                         )}
-                    </Navbar.Collapse>
                 </div>
             )}
         </Navbar>

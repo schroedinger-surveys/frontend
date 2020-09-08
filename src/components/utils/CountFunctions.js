@@ -26,9 +26,10 @@ const privateSurveyCount = async () => {
  */
 const publicSurveyCount = async () => {
     const jwt = storageManager.getJWTToken();
+    const userData = storageManager.getUserData();
     const response = await axios({
         method: "GET",
-        url: "/api/v1/survey/public/count",
+        url: "/api/v1/survey/public/count?user_id="+ userData.id,
         headers: {
             "Authorization": jwt
         }

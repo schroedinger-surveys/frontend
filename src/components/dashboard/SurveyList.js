@@ -71,7 +71,8 @@ const SurveyList = (props) => {
                     {
                         props.surveys.privateSurveys.map((survey, i) => (
                             <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}} onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
-                                status: {getCurrentStatus(survey.start_date, survey.end_date)}</ListGroup.Item>
+                                status: {getCurrentStatus(survey.start_date, survey.end_date)}
+                            </ListGroup.Item>
                         ))
                     }
                 </ListGroup>
