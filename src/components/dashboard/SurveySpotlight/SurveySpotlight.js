@@ -32,16 +32,18 @@ const SurveySpotlight = (props) => {
     }
 
     const getSubmissionCount = async() => {
-        const response = await axios({
-            method: "GET",
-            url: "/api/v1/submission/count?survey_id=" + props.selectedSurvey.id,
-            headers: {
-                "Authorization": storageManager.getJWTToken()
+        if(props.selectedSurvey){
+            const response = await axios({
+                method: "GET",
+                url: "/api/v1/submission/count?survey_id=" + props.selectedSurvey.id,
+                headers: {
+                    "Authorization": storageManager.getJWTToken()
+                }
+            });
+            log.debug("Fetched submission count", response);
+            if (response.status === 200){
+                setSubmissionCount(response.data.count)
             }
-        });
-        log.debug("Fetched submission count", response);
-        if (response.status === 200){
-            setSubmissionCount(response.data.count)
         }
     }
 

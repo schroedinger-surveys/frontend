@@ -10,6 +10,7 @@ import SurveyValidator from "./SurveyValidator";
 import storageManager from "../../storage/LocalStorageManager";
 import {TimeConverter} from "../utils/TimeConverter";
 import {sortQuestions} from "../utils/SortQuestions";
+import SideMenu from "../menu/side-menu/SideMenu";
 
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
@@ -198,7 +199,7 @@ const CreateSurvey = () => {
      */
     const basicDataFormInput = () => {
         return (
-            <Form style={{width: "70%", margin: "0 auto"}}>
+            <Form>
                 <Form.Group controlId="surveyTitle">
                     <Form.Label>Title*</Form.Label>
                     <Form.Control type="text" placeholder="Enter title" value={title}
@@ -292,21 +293,24 @@ const CreateSurvey = () => {
     return (
         <Container fluid>
             <Row>
-                <Col>
+                <Col xs={1} style={{padding: 0}}>
+                    <SideMenu/>
+                </Col>
+                <Col xs={5} style={{marginTop: "30px"}}>
                     {basicDataFormInput()}
                 </Col>
-                <Col>
+                <Col xs={6} style={{marginTop: "30px"}}>
                     {showMessage && (
                         <Message message={messageText} type={messageType}/>
                     )}
                     <Row>
                         <Col>
                             {constrainedQuestion()}
-                            <Button variant="warning" onClick={addConstrainedQuestion} style={{marginBottom: "15px"}}>Add Constrained Question</Button>
+                            <Button variant="warning" onClick={addConstrainedQuestion} style={{marginBottom: "15px", color: "white"}}>Add Constrained Question</Button>
                         </Col>
                         <Col>
                             {freestyleQuestion()}
-                            <Button variant="warning" onClick={addFreestyleQuestion} style={{marginBottom: "15px"}}>Add Freestyle Question</Button>
+                            <Button variant="warning" onClick={addFreestyleQuestion} style={{marginBottom: "15px", color: "white"}}>Add Freestyle Question</Button>
                         </Col>
                     </Row>
                     <Row>

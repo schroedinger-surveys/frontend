@@ -9,7 +9,7 @@ import Profile from "./Profile/Profile";
 import SurveyList from "./SurveyList";
 import SurveySpotlight from "./SurveySpotlight/SurveySpotlight";
 import UserPrompt from "./UserPrompt";
-import SideMenu from "../menu/SideMenu";
+import SideMenu from "../menu/side-menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
 import {privateSurveyCount, publicSurveyCount, setAllSurveyCounts} from "../utils/CountFunctions";
 import {
@@ -59,7 +59,7 @@ const Dashboard = (props) => {
             const publicSurveys = await publicSurveyCount();
             props.setPublicCount(publicSurveys);
 
-            props.setOverallCount(privateSurveys + publicSurveys); // Sets the count of overall survey belonging to the user
+            props.setOverallCount(privateSurveys + publicSurveys); // Sets the count of overall surveys belonging to the user
 
             const allSurveys = [...listPrivateSurveys, ...listPublicSurveys];
             if (allSurveys.length >= 1){
@@ -83,10 +83,10 @@ const Dashboard = (props) => {
             )}
             {!loading && (
                 <Row>
-                    <Col xs={2}>
+                    <Col xs={1} style={{padding: 0}}>
                         <SideMenu/>
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={4} style={{marginTop: "30px"}}>
                         <Row>
                             <Profile/>
                         </Row>
@@ -102,7 +102,7 @@ const Dashboard = (props) => {
                             <CreateSurveyButton/>
                         </Row>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={7} style={{marginTop: "30px"}}>
                         {props.counts.overallSurveys > 0 && ( // Check submission count, NOT Survey Count
                             <SurveySpotlight/>
                         )}

@@ -41,7 +41,7 @@ const Submissions = (props) => {
             </div>
             <div>
                 {allQuestions.map((item, i) => (
-                    <div key={i} style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px", margin: "0 15px"}}>
+                    <div key={i} style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
                         <label style={{cursor: "pointer"}}>Question {i+1}: <span style={{fontWeight: "bold"}}>{item.question.question_text}</span> - <i style={{color: "grey"}}>click to see visual representation</i></label>
                     </div>
                 ))}
