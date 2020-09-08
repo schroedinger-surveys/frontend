@@ -57,7 +57,7 @@ const SurveySpotlight = (props) => {
             <button style={{borderRadius: "5px", border: "none", marginRight: "5px", marginBottom: "10px", color: "white", backgroundColor: showRawSurvey ? "darkgreen" : "lightgrey"}} onClick={() => manageVisibility("raw")}>Raw Survey</button>
             <button style={{borderRadius: "5px", border: "none", marginRight: "5px", marginBottom: "10px", color: "white", backgroundColor: showLinks ? "darkgreen" : "lightgrey"}} onClick={() => manageVisibility("links")}>Share-Links</button>
             {showSubmissions && (
-                <p>{submissionCount > 1 ? "submissions...." : "No Submissions yet"}</p>
+                <p>{submissionCount >= 1 ? "submissions...." : "No Submissions yet"}</p>
             )}
             {showRawSurvey && (
                 <RawSurvey/>
