@@ -1,7 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 import {connect} from "react-redux";
+
 import RawSurvey from "./RawSurvey";
 import ShareLinks from "./ShareLinks";
+import storageManager from "../../../storage/LocalStorageManager";
+import log from "../../../log/Logger";
 
 const SurveySpotlight = (props) => {
     const [showSubmissions, setShowSubmissions] = useState(false);
@@ -24,6 +28,25 @@ const SurveySpotlight = (props) => {
             setShowRawSurvey(false);
         }
     }
+
+    const getSubmissionCount = async() => {
+        const response = await axios({
+            method: "GET",
+            url: "/api/v1/submission/count?survey_id=" + props.selectedSurvey.id,
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            }
+        });
+        log.debug("Fetched submission count", response);
+        if (response.status === 200){
+            setSubmissionCount(response.data.count)
+        }
+    }
+
+    useEffect(() => {
+        setSubmissionCount(""); // So that the count does not flip from old to new number
+        getSubmissionCount()
+    }, [props.selectedSurvey])
 
     return(
         <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
