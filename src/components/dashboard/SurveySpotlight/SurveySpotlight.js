@@ -6,6 +6,8 @@ import RawSurvey from "./RawSurvey";
 import ShareLinks from "./ShareLinks";
 import storageManager from "../../../storage/LocalStorageManager";
 import log from "../../../log/Logger";
+import Submissions from "./Submissions";
+import NoSubmissions from "./NoSubmissions";
 
 const SurveySpotlight = (props) => {
     const [showSubmissions, setShowSubmissions] = useState(false);
@@ -57,7 +59,9 @@ const SurveySpotlight = (props) => {
             <button style={{borderRadius: "5px", border: "none", marginRight: "5px", marginBottom: "10px", color: "white", backgroundColor: showRawSurvey ? "darkgreen" : "lightgrey"}} onClick={() => manageVisibility("raw")}>Raw Survey</button>
             <button style={{borderRadius: "5px", border: "none", marginRight: "5px", marginBottom: "10px", color: "white", backgroundColor: showLinks ? "darkgreen" : "lightgrey"}} onClick={() => manageVisibility("links")}>Share-Links</button>
             {showSubmissions && (
-                <p>{submissionCount >= 1 ? "submissions...." : "No Submissions yet"}</p>
+                <div>
+                    {submissionCount >= 1 ? <Submissions/> : <NoSubmissions/>}
+                </div>
             )}
             {showRawSurvey && (
                 <RawSurvey/>
