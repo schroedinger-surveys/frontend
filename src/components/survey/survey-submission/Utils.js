@@ -4,6 +4,8 @@ import {SurveyForm} from "./Survey";
 import {Button} from "react-bootstrap";
 import React from "react";
 import {sortQuestions} from "../../utils/SortQuestions";
+import {PendingSurvey} from "./PendingSurvey";
+import {ClosedSurvey} from "./ClosedSurvey";
 
 /**
  * Validate the submission attempt of a user
@@ -108,15 +110,13 @@ export const checkSurveyStatus = (survey, collect) => {
     if (start_date > today) {
         return (
             <div>
-                <h1>PENDING</h1>
-                <p>THE SURVEY IS NOT YET ACTIVE</p>
+                {PendingSurvey(survey)}
             </div>
         )
     } else if (end_date < today) {
         return (
             <div>
-                <h1>CLOSED</h1>
-                <p>THE SURVEY DOES NOT TAKE ANYMORE SUBMISSION</p>
+                {ClosedSurvey(survey)}
             </div>
         )
     } else {
