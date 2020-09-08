@@ -1,7 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 import {connect} from "react-redux";
+
 import RawSurvey from "./RawSurvey";
 import ShareLinks from "./ShareLinks";
+import storageManager from "../../../storage/LocalStorageManager";
+import log from "../../../log/Logger";
 
 const SurveySpotlight = (props) => {
     const [showSubmissions, setShowSubmissions] = useState(false);
@@ -25,6 +29,25 @@ const SurveySpotlight = (props) => {
         }
     }
 
+    const getSubmissionCount = async() => {
+        const response = await axios({
+            method: "GET",
+            url: "/api/v1/submission/count?survey_id=" + props.selectedSurvey.id,
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            }
+        });
+        log.debug("Fetched submission count", response);
+        if (response.status === 200){
+            setSubmissionCount(response.data.count)
+        }
+    }
+
+    useEffect(() => {
+        setSubmissionCount(""); // So that the count does not flip from old to new number
+        getSubmissionCount()
+    }, [props.selectedSurvey])
+
     return(
         <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
             {props.selectedSurvey && (
@@ -34,7 +57,7 @@ const SurveySpotlight = (props) => {
             <button style={{borderRadius: "5px", border: "none", marginRight: "5px", marginBottom: "10px", color: "white", backgroundColor: showRawSurvey ? "darkgreen" : "lightgrey"}} onClick={() => manageVisibility("raw")}>Raw Survey</button>
             <button style={{borderRadius: "5px", border: "none", marginRight: "5px", marginBottom: "10px", color: "white", backgroundColor: showLinks ? "darkgreen" : "lightgrey"}} onClick={() => manageVisibility("links")}>Share-Links</button>
             {showSubmissions && (
-                <p>{submissionCount > 1 ? "submissions...." : "No Submissions yet"}</p>
+                <p>{submissionCount >= 1 ? "submissions...." : "No Submissions yet"}</p>
             )}
             {showRawSurvey && (
                 <RawSurvey/>
