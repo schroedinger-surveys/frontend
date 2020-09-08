@@ -15,6 +15,7 @@ import {createStore} from "redux";
 import RootReducer from "./redux/reducer/RootReducer";
 import PublicSurvey from "./components/survey/survey-submission/PublicSurvey";
 import PrivateSurvey from "./components/survey/survey-submission/PrivateSurvey";
+import SurveyOverview from "./components/menu/side-menu/components/SurveyOverview";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/login"><Login single={true}/></Route>
                     <ProtectedRoute path={"/dashboard"} component={Dashboard}/>
                     <ProtectedRoute path={"/survey/create"} component={CreateSurvey}/>
+                    <ProtectedRoute path={"/survey/overview"} component={SurveyOverview}/>
                     <Route exact path="/survey/search" component={Search}/>
                     <Route path={"/pub/:id"} component={PublicSurvey}/>
                     <Route path={"/s/:id"} component={PrivateSurvey}/>
