@@ -18,6 +18,8 @@ COPY --from=build /app/build/ /var/www/
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
+RUN apk add --no-cache curl
+
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
