@@ -16,6 +16,8 @@ import RootReducer from "./redux/reducer/RootReducer";
 import PublicSurvey from "./components/survey/survey-submission/PublicSurvey";
 import PrivateSurvey from "./components/survey/survey-submission/PrivateSurvey";
 import SurveyOverview from "./components/menu/side-menu/components/SurveyOverview";
+import Submissions from "./components/menu/side-menu/components/Submissions";
+import SubmissionSpotlight from "./components/menu/side-menu/components/SubmissionSpotlight";
 
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
                     <ProtectedRoute path={"/dashboard"} component={Dashboard}/>
                     <ProtectedRoute path={"/survey/create"} component={CreateSurvey}/>
                     <ProtectedRoute path={"/survey/overview"} component={SurveyOverview}/>
+                    <ProtectedRoute path={"/survey/submissions"} component={Submissions}/>
+                    <ProtectedRoute path={"/survey/submission/spotlight"} component={SubmissionSpotlight}/>
                     <Route exact path="/survey/search" component={Search}/>
                     <Route path={"/pub/:id"} component={PublicSurvey}/>
                     <Route path={"/s/:id"} component={PrivateSurvey}/>

@@ -33,10 +33,10 @@ const Home = () => {
                 redirectUser()
             )}
             <Row>
-                <Col md={8}>Welcome to Schroedinger <br/>
+                <Col md={8} style={{marginTop: "30px"}}>Welcome to Schroedinger <br/>
                     <a href="/survey/search">Find public surveys and submit your answer</a>
                 </Col>
-                <Col md={4}>
+                <Col md={4} style={{marginTop: "30px"}}>
                     {loginVisibility && (
                         <Login single={false}/>
                     )}

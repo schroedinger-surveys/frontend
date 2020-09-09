@@ -9,7 +9,7 @@ import "./Spinner.css";
 const LoadingScreen = () => {
     return(
         <div className={"spinnerContainer"}>
-            <div className="lds-spinner">
+            <div className="lds-spinner" style={{marginTop: "30px"}}>
                 <div></div>
                 <div></div>
                 <div></div>
