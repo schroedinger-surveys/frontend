@@ -39,7 +39,6 @@ const Dashboard = (props) => {
     const [loading, setLoading] = useState(true);
 
     const getSurveysAndCounts = async () => {
-
         try {
             setLoading(true);
 

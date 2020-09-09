@@ -124,7 +124,7 @@ const PrivateSurvey = (props) => {
 
     useEffect(() => {
         getSurvey();
-    }, []);
+    }, );
 
     return (
         <div>

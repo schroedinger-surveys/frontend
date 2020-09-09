@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {connect} from "react-redux";
 import axios from "axios";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -70,11 +70,11 @@ const ShareLinks = (props) => {
                                 delay={{show: 250, hide: 400}}
                                 overlay={renderTooltip}
                             >
-                                <a onClick={copyToClipboard} style={{cursor: "pointer"}}>
+                                <button onClick={copyToClipboard} style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>
                                     {window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                     /s/{props.selectedSurvey.id}
                                     ?token={link.id}
-                                </a>
+                                </button>
                             </OverlayTrigger>
                         </li>
                     ))}
@@ -112,9 +112,9 @@ const ShareLinks = (props) => {
                     delay={{show: 250, hide: 400}}
                     overlay={renderTooltip}
                 >
-                    <a onClick={copyToClipboard}
-                       style={{cursor: "pointer"}}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
-                        /pub/{props.selectedSurvey.id}</a>
+                    <button onClick={copyToClipboard}
+                       style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                        /pub/{props.selectedSurvey.id}</button>
                 </OverlayTrigger>
                 <hr/>
                 <p>Since your survey is public, everyone can take part and search for your survey here: <a

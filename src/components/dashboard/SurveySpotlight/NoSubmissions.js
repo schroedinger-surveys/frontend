@@ -29,7 +29,7 @@ const NoSubmissions = (props) => {
     return(
         <div>
             <h3>No Submissions because {reason.message}</h3>
-            <img src={reason.img_src} style={{width: "200px"}}/>
+            <img src={reason.img_src} style={{width: "200px"}} alt={""}/>
             <p>What now? - {reason.instructions}</p>
 
         </div>
