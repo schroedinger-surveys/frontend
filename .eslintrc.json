@@ -56,7 +56,6 @@
         "no-unused-vars": "error",
         "comma-dangle": ["error", "never"],
         "curly": "error",
-        "capitalized-comments": ["error"],
         "react/jsx-no-bind": ["error", {
             "allowArrowFunctions": true,
             "allowBind": false,
