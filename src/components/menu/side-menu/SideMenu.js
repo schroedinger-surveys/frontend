@@ -11,7 +11,7 @@ const SideMenu = () => {
                 <label style={{color: "lightgrey", fontWeight: "bolder"}}>Survey</label>
                 <Nav.Link className={"side_nav_link"} href="/survey/create" style={{color: "white"}}>New Survey</Nav.Link>
                 <Nav.Link className={"side_nav_link"}  href="/survey/overview" style={{color: "white"}}>Overview</Nav.Link>
-                <Nav.Link className={"side_nav_link"}  href="/survey/create" style={{color: "white"}}>Submissions</Nav.Link>
+                <Nav.Link className={"side_nav_link"}  href="/survey/submissions" style={{color: "white"}}>Submissions</Nav.Link>
             </Nav>
             <br/>
             <Nav>
