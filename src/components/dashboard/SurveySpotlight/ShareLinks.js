@@ -13,6 +13,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 const ShareLinks = (props) => {
     const [amount, setAmount] = useState(3);
     const [links, setLinks] = useState([]);
+    const [emails, setEmails] = useState("");
 
     const getToken = () => {
         axios({
@@ -44,7 +45,7 @@ const ShareLinks = (props) => {
                 <p>Attention: The Links will be created and you have to copy and save them at a place for your eyes
                     only. We
                     do not save them for you (yet).</p>
-                <InputGroup className="mb-3" style={{width: "70%", margin: "0 auto"}}>
+                <InputGroup className="mb-3" style={{width: "70%"}}>
                     <InputGroup.Append>
                         <InputGroup.Text id="basic-addon2" style={{borderRadius: "5px 0 0 5px"}}>Amount of
                             Links</InputGroup.Text>
@@ -61,7 +62,6 @@ const ShareLinks = (props) => {
                         <Button variant="outline-success" onClick={getToken}>Create</Button>
                     </InputGroup.Append>
                 </InputGroup>
-                <hr/>
                 <ul>
                     {links.map((link, i) => (
                         <li key={i} id={"privateLink" + i} style={{fontSize: "10px"}}>
@@ -116,9 +116,29 @@ const ShareLinks = (props) => {
                        style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                         /pub/{props.selectedSurvey.id}</button>
                 </OverlayTrigger>
-                <hr/>
                 <p>Since your survey is public, everyone can take part and search for your survey here: <a
                     href={"/survey/search"}>Click to search for survey</a></p>
+            </div>
+        )
+    }
+
+    const sendLinkPerMail = () => {
+        return (
+            <div>
+                <p>You can send a link to open and answer the survey to as many people as you like.</p>
+                <p><span style={{fontWeight: "bold"}}>Attention:</span> Separate Emails with a comma</p>
+                <InputGroup>
+                    <FormControl
+                        type={"email"}
+                        as={"textarea"}
+                        rows={3}
+                        value={emails}
+                        onChange={(event) => setEmails(event.target.value)}
+                        aria-label="Default"
+                        aria-describedby="inputGroup-sizing-default"
+                    />
+                </InputGroup>
+                <Button variant={"outline-success"} style={{marginTop: "10px"}}>Send Token Per Mail</Button>
             </div>
         )
     }
@@ -131,6 +151,8 @@ const ShareLinks = (props) => {
             {props.selectedSurvey && !props.selectedSurvey.secured && (
                 publicSurvey()
             )}
+            <hr/>
+            {sendLinkPerMail()}
         </div>
     )
 
