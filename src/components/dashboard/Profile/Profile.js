@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import storageManager from "../../../storage/LocalStorageManager";
 import RandomIcon from "./RandomIcon";
 import SurveyCounts from "./SurveyCounts";
+import axios from "axios";
 
 /**
  * Component greets the User by name (data from jwt in storage)
@@ -14,8 +15,24 @@ import SurveyCounts from "./SurveyCounts";
  * @returns {JSX.Element}
  */
 const Profile = () => {
-    const userData = storageManager.getUserData();
-    const {username} = userData;
+    const [username, setUsername] = useState("");
+
+    const getUserName = async() => {
+        const userInfoResponse = await axios({
+            method: "POST",
+            url: "/api/v1/user/info",
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            }
+        });
+        if (userInfoResponse.status === 200){
+            setUsername(userInfoResponse.data.username);
+        }
+    }
+
+    useEffect(() => {
+        getUserName()
+    }, [])
 
     return(
         <Container>
