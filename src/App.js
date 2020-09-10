@@ -18,6 +18,7 @@ import PrivateSurvey from "./components/survey/survey-submission/PrivateSurvey";
 import SurveyOverview from "./components/menu/side-menu/components/SurveyOverview";
 import Submissions from "./components/menu/side-menu/components/Submissions";
 import SubmissionSpotlight from "./components/menu/side-menu/components/SubmissionSpotlight";
+import ChangeUserData from "./components/user/ChangeUserData";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                     <ProtectedRoute path={"/survey/overview"} component={SurveyOverview}/>
                     <ProtectedRoute path={"/survey/submissions"} component={Submissions}/>
                     <ProtectedRoute path={"/survey/submission/spotlight"} component={SubmissionSpotlight}/>
+                    <ProtectedRoute path={"/settings"} component={ChangeUserData}/>
                     <Route exact path="/survey/search" component={Search}/>
                     <Route path={"/pub/:id"} component={PublicSurvey}/>
                     <Route path={"/s/:id"} component={PrivateSurvey}/>
