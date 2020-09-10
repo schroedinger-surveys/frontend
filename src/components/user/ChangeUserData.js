@@ -177,7 +177,7 @@ const ChangeUserData = (props) => {
                                 <Form.Control id={"newPasswordConfirm"} type="password" placeholder="Password" style={confirmPassword("newPassword", "newPasswordConfirm")} value={confirmationPassword} onChange={handleUserInput("confirmationPassword")}/>
                             </Form.Group>
                             <Form.Group >
-                                <Form.Label>Old Password</Form.Label>
+                                <Form.Label style={{fontWeight: "bold"}}>Old Password*</Form.Label>
                                 <Form.Control id={"newPasswordConfirm"} type="password" placeholder="Password" value={oldPassword} onChange={handleUserInput("oldPassword")}/>
                             </Form.Group>
                             {showMessage && (
