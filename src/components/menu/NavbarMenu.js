@@ -86,7 +86,7 @@ const NavbarMenu = () => {
                 <NavDropdown title="Menu" id="nav-dropdown" alignRight style={{lineHeight: "40px"}}>
                     <NavDropdown.Item id={1} title={username} style={{fontWeight: "Bolder", lineHeight: "25px"}}>{username}</NavDropdown.Item>
                     <NavDropdown.Divider/>
-                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Account Settings</Nav.Link>
+                    <Nav.Link href="/settings" style={{paddingLeft: "25px", lineHeight: "25px"}}>Account Settings</Nav.Link>
                     <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Terms of Service</Nav.Link>
                     <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Info</Nav.Link>
                     <NavDropdown.Divider/>
