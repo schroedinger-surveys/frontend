@@ -9,9 +9,13 @@ import axios from "axios";
 import storageManager from "../../storage/LocalStorageManager";
 import Message from "../utils/Message";
 import {Redirect} from "react-router-dom";
+import Modal from "react-bootstrap/Modal";
 
 const ChangeUserData = (props) => {
     const {history} = props;
+
+    const [showModal, setShowModal] = useState(false);
+
     const [userData, setUserData] = useState({});
     const [newUserData, setNewUserData] = useState({
         username: "",
@@ -19,9 +23,11 @@ const ChangeUserData = (props) => {
         confirmationEmail: "",
         password: "",
         confirmationPassword: "",
-        oldPassword: ""
+        oldPassword: "",
+        confirmDeleteUsername: "",
+        confirmDeletePassword: ""
     })
-    const {username, email, confirmationEmail, password, confirmationPassword, oldPassword} = newUserData;
+    const {username, email, confirmationEmail, password, confirmationPassword, oldPassword, confirmDeleteUsername, confirmDeletePassword} = newUserData;
 
     /**
      * Used as props for the child Component Message
@@ -32,6 +38,10 @@ const ChangeUserData = (props) => {
     const [showMessage, setShowMessage] = useState(false);
     const [messageText, setMessageText] = useState("");
     const [messageType, setMessageType] = useState("");
+
+    const [showMessageDelete, setShowMessageDelete] = useState(false);
+    const [messageTextDelete, setMessageTextDelete] = useState("");
+    const [messageTypeDelete, setMessageTypeDelete] = useState("");
 
     const advancedUserInformation = async() => {
         const userInfoResponse = await axios({
@@ -60,6 +70,8 @@ const ChangeUserData = (props) => {
     }
 
     const handleUserInput = (name) => (event) => {
+        setShowMessage(false);
+        setShowMessageDelete(false);
         setNewUserData({...newUserData, [name]: event.target.value})
     }
 
@@ -126,6 +138,72 @@ const ChangeUserData = (props) => {
         }
     }
 
+    const deleteUserModal = () => {
+        return (
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Deleting your user account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    To confirm that you want to delete your user account, please provide your <span style={{fontWeight: "bold"}}>username</span> and <span style={{fontWeight: "bold"}}>password</span>.
+                    <hr/>
+                    <Form.Group controlId="username">
+                        <Form.Label>Username*</Form.Label>
+                        <Form.Control type="username" placeholder="Enter username" value={confirmDeleteUsername} onChange={handleUserInput("confirmDeleteUsername")}/>
+                    </Form.Group>
+                    <Form.Group controlId="username">
+                        <Form.Label>Current Password*</Form.Label>
+                        <Form.Control type="password" placeholder="Enter password" value={confirmDeletePassword} onChange={handleUserInput("confirmDeletePassword")}/>
+                    </Form.Group>
+                    {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Rather not
+                    </Button>
+                    <Button variant="danger" onClick={deleteUser}>
+                        Yes, delete my account
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
+    const deleteUser = async() => {
+        if (confirmDeleteUsername === userData.username){
+            try{
+                const deleteAccount = await axios({
+                    method: "DELETE",
+                    url: "/api/v1/user",
+                    headers: {
+                        "Authorization": storageManager.getJWTToken()
+                    },
+                    data: {
+                        password: confirmDeletePassword
+                    }
+                });
+                if (deleteAccount.status === 200){
+                    storageManager.clearToken();
+                    history.push("/");
+                } else {
+                    setShowMessageDelete(true);
+                    setMessageTypeDelete("danger");
+                    setMessageTextDelete("That did not work");
+                }
+            } catch (e){
+                console.log("User could not be deleted",e);
+                setShowMessageDelete(true);
+                setMessageTypeDelete("danger");
+                setMessageTextDelete("Please check the given credentials again.");
+            }
+
+        } else {
+            setShowMessageDelete(true);
+            setMessageTypeDelete("danger");
+            setMessageTextDelete("Username is wrong. Please try again!");
+        }
+    }
+
     useEffect(() => {
        advancedUserInformation()
     }, [])
@@ -137,6 +215,7 @@ const ChangeUserData = (props) => {
                     <SideMenu/>
                 </Col>
                 <Col xs={{span: 5, offset: 3}} style={{marginTop: "10px"}}>
+                    {deleteUserModal()}
                     <Row>
                         <div style={{width: "95%", margin: "0 auto"}}>
                             <label style={{fontWeight: "bold", fontSize: "21px"}}>Current Profile</label>
@@ -177,7 +256,7 @@ const ChangeUserData = (props) => {
                                 <Form.Control id={"newPasswordConfirm"} type="password" placeholder="Password" style={confirmPassword("newPassword", "newPasswordConfirm")} value={confirmationPassword} onChange={handleUserInput("confirmationPassword")}/>
                             </Form.Group>
                             <Form.Group >
-                                <Form.Label style={{fontWeight: "bold"}}>Old Password*</Form.Label>
+                                <Form.Label style={{fontWeight: "bold"}}>Current Password*</Form.Label>
                                 <Form.Control id={"newPasswordConfirm"} type="password" placeholder="Password" value={oldPassword} onChange={handleUserInput("oldPassword")}/>
                             </Form.Group>
                             {showMessage && (
@@ -188,7 +267,12 @@ const ChangeUserData = (props) => {
                             </Button>
                         </Form>
                     </Row>
-
+                    <hr style={{backgroundColor: "lightgrey"}}/>
+                    <Row>
+                        <div style={{width: "95%", margin: "0 auto"}}>
+                        <Button variant={"outline-danger"} onClick={() => setShowModal(true)}>Delete User account</Button>
+                        </div>
+                    </Row>
                 </Col>
             </Row>
         </Container>
