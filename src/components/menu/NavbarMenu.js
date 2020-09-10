@@ -3,6 +3,9 @@ import {useLocation} from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import storageManager from "../../storage/LocalStorageManager";
+import NavDropdown from "react-bootstrap/NavDropdown";
+
+import catIcon from "./icons/cat.png";
 
 /**
  * The Navbar that will be displayed at every page
@@ -58,30 +61,31 @@ const NavbarMenu = () => {
      */
     const loggedIn = () => {
         return (
-            <Nav className="mr-auto">
-                <Nav.Link href="/dashboard" style={activePage("/dashboard")}>Dashboard</Nav.Link>
-                <Nav.Link href="/survey/create" style={activePage("/survey/create")}>CreateSurvey</Nav.Link>
-                <Nav.Link href="/survey/search" style={activePage("/survey/search")}>Search</Nav.Link>
-                <Nav.Link href="/" style={activePage("/")} onClick={logoutUser}>Logout</Nav.Link> {/** If clicked, the logoutUser function is called and the nav-link redirects to home **/}
+            <Nav className="ml-auto">
+                <Navbar.Brand href="/" style={{marginRight: "0"}}><img src={catIcon} style={{height: "40px"}}/></Navbar.Brand>
+                <NavDropdown title="Menu" id="nav-dropdown" alignRight style={{lineHeight: "40px"}}>
+                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Account Settings</Nav.Link>
+                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Terms of Service</Nav.Link>
+                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Info</Nav.Link>
+                    <NavDropdown.Divider/>
+                    <Nav.Link href="/" onClick={logoutUser} style={{paddingLeft: "25px", lineHeight: "25px", color: "darkred"}}>Logout</Nav.Link>
+                </NavDropdown>
             </Nav>
         )
     }
 
     return (
-        <Navbar  style={{boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)"}}>
+        <Navbar style={{boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)"}}>
             <Navbar.Brand href="/" style={{color: "#065535", fontWeight: "bolder"}}>Schrödinger-Survey</Navbar.Brand>
             {(location.pathname.split("/")[1] !== "s" && location.pathname.split("/")[1] !== "pub") && (
-                <div>
-                        {/** Check if a jwt token is in local or session storage
-                         * call functions that render different versions based on answer
-                         */}
-                        {storageManager.searchForJWTToken() && (
-                            loggedIn()
-                        )}
-                        {!storageManager.searchForJWTToken() && (
-                            loggedOut()
-                        )}
-                </div>
+                storageManager.searchForJWTToken() && (
+                    loggedIn()
+                )
+            )}
+            {(location.pathname.split("/")[1] !== "s" && location.pathname.split("/")[1] !== "pub") && (
+                !storageManager.searchForJWTToken() && (
+                    loggedOut()
+                )
             )}
         </Navbar>
     )
