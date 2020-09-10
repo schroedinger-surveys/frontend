@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -6,6 +6,7 @@ import storageManager from "../../storage/LocalStorageManager";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
 import catIcon from "./icons/cat.png";
+import axios from "axios";
 
 /**
  * The Navbar that will be displayed at every page
@@ -15,6 +16,25 @@ import catIcon from "./icons/cat.png";
  */
 const NavbarMenu = () => {
     const location = useLocation(); // Current url path, e.g. "/login"
+
+    const [username, setUsername] = useState("");
+
+    const getUserName = async() => {
+        const userInfoResponse = await axios({
+            method: "POST",
+            url: "/api/v1/user/info",
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            }
+        });
+        if (userInfoResponse.status === 200){
+            setUsername(userInfoResponse.data.username);
+        }
+    }
+
+    useEffect(() => {
+        getUserName()
+    }, [])
 
     /**
      * Used to change the styling of the nav-links
@@ -64,6 +84,8 @@ const NavbarMenu = () => {
             <Nav className="ml-auto">
                 <Navbar.Brand href="/" style={{marginRight: "0"}}><img src={catIcon} style={{height: "40px"}}/></Navbar.Brand>
                 <NavDropdown title="Menu" id="nav-dropdown" alignRight style={{lineHeight: "40px"}}>
+                    <NavDropdown.Item id={1} title={username} style={{fontWeight: "Bolder", lineHeight: "25px"}}>{username}</NavDropdown.Item>
+                    <NavDropdown.Divider/>
                     <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Account Settings</Nav.Link>
                     <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Terms of Service</Nav.Link>
                     <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Info</Nav.Link>
