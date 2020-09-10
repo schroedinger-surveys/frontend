@@ -9,11 +9,22 @@ import log from "../../../log/Logger";
 import storageManager from "../../../storage/LocalStorageManager";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Message from "../../utils/Message";
 
 const ShareLinks = (props) => {
     const [amount, setAmount] = useState(3);
     const [links, setLinks] = useState([]);
     const [emails, setEmails] = useState("");
+
+    /**
+     * Used as props for the child Component Message
+     * showMessage: state of visibility of component Message
+     * messageText: string containing the message to be displayed
+     * messageType: "danger" || "success" - based off of bootstrap colors
+     */
+    const [showMessage, setShowMessage] = useState(false);
+    const [messageText, setMessageText] = useState("");
+    const [messageType, setMessageType] = useState("");
 
     const getToken = () => {
         axios({
@@ -30,6 +41,9 @@ const ShareLinks = (props) => {
             log.debug("Got the Tokens as response", response);
             if (response.status === 201) {
                 setLinks(response.data);
+                setShowMessage(true);
+                setMessageType("success");
+                setMessageText("Mails were sent");
             }
         }).catch((error) => {
             log.debug("could not create token", error.response)
@@ -79,6 +93,8 @@ const ShareLinks = (props) => {
                         </li>
                     ))}
                 </ul>
+                <hr/>
+                {sendLinkPerMail()}
             </div>
         )
     }
@@ -138,9 +154,32 @@ const ShareLinks = (props) => {
                         aria-describedby="inputGroup-sizing-default"
                     />
                 </InputGroup>
-                <Button variant={"outline-success"} style={{marginTop: "10px"}}>Send Token Per Mail</Button>
+                {showMessage && <Message  type={messageType} message={messageText}/>}
+                <Button variant={"outline-success"} style={{marginTop: "10px"}} onClick={sendToToken}>Send Token Per Mail</Button>
             </div>
         )
+    }
+
+    const sendToToken = async() => {
+        const mails = emails.split(",");
+        for (let i = 0; i < mails.length; i++){
+            mails[i] = mails[i].trim()
+        }
+        console.log(props.selectedSurvey.id, mails)
+        const sendMailResponse = await axios({
+            method: "POST",
+            url: "/api/v1/token/email",
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            },
+            data: {
+                survey_id: props.selectedSurvey.id,
+                emails: mails
+            }
+        });
+        if(sendMailResponse.status === 201){
+
+        }
     }
 
     return (
@@ -151,8 +190,6 @@ const ShareLinks = (props) => {
             {props.selectedSurvey && !props.selectedSurvey.secured && (
                 publicSurvey()
             )}
-            <hr/>
-            {sendLinkPerMail()}
         </div>
     )
 
