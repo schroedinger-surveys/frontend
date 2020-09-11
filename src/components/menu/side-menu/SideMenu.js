@@ -1,7 +1,7 @@
 import React from "react";
 import Nav from "react-bootstrap/Nav";
 
-import "./sideMenu.css";
+import "./SideMenu.css";
 import storageManager from "../../../storage/LocalStorageManager";
 import {useLocation} from "react-router-dom";
 
@@ -34,7 +34,6 @@ const SideMenu = () => {
             <Nav>
                 <label style={{color: "lightgrey", fontWeight: "bolder"}}>Survey</label>
                 <Nav.Link className={"side_nav_link"} href="/survey/create" style={activePage("/survey/create")}>New Survey</Nav.Link>
-                <Nav.Link className={"side_nav_link"} href="/survey/update" style={activePage("/survey/update")}>Edit Survey</Nav.Link>
                 <Nav.Link className={"side_nav_link"}  href="/survey/overview" style={activePage("/survey/overview")}>Survey Overview</Nav.Link>
                 <Nav.Link className={"side_nav_link"}  href="/survey/submissions" style={activePage("/survey/submissions")}>Submissions</Nav.Link>
             </Nav>
