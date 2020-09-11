@@ -12,7 +12,7 @@ import cat9 from "./icons/009-kitty-6.png";
 
 /**
  * Picks a random image as source of the img tag
- * scenario: Used in Profile component to greet the user with a changing icon for every render/reload of the page
+ * scenario: Used in profile component to greet the user with a changing icon for every render/reload of the page
  * @returns {JSX.Element}
  */
 const RandomIcon = () => {

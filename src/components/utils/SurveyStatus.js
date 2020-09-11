@@ -12,3 +12,16 @@ export const getCurrentStatus = (start_date, end_date) => {
         return <span style={{color: "darkgreen"}}>active</span>
     }
 }
+
+export const getSurveyStatus = (start_date, end_date) => {
+    const today = Date.now();
+    const startDate = new Date(start_date).getTime();
+    const endDate = new Date(end_date).getTime();
+    if (startDate > today) {
+        return "pending"
+    } else if (endDate < today) {
+        return "closed"
+    } else if (startDate <= today && endDate >= today) {
+        return "active"
+    }
+}

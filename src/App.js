@@ -15,10 +15,11 @@ import {createStore} from "redux";
 import RootReducer from "./redux/reducer/RootReducer";
 import PublicSurvey from "./components/survey/survey-submission/PublicSurvey";
 import PrivateSurvey from "./components/survey/survey-submission/PrivateSurvey";
-import SurveyOverview from "./components/menu/side-menu/components/SurveyOverview";
-import Submissions from "./components/menu/side-menu/components/Submissions";
-import SubmissionSpotlight from "./components/menu/side-menu/components/SubmissionSpotlight";
+import SurveyOverview from "./components/survey/SurveyOverview";
+import Submissions from "./components/submissions/Submissions";
+import SubmissionSpotlight from "./components/submissions/SubmissionSpotlight";
 import ChangeUserData from "./components/user/ChangeUserData";
+import EditSurvey from "./components/survey/EditSurvey";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
                     <Route path="/login"><Login single={true}/></Route>
                     <ProtectedRoute path={"/dashboard"} component={Dashboard}/>
                     <ProtectedRoute path={"/survey/create"} component={CreateSurvey}/>
+                    <ProtectedRoute path={"/survey/edit/:id"} component={EditSurvey}/>
                     <ProtectedRoute path={"/survey/overview"} component={SurveyOverview}/>
                     <ProtectedRoute path={"/survey/submissions"} component={Submissions}/>
                     <ProtectedRoute path={"/survey/submission/spotlight"} component={SubmissionSpotlight}/>

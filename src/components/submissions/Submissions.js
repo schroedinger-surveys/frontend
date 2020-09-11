@@ -1,14 +1,14 @@
 import React, {useState} from "react";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
-import SideMenu from "../SideMenu";
+import SideMenu from "../menu/side-menu/SideMenu";
 import Row from "react-bootstrap/Row";
-import {getPrivateSurveys, getPublicSurveys} from "../../../utils/GetSurveys";
+import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 import {Redirect} from "react-router-dom";
-import LoadingScreen from "../../../utils/LoadingScreen";
-import {privateSurveyCount, publicSurveyCount} from "../../../utils/CountFunctions";
+import LoadingScreen from "../utils/LoadingScreen";
+import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
 import axios from "axios";
-import storageManager from "../../../../storage/LocalStorageManager";
+import storageManager from "../../storage/LocalStorageManager";
 
 const Submissions = () => {
     const itemsPerPage = 10;
