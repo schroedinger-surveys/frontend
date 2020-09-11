@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from "react";
 import {Container, ListGroup} from "react-bootstrap";
-import SideMenu from "../SideMenu";
+import SideMenu from "../menu/side-menu/SideMenu";
 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
-import {getPrivateSurveys, getPublicSurveys} from "../../../utils/GetSurveys";
+import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 import axios from "axios";
-import storageManager from "../../../../storage/LocalStorageManager";
-import LoadingScreen from "../../../utils/LoadingScreen";
-import {getCurrentStatus} from "../../../utils/SurveyStatus";
+import storageManager from "../../storage/LocalStorageManager";
+import LoadingScreen from "../utils/LoadingScreen";
+import {getCurrentStatus} from "../utils/SurveyStatus";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
-import {privateSurveyCount, publicSurveyCount} from "../../../utils/CountFunctions";
+import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
 
 const SurveyOverview = () => {
     const [matching, setMatching] = useState(true);

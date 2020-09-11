@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
-import SideMenu from "../SideMenu";
+import SideMenu from "../menu/side-menu/SideMenu";
 import Row from "react-bootstrap/Row";
 import {Redirect} from "react-router-dom";
-import log from "../../../../log/Logger";
+import log from "../../log/Logger";
 import axios from "axios";
-import storageManager from "../../../../storage/LocalStorageManager";
-import {sortQuestions} from "../../../utils/SortQuestions";
+import storageManager from "../../storage/LocalStorageManager";
+import {sortQuestions} from "../utils/SortQuestions";
 
 const SubmissionSpotlight = (props) => {
     const survey = props.location.state.survey;

@@ -5,9 +5,9 @@ import Col from "react-bootstrap/Col";
 import {connect} from "react-redux";
 
 import log from "../../log/Logger";
-import Profile from "./Profile/Profile";
+import Profile from "./profile/Profile";
 import SurveyList from "./SurveyList";
-import SurveySpotlight from "./SurveySpotlight/SurveySpotlight";
+import SurveySpotlight from "./survey-spotlight/SurveySpotlight";
 import UserPrompt from "./UserPrompt";
 import SideMenu from "../menu/side-menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
@@ -28,9 +28,9 @@ import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
  * User Dashboard containing multiple elements to give user an overview of his acocunt
  * Child Components:
  * SideMenu - Shows Page to navigate to
- * Profile - greets the user, shows cute icon and displays the survey counts
- * SurveyList - a list of the users surveys, click opens them in SurveySpotlight
- * SurveySpotlight - Shows one Survey, its questions and all submitted answers
+ * profile - greets the user, shows cute icon and displays the survey counts
+ * SurveyList - a list of the users surveys, click opens them in survey-spotlight
+ * survey-spotlight - Shows one Survey, its questions and all submitted answers
  * CreateSurveyButton - Redirects to the CreateSurvey Component
  * UserPrompt - in case user has no surveys yet it prompts him to create some
  * @returns {JSX.Element}

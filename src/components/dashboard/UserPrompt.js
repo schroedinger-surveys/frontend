@@ -4,7 +4,7 @@ import React from "react";
  * A Prompt telling/showing the user how to create a survey/use the app
  * scenario: User has no surveys yet
  * @param props
- * size (prop) - there is a small prompt for the SurveyList and a large prompt for the SurveySpotlight
+ * size (prop) - there is a small prompt for the SurveyList and a large prompt for the survey-spotlight
  * @returns {JSX.Element}
  * @constructor
  */
@@ -22,7 +22,7 @@ const UserPrompt = (props) => {
     }
 
     /**
-     * Displayed instead of the component SurveySpotlight in the Dashboard
+     * Displayed instead of the component survey-spotlight in the Dashboard
      * @returns {JSX.Element}
      */
     const largePrompt = () => {

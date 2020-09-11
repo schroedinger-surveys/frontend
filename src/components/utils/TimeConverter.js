@@ -11,12 +11,18 @@ const TimeConverter = (date) => {
     return `${year}-${month}-${day}`;
 }
 
+/**
+ *
+ * @param date is like "2020-09-12T00:00:00.000Z"
+ * @returns {number}
+ * @constructor
+ */
 const UnixToHumanTime = (date) => {
-    const dateParts = date.split("-");
+    const dateParts = date.substr(0, 10).split("-");
     const year = dateParts[0];
     const month = dateParts[1];
     const day = dateParts[2];
-    return new Date(Date.UTC(year, month, day)).getTime();
+    return new Date(Date.UTC(year, month, day));
 }
 
 export {
