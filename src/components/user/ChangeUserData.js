@@ -8,7 +8,6 @@ import ListGroup from "react-bootstrap/ListGroup";
 import axios from "axios";
 import storageManager from "../../storage/LocalStorageManager";
 import Message from "../utils/Message";
-import {Redirect} from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 
 const ChangeUserData = (props) => {
