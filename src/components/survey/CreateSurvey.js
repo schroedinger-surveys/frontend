@@ -11,6 +11,7 @@ import storageManager from "../../storage/LocalStorageManager";
 import {TimeConverter} from "../utils/TimeConverter";
 import {sortQuestions} from "../utils/SortQuestions";
 import SideMenu from "../menu/side-menu/SideMenu";
+import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
@@ -33,16 +34,8 @@ const CreateSurvey = () => {
     const [constrainedOptions, setConstrainedOptions] = useState([]);
     const [optionsIndex, setOptionsIndex] = useState(minimumOptionsAmount);
 
-    const fillDefaultOptionsArray = () => {
-        const defaultOptions = [];
-        for (let i = 0; i < minimumOptionsAmount; i++){
-            defaultOptions.push({index: i})
-        }
-        setConstrainedOptions(defaultOptions);
-    }
-
     useEffect(() => {
-        fillDefaultOptionsArray();
+        setConstrainedOptions(fillDefaultOptionsArray(minimumOptionsAmount));
     }, []);
 
     /**
@@ -147,7 +140,7 @@ const CreateSurvey = () => {
 
             setQuestionIndex(questionIndex + 1); // Increment Index used to track creation order/position of all Questions (Freestyle and Constrained)
             setOptionsIndex(minimumOptionsAmount); // Set Options Index back to 2, which is default
-            fillDefaultOptionsArray(); // Refill the optionsArray with default objects
+            setConstrainedOptions(fillDefaultOptionsArray(minimumOptionsAmount)); // Refill the optionsArray with default objects
 
             /**
              * Clear the Input fields for the question and the options
@@ -198,46 +191,16 @@ const CreateSurvey = () => {
      * @returns {JSX.Element}
      */
     const basicDataFormInput = () => {
+        const params = {
+            title,
+            description,
+            start_date,
+            end_date,
+            handleInputChange
+        }
         return (
             <Form>
-                <Form.Group controlId="surveyTitle">
-                    <Form.Label>Title*</Form.Label>
-                    <Form.Control type="text" placeholder="Enter title" value={title}
-                                  onChange={handleInputChange("title")}/>
-                    <Form.Text className="text-muted">
-                        Public surveys are easier to find with a poignant title.
-                    </Form.Text>
-                </Form.Group>
-
-                <Form.Group controlId="surveyDescription">
-                    <Form.Label>Description*</Form.Label>
-                    <Form.Control as="textarea" rows="3" placeholder="Description" value={description}
-                                  onChange={handleInputChange("description")}/>
-                    <Form.Text className="text-muted">
-                        If the mission of your survey is clear to a user, they will have a better experience taking it.
-                    </Form.Text>
-                </Form.Group>
-
-                <Row>
-                    <Col>
-                        <Form.Group controlId="surveyStartDate">
-                            <Form.Label>Start Date*</Form.Label>
-                            <Form.Control type="date" value={start_date} onChange={handleInputChange("start_date")}/>
-                            <Form.Text className="text-muted">
-                                The date your survey starts taking submissions.
-                            </Form.Text>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group controlId="surveyEndDate">
-                            <Form.Label>End Date*</Form.Label>
-                            <Form.Control type="date" value={end_date} onChange={handleInputChange("end_date")}/>
-                            <Form.Text className="text-muted">
-                                The date your survey closes for submissions.
-                            </Form.Text>
-                        </Form.Group>
-                    </Col>
-                </Row>
+                <BasicForm params={params}/>
 
                 <Form.Group>
                     <Form.Check id={"securedStatus"} type="checkbox" label="Make Survey Private"/>
