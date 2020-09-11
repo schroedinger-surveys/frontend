@@ -9,8 +9,9 @@ import axios from "axios";
 import {TimeConverter} from "../utils/TimeConverter";
 import {sortQuestions} from "../utils/SortQuestions";
 import storageManager from "../../storage/LocalStorageManager";
-import Modal from "react-bootstrap/Modal";
 import Message from "../utils/Message";
+import {DeleteModal, deleteSurveyRequest} from "./delete-survey-utils";
+import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 
 const EditSurvey = (props) => {
     const {history} = props;
@@ -80,6 +81,10 @@ const EditSurvey = (props) => {
     const [messageTextDelete, setMessageTextDelete] = useState("");
     const [messageTypeDelete, setMessageTypeDelete] = useState("");
 
+    const [showMessageUpdate, setShowMessageUpdate] = useState(false);
+    const [messageTextUpdate, setMessageTextUpdate] = useState("");
+    const [messageTypeUpdate, setMessageTypeUpdate] = useState("");
+
     const handleInputChange = (name) => (event) => {
         setValues({...values, [name]: event.target.value});
     }
@@ -90,46 +95,16 @@ const EditSurvey = (props) => {
      * @returns {JSX.Element}
      */
     const basicDataFormInput = () => {
+        const params = {
+            title,
+            description,
+            start_date,
+            end_date,
+            handleInputChange
+        }
         return (
             <Form>
-                <Form.Group controlId="surveyTitle">
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control type="text" placeholder="Enter title" value={title}
-                                  onChange={handleInputChange("title")}/>
-                    <Form.Text className="text-muted">
-                        Public surveys are easier to find with a poignant title.
-                    </Form.Text>
-                </Form.Group>
-
-                <Form.Group controlId="surveyDescription">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control as="textarea" rows="3" placeholder="Description" value={description}
-                                  onChange={handleInputChange("description")}/>
-                    <Form.Text className="text-muted">
-                        If the mission of your survey is clear to a user, they will have a better experience taking it.
-                    </Form.Text>
-                </Form.Group>
-
-                <Row>
-                    <Col>
-                        <Form.Group controlId="surveyStartDate">
-                            <Form.Label>Start Date</Form.Label>
-                            <Form.Control type="date" value={start_date} onChange={handleInputChange("start_date")}/>
-                            <Form.Text className="text-muted">
-                                The date your survey starts taking submissions.
-                            </Form.Text>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group controlId="surveyEndDate">
-                            <Form.Label>End Date</Form.Label>
-                            <Form.Control type="date" value={end_date} onChange={handleInputChange("end_date")}/>
-                            <Form.Text className="text-muted">
-                                The date your survey closes for submissions.
-                            </Form.Text>
-                        </Form.Group>
-                    </Col>
-                </Row>
+                <BasicForm params={params}/>
 
                 <Form.Group>
                     <Form.Check id={"securedStatusPrivate"} type="radio" name={"securedRadio"} label="Private"
@@ -151,36 +126,22 @@ const EditSurvey = (props) => {
     }
 
     const deleteSurveyModal = () => {
-        return(
-            <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Deleting your user account</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Are you sure that you want to delete this survey. All data will be lost forever!
-                    {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-                        Rather not
-                    </Button>
-                    <Button variant="danger" onClick={deleteSurvey}>
-                        Yes, i am sure
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+        const closeFunction = () => {
+            setShowDeleteModal(false)
+        }
+        const params = {
+            closeFunction,
+            deleteSurvey,
+            showDeleteModal
+        }
+        return (
+            <DeleteModal parameter={params}/>
         )
     }
 
     const deleteSurvey = async() => {
-        const deleteSurveyResponse = await axios({
-            method: "DELETE",
-            url: "/api/v1/survey/"+ survey.id,
-            headers: {
-                "Authorization": storageManager.getJWTToken()
-            }
-        });
-        if(deleteSurveyResponse.status === 204){
+        const deleteSurveyResponse = await deleteSurveyRequest(survey.id);
+        if(deleteSurveyResponse === 204){
             history.push("/dashboard");
         } else {
             setShowMessageDelete(true);
@@ -282,14 +243,6 @@ const EditSurvey = (props) => {
         setOptionsIndex(optionsIndex + 1)
     }
 
-    const fillDefaultOptionsArray = () => {
-        const defaultOptions = [];
-        for (let i = 0; i < minimumOptionsAmount; i++){
-            defaultOptions.push({index: i})
-        }
-        setConstrainedOptions(defaultOptions);
-    }
-
     /**
      * Adds a question based on the ConstrainedQuestions Form to the array of constrainedQuestions
      * If at least two options are given the question is added and a success message is shown
@@ -318,7 +271,7 @@ const EditSurvey = (props) => {
             setValues({...values, constrainedQuestionText: ""});
             setChangedValues({...changedValues, addedConstrainedQuestions: [...addedConstrainedQuestions, question]});
 
-            fillDefaultOptionsArray(); // Refill the optionsArray with default objects
+            setConstrainedOptions(fillDefaultOptionsArray(minimumOptionsAmount)); // Refill the optionsArray with default objects
 
             /**
              * Clear the Input fields for the question and the options
@@ -438,12 +391,19 @@ const EditSurvey = (props) => {
                 deleted_freestyle_questions: deletedFreestyleQuestions
             }
         });
-        console.log(updateResponse.status);
+        if (updateResponse.status === 204){
+            setShowMessageUpdate(true);
+            setMessageTypeUpdate("success");
+            setMessageTextUpdate("Survey was updated");
+            setTimeout(()=> {
+                history.push("/dashboard");
+            }, 3000);
+        }
     }
 
     useEffect(() => {
         setupSurveyForm();
-        fillDefaultOptionsArray();
+        setConstrainedOptions(fillDefaultOptionsArray(minimumOptionsAmount));
     }, [])
 
     return (
@@ -455,6 +415,8 @@ const EditSurvey = (props) => {
                 {deleteSurveyModal()}
                 <Col xs={5} style={{marginTop: "30px"}}>
                     {basicDataFormInput()}
+                    {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
+                    {showMessageUpdate && <Message type={messageTypeUpdate} message={messageTextUpdate}/>}
                 </Col>
                 <Col xs={6} style={{marginTop: "30px"}}>
                     <Row>
@@ -476,7 +438,6 @@ const EditSurvey = (props) => {
                             {showConstrainedQuestionForm && constrainedQuestion()}
                             {showFreestyleQuestionForm && freestyleQuestion()}
                         </div>
-
                     </Row>
                 </Col>
             </Row>
