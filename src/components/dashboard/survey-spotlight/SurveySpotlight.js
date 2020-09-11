@@ -8,7 +8,6 @@ import storageManager from "../../../storage/LocalStorageManager";
 import log from "../../../log/Logger";
 import Submissions from "./Submissions";
 import NoSubmissions from "./NoSubmissions";
-import Button from "react-bootstrap/Button";
 import {Redirect} from "react-router-dom";
 import {getSurveyStatus} from "../../utils/SurveyStatus";
 
