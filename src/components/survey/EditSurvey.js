@@ -9,8 +9,11 @@ import axios from "axios";
 import {TimeConverter} from "../utils/TimeConverter";
 import {sortQuestions} from "../utils/SortQuestions";
 import storageManager from "../../storage/LocalStorageManager";
+import Modal from "react-bootstrap/Modal";
+import Message from "../utils/Message";
 
 const EditSurvey = (props) => {
+    const {history} = props;
     const survey = props.location.state.survey;
 
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
@@ -57,6 +60,8 @@ const EditSurvey = (props) => {
 
     const [lastPosition, setLastPosition] = useState(0);
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
     const setupSurveyForm = () => {
         setValues({
             ...values,
@@ -70,6 +75,10 @@ const EditSurvey = (props) => {
         const sortedQuestions = sortQuestions(survey.constrained_questions, survey.freestyle_questions);
         setLastPosition(sortedQuestions[sortedQuestions.length-1].question.position+2);
     }
+
+    const [showMessageDelete, setShowMessageDelete] = useState(false);
+    const [messageTextDelete, setMessageTextDelete] = useState("");
+    const [messageTypeDelete, setMessageTypeDelete] = useState("");
 
     const handleInputChange = (name) => (event) => {
         setValues({...values, [name]: event.target.value});
@@ -136,10 +145,49 @@ const EditSurvey = (props) => {
                 <Button variant="success" onClick={updateSurvey}>
                     Update Survey
                 </Button>
+                <Button variant="outline-danger" onClick={() => setShowDeleteModal(true)}>Delete Survey</Button>
             </Form>
         )
     }
 
+    const deleteSurveyModal = () => {
+        return(
+            <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Deleting your user account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Are you sure that you want to delete this survey. All data will be lost forever!
+                    {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                        Rather not
+                    </Button>
+                    <Button variant="danger" onClick={deleteSurvey}>
+                        Yes, i am sure
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
+    const deleteSurvey = async() => {
+        const deleteSurveyResponse = await axios({
+            method: "DELETE",
+            url: "/api/v1/survey/"+ survey.id,
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            }
+        });
+        if(deleteSurveyResponse.status === 204){
+            history.push("/dashboard");
+        } else {
+            setShowMessageDelete(true);
+            setMessageTypeDelete("danger");
+            setMessageTextDelete("That did not work. Please try again.");
+        }
+    }
 
     const QuestionsForm = () => {
         const sortedQuestions = sortQuestions(survey.constrained_questions, survey.freestyle_questions);
@@ -404,6 +452,7 @@ const EditSurvey = (props) => {
                 <Col xs={1} style={{padding: 0}}>
                     <SideMenu/>
                 </Col>
+                {deleteSurveyModal()}
                 <Col xs={5} style={{marginTop: "30px"}}>
                     {basicDataFormInput()}
                 </Col>
