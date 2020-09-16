@@ -6,6 +6,8 @@ import storageManager from "../../../storage/LocalStorageManager";
 import RandomIcon from "./RandomIcon";
 import SurveyCounts from "./SurveyCounts";
 import axios from "axios";
+import {getUserInfo} from "../../../calls/user";
+import log from "../../../log/Logger";
 
 /**
  * Component greets the User by name (data from jwt in storage)
@@ -17,16 +19,10 @@ import axios from "axios";
 const Profile = () => {
     const [username, setUsername] = useState("");
 
-    const getUserName = async() => {
-        const userInfoResponse = await axios({
-            method: "POST",
-            url: "/api/v1/user/info",
-            headers: {
-                "Authorization": storageManager.getJWTToken()
-            }
-        });
-        if (userInfoResponse.status === 200){
-            setUsername(userInfoResponse.data.username);
+    const getUserName = async () => {
+        const apiResponse = await getUserInfo();
+        if (apiResponse.status === 200) {
+            setUsername(apiResponse.data.username);
         }
     }
 
@@ -34,7 +30,7 @@ const Profile = () => {
         getUserName()
     }, [])
 
-    return(
+    return (
         <Container>
             <Row style={{border: "1px solid lightgrey", padding: "5px", borderRadius: "8px 8px 0 0"}}>
                 <Col xs={3}>

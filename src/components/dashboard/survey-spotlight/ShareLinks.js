@@ -1,20 +1,31 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import axios from "axios";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
 
 import log from "../../../log/Logger";
-import storageManager from "../../../storage/LocalStorageManager";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Message from "../../utils/Message";
+import {createToken, getSurveyToken, sendLinkPerMail, tokenCount, tokenDelete} from "../../../calls/token";
+import Accordion from "react-bootstrap/Accordion";
+import Card from "react-bootstrap/Card";
+import {getPublicSurveys} from "../../utils/GetSurveys";
 
 const ShareLinks = (props) => {
+    const itemsPerPage = 5;
     const [amount, setAmount] = useState(3);
     const [links, setLinks] = useState([]);
     const [emails, setEmails] = useState("");
+
+    const [unusedToken, setUnusedToken] = useState([]);
+    const [usedToken, setUsedToken] = useState([]);
+
+    const [currentPageUnusedToken, setCurrentPageUnusedToken] = useState(0);
+
+    const [unusedTokenCount, setUnusedTokenCount] = useState(0);
+    const [usedTokenCount, setUsedTokenCount] = useState(0);
 
     /**
      * Used as props for the child Component Message
@@ -26,28 +37,16 @@ const ShareLinks = (props) => {
     const [messageText, setMessageText] = useState("");
     const [messageType, setMessageType] = useState("");
 
-    const getToken = () => {
-        axios({
-            method: "POST",
-            url: "/api/v1/token",
-            headers: {
-                "Authorization": storageManager.getJWTToken()
-            },
-            data: {
-                "survey_id": props.selectedSurvey.id,
-                amount
-            }
-        }).then((response) => {
-            log.debug("Got the Tokens as response", response);
-            if (response.status === 201) {
-                setLinks(response.data);
-                setShowMessage(true);
-                setMessageType("success");
-                setMessageText("Mails were sent");
-            }
-        }).catch((error) => {
-            log.debug("could not create token", error.response)
-        })
+    const getToken = async () => {
+        const apiResponse = await createToken(props.selectedSurvey.id, amount);
+        if (apiResponse.status === 201) {
+            setLinks(apiResponse.data);
+        } else {
+            setMessageType("waring");
+            setMessageText("Token could not be created. Please try again.");
+            setShowMessage(true);
+            log.debug(apiResponse.log);
+        }
     }
 
     const privateSurvey = () => {
@@ -84,7 +83,8 @@ const ShareLinks = (props) => {
                                 delay={{show: 250, hide: 400}}
                                 overlay={renderTooltip}
                             >
-                                <button onClick={copyToClipboard} style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>
+                                <button onClick={copyToClipboard}
+                                        style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>
                                     {window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                     /s/{props.selectedSurvey.id}
                                     ?token={link.id}
@@ -93,10 +93,156 @@ const ShareLinks = (props) => {
                         </li>
                     ))}
                 </ul>
+                {(unusedToken.length > 0 || usedToken.length > 0) && (
+                    <div>
+                        <hr/>
+                        <Accordion>
+                            {unusedToken.length > 0 && displayUnusedToken()}
+                            {usedToken.length > 0 && displayUsedToken()}
+                        </Accordion>
+                    </div>
+                )}
                 <hr/>
-                {sendLinkPerMail()}
+                {sendLinkPerMailForm()}
             </div>
         )
+    }
+
+    const unusedTokenPagination = () => {
+        const changePage = async (index) => {
+            const apiResponseUnusedToken = await getSurveyToken(props.selectedSurvey.id, false, index, itemsPerPage);
+            if (apiResponseUnusedToken.status === 200){
+                setUnusedToken(apiResponseUnusedToken.data);
+                setCurrentPageUnusedToken(index);
+            }
+        }
+
+        const pages = Math.ceil(unusedTokenCount / itemsPerPage);
+        return createPaginationMarker(pages, changePage);
+    }
+
+    const createPaginationMarker = (pages, clickMethod) => {
+        let li = [];
+        for (let i = 0; i < pages; i++) {
+            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
+                        onClick={() => clickMethod(i)}>{i + 1}</li>)
+        }
+
+        if (pages <= 1) {
+            return (
+                <div style={{width: "100%"}}>
+                    <ul style={{listStyle: "none"}}>
+                        <li style={{color: "transparent"}}>.</li>
+                    </ul>
+                </div>
+            )
+        } else {
+            return (
+                <div style={{width: "100%"}}>
+                    <ul style={{listStyle: "none"}}>
+                        {li}
+                    </ul>
+                </div>
+            )
+        }
+    }
+
+    const displayUnusedToken = () => {
+        const deleteToken = async (token) => {
+            const apiResponse = await tokenDelete(token.id);
+            if (apiResponse.status === 204){
+                log.debug("Token was deleted");
+                await createdAndUsedToken();
+            } else {
+                log.debug("Token could not be deleted");
+            }
+        }
+
+        return (
+            <Card>
+                <Card.Header>
+                    <Accordion.Toggle as={Button} variant="link" eventKey="0" style={{color: "grey"}}>
+                        Unused Tokens
+                    </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                    <Card.Body>
+                        {unusedTokenCount > itemsPerPage && unusedTokenPagination()}
+                        <ul>
+                            {unusedToken.map((token, i) => (
+                                <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                    <span style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                                        /s/{props.selectedSurvey.id}
+                                        ?token={token.id}</span>
+                                    <button style={{border: "none", backgroundColor: "transparent", float: "right"}}
+                                        onClick={() => deleteToken(token)}
+                                    >
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash"
+                                             fill="currentColor"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path fillRule="evenodd"
+                                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        </svg>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </Card.Body>
+                </Accordion.Collapse>
+            </Card>
+        )
+    }
+
+    const displayUsedToken = () => {
+        return (
+            <Card>
+                <Card.Header>
+                    <Accordion.Toggle as={Button} variant="link" eventKey="1" style={{color: "grey"}}>
+                        Used Tokens
+                    </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                    <Card.Body>
+                        <ul>
+                            {usedToken.map((token, i) => (
+                                <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                    <span style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                                        /s/{props.selectedSurvey.id}
+                                        ?token={token.id}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </Card.Body>
+                </Accordion.Collapse>
+            </Card>
+        )
+    }
+
+    useEffect(() => {
+        createdAndUsedToken();
+    }, [links])
+
+    const createdAndUsedToken = async () => {
+        const apiResponseUnusedToken = await getSurveyToken(props.selectedSurvey.id, false, currentPageUnusedToken);
+        if (apiResponseUnusedToken.status === 200){
+            setUnusedToken(apiResponseUnusedToken.data);
+        }
+        const apiResponseUnusedTokenCount = await tokenCount(props.selectedSurvey.id, false);
+        if (apiResponseUnusedTokenCount.status === 200){
+            setUnusedTokenCount(apiResponseUnusedTokenCount.data.count);
+        }
+
+        const apiResponseUsedToken = await getSurveyToken(props.selectedSurvey.id, true);
+        if (apiResponseUsedToken.status === 200){
+            setUsedToken(apiResponseUsedToken.data);
+        }
+        const apiResponseUsedTokenCount = await tokenCount(props.selectedSurvey.id, true);
+        if (apiResponseUsedTokenCount.status === 200){
+            setUsedTokenCount(apiResponseUsedTokenCount.data.count);
+        }
+
     }
 
     /**
@@ -129,7 +275,11 @@ const ShareLinks = (props) => {
                     overlay={renderTooltip}
                 >
                     <button onClick={copyToClipboard}
-                       style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                            style={{
+                                cursor: "pointer",
+                                border: "none",
+                                backgroundColor: "transparent"
+                            }}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                         /pub/{props.selectedSurvey.id}</button>
                 </OverlayTrigger>
                 <p>Since your survey is public, everyone can take part and search for your survey here: <a
@@ -138,7 +288,7 @@ const ShareLinks = (props) => {
         )
     }
 
-    const sendLinkPerMail = () => {
+    const sendLinkPerMailForm = () => {
         return (
             <div>
                 <p>You can send a link to open and answer the survey to as many people as you like.</p>
@@ -154,31 +304,27 @@ const ShareLinks = (props) => {
                         aria-describedby="inputGroup-sizing-default"
                     />
                 </InputGroup>
-                {showMessage && <Message  type={messageType} message={messageText}/>}
-                <Button variant={"outline-success"} style={{marginTop: "10px"}} onClick={sendToToken}>Send Token Per Mail</Button>
+                {showMessage && <Message type={messageType} message={messageText}/>}
+                <Button variant={"outline-success"} style={{marginTop: "10px"}} onClick={sendToToken}>Send Token Per
+                    Mail</Button>
             </div>
         )
     }
 
-    const sendToToken = async() => {
+    const sendToToken = async () => {
         const mails = emails.split(",");
-        for (let i = 0; i < mails.length; i++){
+        for (let i = 0; i < mails.length; i++) {
             mails[i] = mails[i].trim()
         }
-        console.log(props.selectedSurvey.id, mails)
-        const sendMailResponse = await axios({
-            method: "POST",
-            url: "/api/v1/token/email",
-            headers: {
-                "Authorization": storageManager.getJWTToken()
-            },
-            data: {
-                survey_id: props.selectedSurvey.id,
-                emails: mails
-            }
-        });
-        if(sendMailResponse.status === 201){
-
+        const apiResponse = await sendLinkPerMail(props.selectedSurvey.id, mails);
+        if (apiResponse.status === 201 || apiResponse.status === 204) {
+            setShowMessage(true);
+            setMessageType("success");
+            setMessageText("Links were sent by mail to all receivers in the given list.");
+        } else {
+            setShowMessage(true);
+            setMessageType("danger");
+            setMessageText("Something went wrong. Please try again.");
         }
     }
 
