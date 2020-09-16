@@ -167,7 +167,7 @@ const ShareLinks = (props) => {
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
-                        {unusedTokenPagination()}
+                        {unusedTokenCount > itemsPerPage && unusedTokenPagination()}
                         <ul>
                             {unusedToken.map((token, i) => (
                                 <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
