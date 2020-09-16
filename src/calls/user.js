@@ -20,7 +20,6 @@ export const userRegistration = async (username, email, password) => {
         return apiResponse;
     } catch {
         return {
-            message: "Something went wrong. Please try again.",
             log: "Failed axios request was caught: userRegistration"
         };
     }
@@ -28,7 +27,7 @@ export const userRegistration = async (username, email, password) => {
 
 export const userLogin = async (username, password) => {
     try{
-        const apiResponse = await axios({
+        return await axios({
             method: "POST",
             url: "/api/v1/user/login",
             headers: {
@@ -39,10 +38,8 @@ export const userLogin = async (username, password) => {
                 password
             }
         });
-        return apiResponse;
     } catch {
         return {
-            message: "Something went wrong. Please try again.",
             log: "Failed axios request was caught: userLogin"
         };
     }
@@ -57,7 +54,51 @@ export const userLogout = async () => {
                 "Authorization": storageManager.getJWTToken()
             }
         });
+        log.debug("User token was banned, user logged out", apiResponse.status);
     } catch {
         log.debug("User token could not be banned: userLogout")
+    }
+}
+
+export const changeUserPassword = async (username, email, oldPassword, password) => {
+    try {
+        return await axios({
+            method: "PUT",
+            url: "/api/v1/user",
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            },
+            data: {
+                username: username !== "" ? username : null,
+                email: email !== "" ? email : null,
+                old_password: oldPassword,
+                new_password: password
+            }
+        });
+    } catch {
+        return {
+            log: "Failed axios request was caught: changeUserPassword"
+        }
+    }
+}
+
+export const changeUserData = async (username, email, oldPassword) => {
+    try {
+        return await axios({
+            method: "PUT",
+            url: "/api/v1/user",
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            },
+            data: {
+                username: username !== "" ? username : null,
+                email: email !== "" ? email : null,
+                old_password: oldPassword
+            }
+        });
+    } catch {
+        return {
+            log: "Failed axios request was caught: changeUserData"
+        }
     }
 }
