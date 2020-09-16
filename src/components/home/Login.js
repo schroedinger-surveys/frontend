@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import log from "../../log/Logger";
 import Message from "../utils/Message";
 import storageManager from "../../storage/LocalStorageManager";
+import {userLogin} from "../../calls/user/useraccount";
 
 /**
  * Login provides functionalities for a user to log in to the application
@@ -41,50 +42,29 @@ const Login = (props) => {
      * invalid credentials trigger the Message Component, show error message
      * @param event - click
      */
-    const login = (event) => {
+    const login = async (event) => {
         event.preventDefault();
 
-        axios({
-            method: "POST",
-            url: "/api/v1/user/login",
-            headers: {
-                "content-type": "application/json"
-            },
-            data: {
-                username,
-                password
+        const apiResponse = await userLogin(username, password);
+        if (apiResponse.status === 200) {
+            const userToken = apiResponse.data.jwt; // The jwt token belonging to the user
+            const rememberUser = document.getElementById("rememberMe").checked; // Based on this the jwt token will be saved to local or session storage
+            if (rememberUser) {
+                storageManager.saveJWTTokenLocal(userToken);
+            } else {
+                storageManager.saveJWTTokenSession(userToken);
             }
-        }).then((response) => {
-            log.debug("User logged into his account");
-            log.debug("Backend data response", response.data);
-            if(response.status === 200){
-                const userToken = response.data.jwt; // The jwt token belonging to the user
-                const rememberUser = document.getElementById("rememberMe").checked; // Based on this the jwt token will be saved to local or session storage
-                if(rememberUser){
-                    storageManager.saveJWTTokenLocal(userToken);
-                } else {
-                    storageManager.saveJWTTokenSession(userToken);
-                }
-
-                try{ // Try to redirect to dashboard after successful login
-                    history.push("/dashboard");
-                } catch (e) {
-                    log.debug("Redirection from home/Login to users dashboard failed", e.stack);
-                    setMessageText("Sorry, that did not work. Please try again.");
-                    setShowMessage(true);
-                    setMessageType("danger")
-                }
-            }
-        }).catch((error) => {
-            if(error.response.status === 404 || error.response.status === 403){
-                setMessageText("Wrong credentials");
-            }else { // 500
-                setMessageText("Something went wrong. Please try again.")
-            }
+            history.push("/dashboard");
+        } else if (apiResponse.status === 404 || apiResponse.status === 403){
             setShowMessage(true);
-            setMessageType("danger")
-            log.debug("user login not successful", error.response.status, error.response.statusText);
-        });
+            setMessageText("Wrong credentials!");
+            setMessageType("warning");
+        } else {
+            setShowMessage(true);
+            setMessageText("Something went wrong. Please try again.");
+            setMessageType("danger");
+            log.debug(apiResponse.log);
+        }
     }
 
     /**
@@ -99,15 +79,20 @@ const Login = (props) => {
 
     return (
         <div>
-            <Form style={{width: single ? "30%" : "100%", margin: "30px auto"}}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
+            <Form style={{
+                width: single ? "30%" : "100%",
+                margin: "30px auto"
+            }}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
                 <h3>Login to your user account</h3>
                 <Form.Group controlId="username">
                     <Form.Label>Username*</Form.Label>
-                    <Form.Control type="username" placeholder="Enter username" value={username} onChange={handleUserInput("username")}/>
+                    <Form.Control type="username" placeholder="Enter username" value={username}
+                                  onChange={handleUserInput("username")}/>
                 </Form.Group>
                 <Form.Group controlId="password">
                     <Form.Label>Password*</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={password} onChange={handleUserInput("password")}/>
+                    <Form.Control type="password" placeholder="Password" value={password}
+                                  onChange={handleUserInput("password")}/>
                 </Form.Group>
                 <Form.Group controlId="rememberMe">
                     <Form.Check type="checkbox" label="Remember me"/>
