@@ -99,7 +99,7 @@ const Login = (props) => {
 
     return (
         <div>
-            <Form style={{width: single ? "30%" : "100%"}}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
+            <Form style={{width: single ? "30%" : "100%", margin: "30px auto"}}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
                 <h3>Login to your user account</h3>
                 <Form.Group controlId="username">
                     <Form.Label>Username*</Form.Label>
