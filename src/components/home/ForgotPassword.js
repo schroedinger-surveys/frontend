@@ -44,7 +44,7 @@ const ForgotPassword = (props) => {
         <div>
             <Form
                 style={{width: single ? "30%" : "100%"}}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
-                <h3>Forgott Password or Username?</h3>
+                <h3>Forgot Password or Username?</h3>
                 <Form.Group>
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="text" placeholder="Enter username" value={username}
