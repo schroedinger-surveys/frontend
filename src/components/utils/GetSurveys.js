@@ -12,7 +12,20 @@ const getPrivateSurveys = async (page_number = 0, page_size = 3) => {
         }
     });
     log.debug("fetched private surveys:", response);
-    return response.data;
+    if (response.status === 200){
+        for (let i = 0; i < response.data.length; i++){
+            if (response.data[i].constrained_questions === null){
+                response.data[i].constrained_questions = [];
+            }
+            if(response.data[i].freestyle_questions === null){
+                response.data[i].freestyle_questions = [];
+            }
+        }
+        return response.data;
+    }else {
+        return []
+    }
+
 }
 
 const getPublicSurveys = async (page_number = 0, page_size = 3) => {
@@ -27,7 +40,19 @@ const getPublicSurveys = async (page_number = 0, page_size = 3) => {
         }
     });
     log.debug("fetched public surveys:", response);
-    return response.data;
+    if (response.status === 200){
+        for (let i = 0; i < response.data.length; i++){
+            if (response.data[i].constrained_questions === null){
+                response.data[i].constrained_questions = [];
+            }
+            if(response.data[i].freestyle_questions === null){
+                response.data[i].freestyle_questions = [];
+            }
+        }
+        return response.data;
+    }else {
+        return []
+    }
 }
 
 export {

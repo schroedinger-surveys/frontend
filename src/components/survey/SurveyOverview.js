@@ -13,11 +13,11 @@ import {getCurrentStatus, getSurveyStatus} from "../utils/SurveyStatus";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
-import Modal from "react-bootstrap/Modal";
 import Message from "../utils/Message";
 import {Redirect} from "react-router-dom";
+import {DeleteModal, deleteSurveyRequest} from "./delete-survey-utils";
 
-const SurveyOverview = (props) => {
+const SurveyOverview = () => {
     const [matching, setMatching] = useState(true);
 
     const [privateSurveys, setPrivateSurveys] = useState([]);
@@ -43,7 +43,7 @@ const SurveyOverview = (props) => {
         const listPublicSurveys = await getPublicSurveys(0, itemsPerPage);
         await matchPrivateSurveys(listPrivateSurveys)
         await matchPublicSurveys(listPublicSurveys);
-        setMatching(false)
+        setMatching(false);
     }
 
     const getSurveyCounts = async () => {
@@ -98,6 +98,8 @@ const SurveyOverview = (props) => {
     }
 
     const SurveyList = (surveys) => {
+
+
         return (
             <ListGroup>
                 {surveys.map((item, i) => (
@@ -153,7 +155,7 @@ const SurveyOverview = (props) => {
         )
     }
 
-    const redirectToSurvey = async(survey) => {
+    const redirectToSurvey = async (survey) => {
         await setSurveyToEdit(survey);
         setRedirect(true);
     }
@@ -170,43 +172,25 @@ const SurveyOverview = (props) => {
     }
 
     const deleteSurveyModal = () => {
+        const closeFunction = () => {
+            setShowDeleteModal(false);
+            setSurveyToDelete({});
+        }
+        const params = {
+            closeFunction,
+            deleteSurvey,
+            showDeleteModal
+        }
         return (
-            <Modal show={showDeleteModal} onHide={() => {
-                setShowDeleteModal(false);
-                setSurveyToDelete({});
-            }}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Deleting your user account</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Are you sure that you want to delete this survey. All data will be lost forever!
-                    {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => {
-                        setShowDeleteModal(false);
-                        setSurveyToDelete({});
-                    }}>
-                        Rather not
-                    </Button>
-                    <Button variant="danger" onClick={deleteSurvey}>
-                        Yes, i am sure
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <DeleteModal parameter={params}/>
         )
     }
 
     const deleteSurvey = async () => {
-        const deleteSurveyResponse = await axios({
-            method: "DELETE",
-            url: "/api/v1/survey/" + surveyToDelete.id,
-            headers: {
-                "Authorization": storageManager.getJWTToken()
-            }
-        });
-        if (deleteSurveyResponse.status === 204) {
-            getSurveyLists();
+        const deleteSurveyResponse = await deleteSurveyRequest(surveyToDelete.id);
+        if (deleteSurveyResponse === 204) {
+            await getSurveyLists();
+            await getSurveyCounts();
             setShowDeleteModal(false);
         } else {
             setShowMessageDelete(true);
@@ -228,7 +212,7 @@ const SurveyOverview = (props) => {
                     <Card.Body>
                         {constrainedQuestions.map((question, i) => (
                             <div key={i}>
-                                <p>Question {question.position + 1}: {question.question_text}</p>
+                                <p>{question.question_text}</p>
                                 <ul>
                                     {question.options.map((option, j) => (
                                         <li key={j}>{option.answer}</li>
@@ -255,7 +239,7 @@ const SurveyOverview = (props) => {
                     <Card.Body>
                         <ul>
                             {freestyleQuestions.map((question, i) => (
-                                <li key={i}>Question {question.position + 1}: {question.question_text}</li>
+                                <li key={i}>{question.question_text}</li>
                             ))}
                         </ul>
                     </Card.Body>
@@ -331,6 +315,7 @@ const SurveyOverview = (props) => {
                 )}
                 {!matching && (
                     <Col xs={5} style={{margin: "30px 30px 0 0", border: "1px solid lightgrey", borderRadius: "8px"}}>
+                        {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
                         <h3>Private Surveys - {privateCount}</h3>
                         {privateSurveys.length > 0 && (
                             <div>
@@ -349,6 +334,7 @@ const SurveyOverview = (props) => {
                 )}
                 {!matching && (
                     <Col xs={5} style={{marginTop: "30px", border: "1px solid lightgrey", borderRadius: "8px"}}>
+                        {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
                         <h3>Public Surveys - {publicCount}</h3>
                         {publicSurveys.length > 0 && (
                             <div>
@@ -361,7 +347,6 @@ const SurveyOverview = (props) => {
                                 <p>No Public Surveys yet.</p>
                                 <a href={"/survey/create"}>Create a Public Survey now</a>
                             </div>
-
                         )}
                     </Col>
                 )}

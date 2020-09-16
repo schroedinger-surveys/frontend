@@ -1,9 +1,10 @@
 import React from "react";
 import {connect} from "react-redux";
 import {getCurrentStatus} from "../../utils/SurveyStatus";
+import {sortQuestions} from "../../utils/SortQuestions";
 
 const RawSurvey = (props) => {
-    return(
+    return (
         <div>
             {props.selectedSurvey && (
                 <div>
@@ -19,29 +20,30 @@ const RawSurvey = (props) => {
                         <label style={{fontWeight: "bold"}}>Who can submit an answer:</label>
                         <p>{props.selectedSurvey.secured ? "Invite Only" : "Open to public"}</p>
                     </div>
+
+
                     <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-                        <label style={{fontWeight: "bold"}}>Constrained Questions:</label>
-                        {props.selectedSurvey.constrained_questions.length > 0 && props.selectedSurvey.constrained_questions.map((question, i) => (
-                            <div key={i}>
-                                <p>{question.question_text}</p>
-                                <ul>
-                                    {question.options.map((option, j) => (
-                                        <li key={j}>{option.answer}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                        {props.selectedSurvey.constrained_questions.length === 0 && (
-                            <p>No Constrained Questions in this survey</p>
-                        )}
-                    </div>
-                    <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-                        <label style={{fontWeight: "bold"}}>Freestyle Questions:</label>
-                        {props.selectedSurvey.freestyle_questions.length > 0 && props.selectedSurvey.freestyle_questions.map((question, i) => (
-                            <p key={i}>{question.question_text}</p>
-                        ))}
-                        {props.selectedSurvey.freestyle_questions.length === 0 && (
-                            <p>No Freestyle Questions in this survey</p>
+                        <label style={{fontWeight: "bold"}}>Questions:</label>
+                        {sortQuestions(props.selectedSurvey.constrained_questions, props.selectedSurvey.freestyle_questions).map((item, i) => {
+                                if (item.type === "constrained") {
+                                    return (
+                                        <div key={i}>
+                                            <p>Question {i + 1}: {item.question.question_text}</p>
+                                            <ul>
+                                                {item.question.options.map((option, j) => (
+                                                    <li key={j}>{option.answer}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )
+                                } else {
+                                    return (
+                                        <div key={i}>
+                                            <p key={i}>Question {i + 1}: {item.question.question_text}</p>
+                                        </div>
+                                    )
+                                }
+                            }
                         )}
                     </div>
                 </div>
