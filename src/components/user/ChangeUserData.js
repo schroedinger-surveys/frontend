@@ -11,7 +11,7 @@ import Message from "../utils/Message";
 import Modal from "react-bootstrap/Modal";
 import log from "../../log/Logger";
 import {confirmDoubleInput} from "../utils/ConfirmInput";
-import {changeUserData, changeUserPassword, userLogout} from "../../calls/user";
+import {changeUserData, changeUserPassword, getUserInfo, userLogout} from "../../calls/user";
 
 const ChangeUserData = (props) => {
     const {history} = props;
@@ -46,15 +46,11 @@ const ChangeUserData = (props) => {
     const [messageTypeDelete, setMessageTypeDelete] = useState("");
 
     const advancedUserInformation = async () => {
-        const userInfoResponse = await axios({
-            method: "POST",
-            url: "/api/v1/user/info",
-            headers: {
-                "Authorization": storageManager.getJWTToken()
-            }
-        });
-        if (userInfoResponse.status === 200) {
-            setUserData(userInfoResponse.data);
+        const apiResponse = await getUserInfo();
+        if (apiResponse.status === 200) {
+            setUserData(apiResponse.data);
+        } else {
+            log.debug(apiResponse.log);
         }
     }
 

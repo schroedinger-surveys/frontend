@@ -102,3 +102,19 @@ export const changeUserData = async (username, email, oldPassword) => {
         }
     }
 }
+
+export const getUserInfo = async () => {
+    try{
+        return await axios({
+            method: "POST",
+            url: "/api/v1/user/info",
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            }
+        });
+    } catch {
+        return {
+            log: "Failed axios request was caught: getUserInfo"
+        }
+    }
+}
