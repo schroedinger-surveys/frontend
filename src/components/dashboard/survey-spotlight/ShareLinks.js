@@ -1,21 +1,24 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import axios from "axios";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
 
 import log from "../../../log/Logger";
-import storageManager from "../../../storage/LocalStorageManager";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Message from "../../utils/Message";
-import {createToken, sendLinkPerMail} from "../../../calls/token";
+import {createToken, getSurveyToken, sendLinkPerMail} from "../../../calls/token";
+import Accordion from "react-bootstrap/Accordion";
+import Card from "react-bootstrap/Card";
 
 const ShareLinks = (props) => {
     const [amount, setAmount] = useState(3);
     const [links, setLinks] = useState([]);
     const [emails, setEmails] = useState("");
+
+    const [unusedToken, setUnusedToken] = useState([]);
+    const [usedToken, setUsedToken] = useState([]);
 
     /**
      * Used as props for the child Component Message
@@ -84,9 +87,35 @@ const ShareLinks = (props) => {
                     ))}
                 </ul>
                 <hr/>
+                <ul>
+                    {unusedToken.map((token, i) => (
+                        <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                            <span style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                            /s/{props.selectedSurvey.id}
+                                ?token={token.id}</span>
+                        </li>
+                    ))}
+                </ul>
+                <hr/>
                 {sendLinkPerMailForm()}
             </div>
         )
+    }
+
+    useEffect(() => {
+        createdAndUsedToken();
+    }, [])
+
+    const createdAndUsedToken = async () => {
+        const apiResponseUnusedToken = await getSurveyToken(props.selectedSurvey.id, false);
+        if (apiResponseUnusedToken.status === 200){
+            setUnusedToken(apiResponseUnusedToken.data);
+        }
+
+        const apiResponseUsedToken = await getSurveyToken(props.selectedSurvey.id, true);
+        if (apiResponseUsedToken.status === 200){
+            setUsedToken(apiResponseUsedToken.data);
+        }
     }
 
     /**
