@@ -118,3 +118,22 @@ export const getUserInfo = async () => {
         }
     }
 }
+
+export const userDelete = async (confirmDeletePassword) => {
+    try {
+        return await axios({
+            method: "DELETE",
+            url: "/api/v1/user",
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            },
+            data: {
+                password: confirmDeletePassword
+            }
+        });
+    } catch {
+        return {
+            log: "Failed axios request was caught: userDelete"
+        }
+    }
+}

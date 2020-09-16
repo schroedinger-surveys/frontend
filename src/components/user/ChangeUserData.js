@@ -11,7 +11,7 @@ import Message from "../utils/Message";
 import Modal from "react-bootstrap/Modal";
 import log from "../../log/Logger";
 import {confirmDoubleInput} from "../utils/ConfirmInput";
-import {changeUserData, changeUserPassword, getUserInfo, userLogout} from "../../calls/user";
+import {changeUserData, changeUserPassword, getUserInfo, userDelete, userLogout} from "../../calls/user";
 
 const ChangeUserData = (props) => {
     const {history} = props;
@@ -143,36 +143,20 @@ const ChangeUserData = (props) => {
 
     const deleteUser = async () => {
         if (confirmDeleteUsername === userData.username) {
-            try {
-                const deleteAccount = await axios({
-                    method: "DELETE",
-                    url: "/api/v1/user",
-                    headers: {
-                        "Authorization": storageManager.getJWTToken()
-                    },
-                    data: {
-                        password: confirmDeletePassword
-                    }
-                });
-                if (deleteAccount.status === 200) {
-                    storageManager.clearToken();
-                    history.push("/");
-                } else {
-                    setShowMessageDelete(true);
-                    setMessageTypeDelete("danger");
-                    setMessageTextDelete("That did not work");
-                }
-            } catch (e) {
-                console.log("User could not be deleted", e);
+            const apiResponse = await userDelete(confirmDeletePassword);
+            if (apiResponse.status === 200) {
+                storageManager.clearToken();
+                history.push("/");
+            } else {
+                log.debug("User could not be deleted", apiResponse.log);
                 setShowMessageDelete(true);
                 setMessageTypeDelete("danger");
-                setMessageTextDelete("Please check the given credentials again.");
+                setMessageTextDelete("Please check the given credentials and try again.");
             }
-
         } else {
             setShowMessageDelete(true);
             setMessageTypeDelete("danger");
-            setMessageTextDelete("Username is wrong. Please try again!");
+            setMessageTextDelete("Username does not match. Pleased check and try again.");
         }
     }
 
@@ -192,7 +176,8 @@ const ChangeUserData = (props) => {
                         <div style={{width: "95%", margin: "0 auto"}}>
                             <label style={{fontWeight: "bold", fontSize: "21px"}}>Current Profile</label>
                             <ListGroup>
-                                <ListGroup.Item>Username: <span style={{fontWeight: "bold"}}>{userData.username}</span></ListGroup.Item>
+                                <ListGroup.Item>Username: <span
+                                    style={{fontWeight: "bold"}}>{userData.username}</span></ListGroup.Item>
                                 <ListGroup.Item>Email: <span
                                     style={{fontWeight: "bold"}}>{userData.email}</span></ListGroup.Item>
                                 <ListGroup.Item>Account created at: <span
@@ -213,7 +198,8 @@ const ChangeUserData = (props) => {
                             <Form.Group>
                                 <Form.Label style={{fontWeight: "bold"}}>Email address</Form.Label>
                                 <Form.Control id="newEmail" type="email" placeholder={userData.email}
-                                              style={confirmDoubleInput("newEmail", "newEmailConfirm")} value={email}
+                                              style={confirmDoubleInput("newEmail", "newEmailConfirm")}
+                                              value={email}
                                               onChange={handleUserInput("email")}/>
                             </Form.Group>
                             <Form.Group>
