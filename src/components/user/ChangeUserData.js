@@ -9,6 +9,7 @@ import axios from "axios";
 import storageManager from "../../storage/LocalStorageManager";
 import Message from "../utils/Message";
 import Modal from "react-bootstrap/Modal";
+import {confirmDoubleInput} from "../utils/ConfirmInput";
 
 const ChangeUserData = (props) => {
     const {history} = props;
@@ -52,19 +53,6 @@ const ChangeUserData = (props) => {
         });
         if (userInfoResponse.status === 200){
             setUserData(userInfoResponse.data);
-        }
-    }
-
-    const confirmPassword = (identification, confirmIdentification) => {
-        const firstInput = document.getElementById(identification);
-        const confirmInput = document.getElementById(confirmIdentification);
-
-        if (firstInput !== null && confirmInput !== null){
-            if(firstInput.value === confirmInput.value){
-                return {backgroundColor: "white"};
-            } else {
-                return {backgroundColor: "darkred"};
-            }
         }
     }
 
@@ -236,11 +224,11 @@ const ChangeUserData = (props) => {
 
                             <Form.Group >
                                 <Form.Label style={{fontWeight: "bold"}}>Email address</Form.Label>
-                                <Form.Control id="newEmail" type="email" placeholder={userData.email} style={confirmPassword("newEmail", "newEmailConfirm")} value={email} onChange={handleUserInput("email")}/>
+                                <Form.Control id="newEmail" type="email" placeholder={userData.email} style={confirmDoubleInput("newEmail", "newEmailConfirm")} value={email} onChange={handleUserInput("email")}/>
                             </Form.Group>
                             <Form.Group >
                                 <Form.Label>Confirm Email address</Form.Label>
-                                <Form.Control type="email" placeholder={userData.email} id="newEmailConfirm" style={confirmPassword("newEmail", "newEmailConfirm")} value={confirmationEmail} onChange={handleUserInput("confirmationEmail")}/>
+                                <Form.Control type="email" placeholder={userData.email} id="newEmailConfirm" style={confirmDoubleInput("newEmail", "newEmailConfirm")} value={confirmationEmail} onChange={handleUserInput("confirmationEmail")}/>
                                 <Form.Text className="text-muted">
                                     Make sure your email is right and you can login.
                                 </Form.Text>
@@ -248,11 +236,11 @@ const ChangeUserData = (props) => {
 
                             <Form.Group>
                                 <Form.Label style={{fontWeight: "bold"}}>Password</Form.Label>
-                                <Form.Control id={"newPassword"} type="password" placeholder="Password" style={confirmPassword("newPassword", "newPasswordConfirm")} value={password} onChange={handleUserInput("password")}/>
+                                <Form.Control id={"newPassword"} type="password" placeholder="Password" style={confirmDoubleInput("newPassword", "newPasswordConfirm")} value={password} onChange={handleUserInput("password")}/>
                             </Form.Group>
                             <Form.Group >
                                 <Form.Label>Confirm Password</Form.Label>
-                                <Form.Control id={"newPasswordConfirm"} type="password" placeholder="Password" style={confirmPassword("newPassword", "newPasswordConfirm")} value={confirmationPassword} onChange={handleUserInput("confirmationPassword")}/>
+                                <Form.Control id={"newPasswordConfirm"} type="password" placeholder="Password" style={confirmDoubleInput("newPassword", "newPasswordConfirm")} value={confirmationPassword} onChange={handleUserInput("confirmationPassword")}/>
                             </Form.Group>
                             <Form.Group >
                                 <Form.Label style={{fontWeight: "bold"}}>Current Password*</Form.Label>
