@@ -20,6 +20,8 @@ const ShareLinks = (props) => {
     const [unusedToken, setUnusedToken] = useState([]);
     const [usedToken, setUsedToken] = useState([]);
 
+    const [currentPageUnusedToken, setCurrentPageUnusedToken] = useState(0);
+
     /**
      * Used as props for the child Component Message
      * showMessage: state of visibility of component Message
@@ -106,7 +108,7 @@ const ShareLinks = (props) => {
             const apiResponse = await tokenDelete(token.id);
             if (apiResponse.status === 204){
                 log.debug("Token was deleted");
-                createdAndUsedToken();
+                await createdAndUsedToken();
             } else {
                 log.debug("Token could not be deleted");
             }
@@ -121,6 +123,7 @@ const ShareLinks = (props) => {
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
+
                         <ul>
                             {unusedToken.map((token, i) => (
                                 <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
@@ -175,10 +178,10 @@ const ShareLinks = (props) => {
 
     useEffect(() => {
         createdAndUsedToken();
-    }, [])
+    }, [links])
 
     const createdAndUsedToken = async () => {
-        const apiResponseUnusedToken = await getSurveyToken(props.selectedSurvey.id, false);
+        const apiResponseUnusedToken = await getSurveyToken(props.selectedSurvey.id, false, currentPageUnusedToken);
         if (apiResponseUnusedToken.status === 200){
             setUnusedToken(apiResponseUnusedToken.data);
         }
