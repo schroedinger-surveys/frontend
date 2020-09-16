@@ -10,6 +10,7 @@ import storageManager from "../../../storage/LocalStorageManager";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Message from "../../utils/Message";
+import {createToken} from "../../../calls/token";
 
 const ShareLinks = (props) => {
     const [amount, setAmount] = useState(3);
@@ -26,28 +27,16 @@ const ShareLinks = (props) => {
     const [messageText, setMessageText] = useState("");
     const [messageType, setMessageType] = useState("");
 
-    const getToken = () => {
-        axios({
-            method: "POST",
-            url: "/api/v1/token",
-            headers: {
-                "Authorization": storageManager.getJWTToken()
-            },
-            data: {
-                "survey_id": props.selectedSurvey.id,
-                amount
-            }
-        }).then((response) => {
-            log.debug("Got the Tokens as response", response);
-            if (response.status === 201) {
-                setLinks(response.data);
-                setShowMessage(true);
-                setMessageType("success");
-                setMessageText("Mails were sent");
-            }
-        }).catch((error) => {
-            log.debug("could not create token", error.response)
-        })
+    const getToken = async () => {
+        const apiResponse = await createToken(props.selectedSurvey.id, amount);
+        if (apiResponse.status === 201) {
+            setLinks(apiResponse.data);
+        } else {
+            setMessageType("waring");
+            setMessageText("Token could not be created. Please try again.");
+            setShowMessage(true);
+            log.debug(apiResponse.log);
+        }
     }
 
     const privateSurvey = () => {
@@ -84,7 +73,8 @@ const ShareLinks = (props) => {
                                 delay={{show: 250, hide: 400}}
                                 overlay={renderTooltip}
                             >
-                                <button onClick={copyToClipboard} style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>
+                                <button onClick={copyToClipboard}
+                                        style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>
                                     {window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                     /s/{props.selectedSurvey.id}
                                     ?token={link.id}
@@ -129,7 +119,11 @@ const ShareLinks = (props) => {
                     overlay={renderTooltip}
                 >
                     <button onClick={copyToClipboard}
-                       style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                            style={{
+                                cursor: "pointer",
+                                border: "none",
+                                backgroundColor: "transparent"
+                            }}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                         /pub/{props.selectedSurvey.id}</button>
                 </OverlayTrigger>
                 <p>Since your survey is public, everyone can take part and search for your survey here: <a
@@ -154,15 +148,16 @@ const ShareLinks = (props) => {
                         aria-describedby="inputGroup-sizing-default"
                     />
                 </InputGroup>
-                {showMessage && <Message  type={messageType} message={messageText}/>}
-                <Button variant={"outline-success"} style={{marginTop: "10px"}} onClick={sendToToken}>Send Token Per Mail</Button>
+                {showMessage && <Message type={messageType} message={messageText}/>}
+                <Button variant={"outline-success"} style={{marginTop: "10px"}} onClick={sendToToken}>Send Token Per
+                    Mail</Button>
             </div>
         )
     }
 
-    const sendToToken = async() => {
+    const sendToToken = async () => {
         const mails = emails.split(",");
-        for (let i = 0; i < mails.length; i++){
+        for (let i = 0; i < mails.length; i++) {
             mails[i] = mails[i].trim()
         }
         console.log(props.selectedSurvey.id, mails)
@@ -177,7 +172,7 @@ const ShareLinks = (props) => {
                 emails: mails
             }
         });
-        if(sendMailResponse.status === 201){
+        if (sendMailResponse.status === 201) {
 
         }
     }
