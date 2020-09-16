@@ -10,7 +10,7 @@ import storageManager from "../../../storage/LocalStorageManager";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Message from "../../utils/Message";
-import {createToken} from "../../../calls/token";
+import {createToken, sendLinkPerMail} from "../../../calls/token";
 
 const ShareLinks = (props) => {
     const [amount, setAmount] = useState(3);
@@ -84,7 +84,7 @@ const ShareLinks = (props) => {
                     ))}
                 </ul>
                 <hr/>
-                {sendLinkPerMail()}
+                {sendLinkPerMailForm()}
             </div>
         )
     }
@@ -132,7 +132,7 @@ const ShareLinks = (props) => {
         )
     }
 
-    const sendLinkPerMail = () => {
+    const sendLinkPerMailForm = () => {
         return (
             <div>
                 <p>You can send a link to open and answer the survey to as many people as you like.</p>
@@ -160,20 +160,15 @@ const ShareLinks = (props) => {
         for (let i = 0; i < mails.length; i++) {
             mails[i] = mails[i].trim()
         }
-        console.log(props.selectedSurvey.id, mails)
-        const sendMailResponse = await axios({
-            method: "POST",
-            url: "/api/v1/token/email",
-            headers: {
-                "Authorization": storageManager.getJWTToken()
-            },
-            data: {
-                survey_id: props.selectedSurvey.id,
-                emails: mails
-            }
-        });
-        if (sendMailResponse.status === 201) {
-
+        const apiResponse = await sendLinkPerMail(props.selectedSurvey.id, mails);
+        if (apiResponse.status === 201 || apiResponse.status === 204) {
+            setShowMessage(true);
+            setMessageType("success");
+            setMessageText("Links were sent by mail to all receivers in the given list.");
+        } else {
+            setShowMessage(true);
+            setMessageType("danger");
+            setMessageText("Something went wrong. Please try again.");
         }
     }
 
