@@ -71,11 +71,37 @@ export const tokenDelete = async (id) => {
     try {
         return await axios({
             method: "DELETE",
-            url: "/api/v1/token/"+id,
+            url: "/api/v1/token/" + id,
             headers: {
                 "Authorization": storageManager.getJWTToken()
             }
-        })
+        });
+    } catch {
+        return {
+            log: "Failed axios request was caught: tokenDelete"
+        };
+    }
+}
+
+export const tokenCount = async (id, used = null) => {
+    try {
+        if (used !== null) {
+            return await axios({
+                method: "GET",
+                url: "/api/v1/token/count?survey_id=" + id + "&used=" + used,
+                headers: {
+                    "Authorization": storageManager.getJWTToken()
+                }
+            });
+        } else {
+            return await axios({
+                method: "GET",
+                url: "/api/v1/token/count?survey_id=" + id,
+                headers: {
+                    "Authorization": storageManager.getJWTToken()
+                }
+            });
+        }
     } catch {
         return {
             log: "Failed axios request was caught: tokenDelete"

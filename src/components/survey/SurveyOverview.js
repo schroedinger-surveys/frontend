@@ -98,8 +98,6 @@ const SurveyOverview = () => {
     }
 
     const SurveyList = (surveys) => {
-
-
         return (
             <ListGroup>
                 {surveys.map((item, i) => (

@@ -8,11 +8,13 @@ import log from "../../../log/Logger";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Message from "../../utils/Message";
-import {createToken, getSurveyToken, sendLinkPerMail, tokenDelete} from "../../../calls/token";
+import {createToken, getSurveyToken, sendLinkPerMail, tokenCount, tokenDelete} from "../../../calls/token";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
+import {getPublicSurveys} from "../../utils/GetSurveys";
 
 const ShareLinks = (props) => {
+    const itemsPerPage = 5;
     const [amount, setAmount] = useState(3);
     const [links, setLinks] = useState([]);
     const [emails, setEmails] = useState("");
@@ -21,6 +23,9 @@ const ShareLinks = (props) => {
     const [usedToken, setUsedToken] = useState([]);
 
     const [currentPageUnusedToken, setCurrentPageUnusedToken] = useState(0);
+
+    const [unusedTokenCount, setUnusedTokenCount] = useState(0);
+    const [usedTokenCount, setUsedTokenCount] = useState(0);
 
     /**
      * Used as props for the child Component Message
@@ -103,6 +108,45 @@ const ShareLinks = (props) => {
         )
     }
 
+    const unusedTokenPagination = () => {
+        const changePage = async (index) => {
+            const apiResponseUnusedToken = await getSurveyToken(props.selectedSurvey.id, false, index, itemsPerPage);
+            if (apiResponseUnusedToken.status === 200){
+                setUnusedToken(apiResponseUnusedToken.data);
+                setCurrentPageUnusedToken(index);
+            }
+        }
+
+        const pages = Math.ceil(unusedTokenCount / itemsPerPage);
+        return createPaginationMarker(pages, changePage);
+    }
+
+    const createPaginationMarker = (pages, clickMethod) => {
+        let li = [];
+        for (let i = 0; i < pages; i++) {
+            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
+                        onClick={() => clickMethod(i)}>{i + 1}</li>)
+        }
+
+        if (pages <= 1) {
+            return (
+                <div style={{width: "100%"}}>
+                    <ul style={{listStyle: "none"}}>
+                        <li style={{color: "transparent"}}>.</li>
+                    </ul>
+                </div>
+            )
+        } else {
+            return (
+                <div style={{width: "100%"}}>
+                    <ul style={{listStyle: "none"}}>
+                        {li}
+                    </ul>
+                </div>
+            )
+        }
+    }
+
     const displayUnusedToken = () => {
         const deleteToken = async (token) => {
             const apiResponse = await tokenDelete(token.id);
@@ -123,7 +167,7 @@ const ShareLinks = (props) => {
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
-
+                        {unusedTokenPagination()}
                         <ul>
                             {unusedToken.map((token, i) => (
                                 <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
@@ -185,11 +229,20 @@ const ShareLinks = (props) => {
         if (apiResponseUnusedToken.status === 200){
             setUnusedToken(apiResponseUnusedToken.data);
         }
+        const apiResponseUnusedTokenCount = await tokenCount(props.selectedSurvey.id, false);
+        if (apiResponseUnusedTokenCount.status === 200){
+            setUnusedTokenCount(apiResponseUnusedTokenCount.data.count);
+        }
 
         const apiResponseUsedToken = await getSurveyToken(props.selectedSurvey.id, true);
         if (apiResponseUsedToken.status === 200){
             setUsedToken(apiResponseUsedToken.data);
         }
+        const apiResponseUsedTokenCount = await tokenCount(props.selectedSurvey.id, true);
+        if (apiResponseUsedTokenCount.status === 200){
+            setUsedTokenCount(apiResponseUsedTokenCount.data.count);
+        }
+
     }
 
     /**
