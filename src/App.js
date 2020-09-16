@@ -20,6 +20,7 @@ import Submissions from "./components/submissions/Submissions";
 import SubmissionSpotlight from "./components/submissions/SubmissionSpotlight";
 import ChangeUserData from "./components/user/ChangeUserData";
 import EditSurvey from "./components/survey/EditSurvey";
+import ResetPassword from "./components/home/ResetPassword";
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
                     <Route exact path="/survey/search" component={Search}/>
                     <Route path={"/pub/:id"} component={PublicSurvey}/>
                     <Route path={"/s/:id"} component={PrivateSurvey}/>
+                    <Route path={"/reset-forgotten-password"} component={ResetPassword}/>
                 </Switch>
             </Router>
         </Provider>
