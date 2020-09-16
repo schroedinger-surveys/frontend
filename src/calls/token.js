@@ -41,7 +41,7 @@ export const sendLinkPerMail = async (id, mails) => {
     }
 }
 
-export const getSurveyToken = async (id, used = null, page_number = 0, page_size = 10) => {
+export const getSurveyToken = async (id, used = null, page_number = 0, page_size = 5) => {
     try {
         if (used !== null) {
             return await axios({
@@ -63,6 +63,22 @@ export const getSurveyToken = async (id, used = null, page_number = 0, page_size
     } catch {
         return {
             log: "Failed axios request was caught: getSurveyToken"
+        };
+    }
+}
+
+export const tokenDelete = async (id) => {
+    try {
+        return await axios({
+            method: "DELETE",
+            url: "/api/v1/token/"+id,
+            headers: {
+                "Authorization": storageManager.getJWTToken()
+            }
+        })
+    } catch {
+        return {
+            log: "Failed axios request was caught: tokenDelete"
         };
     }
 }

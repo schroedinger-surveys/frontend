@@ -8,7 +8,7 @@ import log from "../../../log/Logger";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Message from "../../utils/Message";
-import {createToken, getSurveyToken, sendLinkPerMail} from "../../../calls/token";
+import {createToken, getSurveyToken, sendLinkPerMail, tokenDelete} from "../../../calls/token";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 
@@ -86,19 +86,90 @@ const ShareLinks = (props) => {
                         </li>
                     ))}
                 </ul>
-                <hr/>
-                <ul>
-                    {unusedToken.map((token, i) => (
-                        <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
-                            <span style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
-                            /s/{props.selectedSurvey.id}
-                                ?token={token.id}</span>
-                        </li>
-                    ))}
-                </ul>
+                {(unusedToken.length > 0 || usedToken.length > 0) && (
+                    <div>
+                        <hr/>
+                        <Accordion>
+                            {unusedToken.length > 0 && displayUnusedToken()}
+                            {usedToken.length > 0 && displayUsedToken()}
+                        </Accordion>
+                    </div>
+                )}
                 <hr/>
                 {sendLinkPerMailForm()}
             </div>
+        )
+    }
+
+    const displayUnusedToken = () => {
+        const deleteToken = async (token) => {
+            const apiResponse = await tokenDelete(token.id);
+            if (apiResponse.status === 204){
+                log.debug("Token was deleted");
+                createdAndUsedToken();
+            } else {
+                log.debug("Token could not be deleted");
+            }
+        }
+
+        return (
+            <Card>
+                <Card.Header>
+                    <Accordion.Toggle as={Button} variant="link" eventKey="0" style={{color: "grey"}}>
+                        Unused Tokens
+                    </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                    <Card.Body>
+                        <ul>
+                            {unusedToken.map((token, i) => (
+                                <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                    <span style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                                        /s/{props.selectedSurvey.id}
+                                        ?token={token.id}</span>
+                                    <button style={{border: "none", backgroundColor: "transparent", float: "right"}}
+                                        onClick={() => deleteToken(token)}
+                                    >
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash"
+                                             fill="currentColor"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path fillRule="evenodd"
+                                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        </svg>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </Card.Body>
+                </Accordion.Collapse>
+            </Card>
+        )
+    }
+
+    const displayUsedToken = () => {
+        return (
+            <Card>
+                <Card.Header>
+                    <Accordion.Toggle as={Button} variant="link" eventKey="1" style={{color: "grey"}}>
+                        Used Tokens
+                    </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                    <Card.Body>
+                        <ul>
+                            {usedToken.map((token, i) => (
+                                <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                    <span style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                                        /s/{props.selectedSurvey.id}
+                                        ?token={token.id}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </Card.Body>
+                </Accordion.Collapse>
+            </Card>
         )
     }
 
