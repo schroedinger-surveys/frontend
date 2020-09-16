@@ -98,6 +98,8 @@ const SurveyOverview = () => {
     }
 
     const SurveyList = (surveys) => {
+
+
         return (
             <ListGroup>
                 {surveys.map((item, i) => (
@@ -210,7 +212,7 @@ const SurveyOverview = () => {
                     <Card.Body>
                         {constrainedQuestions.map((question, i) => (
                             <div key={i}>
-                                <p>Question {question.position + 1}: {question.question_text}</p>
+                                <p>{question.question_text}</p>
                                 <ul>
                                     {question.options.map((option, j) => (
                                         <li key={j}>{option.answer}</li>
@@ -237,7 +239,7 @@ const SurveyOverview = () => {
                     <Card.Body>
                         <ul>
                             {freestyleQuestions.map((question, i) => (
-                                <li key={i}>Question {question.position + 1}: {question.question_text}</li>
+                                <li key={i}>{question.question_text}</li>
                             ))}
                         </ul>
                     </Card.Body>
