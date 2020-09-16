@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Message from "../utils/Message";
 import axios from "axios";
+import {userRequestPasswordReset} from "../../calls/user";
 
 const ForgotPassword = (props) => {
     const {single} = props;
@@ -26,44 +27,17 @@ const ForgotPassword = (props) => {
         setValues({...values, [name]: event.target.value})
     }
 
-    const requestPasswordReset = async() => {
-        let apiResponse;
-        try{
-            if (username !== ""){
-                apiResponse = await axios({
-                    method: "POST",
-                    url: "/api/v1/user/password/reset",
-                    data: {
-                        username,
-                        email
-                    }
-                })
-            } else {
-                apiResponse = await axios({
-                    method: "POST",
-                    url: "/api/v1/user/password/reset",
-                    data: {
-                        email
-                    }
-                })
-            }
-
-            console.log(apiResponse);
-            if(apiResponse.status === 200){
-                setMessageText(apiResponse.data);
-                setMessageType("info");
-                setShowMessage(true);
-            } else {
-                setMessageText("That did not work");
-                setMessageType("danger");
-                setShowMessage(true);
-            }
-        } catch (e) {
+    const requestPasswordReset = async () => {
+        const apiResponse = await userRequestPasswordReset(username, email);
+        if (apiResponse.status === 200) {
+            setMessageText(apiResponse.data);
+            setMessageType("info");
+            setShowMessage(true);
+        } else {
             setMessageText("That did not work. Invalid Email or Username");
             setMessageType("danger");
             setShowMessage(true);
         }
-
     }
 
     return (
@@ -73,7 +47,8 @@ const ForgotPassword = (props) => {
                 <h3>Forgott Password or Username?</h3>
                 <Form.Group>
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" placeholder="Enter username" value={username} onChange={handleInput("username")}/>
+                    <Form.Control type="text" placeholder="Enter username" value={username}
+                                  onChange={handleInput("username")}/>
                     <Form.Text className="text-muted">
                         If you forgot your username, leave this field empty.
                     </Form.Text>

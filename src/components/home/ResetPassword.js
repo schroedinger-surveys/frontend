@@ -1,9 +1,10 @@
 import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
+import log from "../../log/Logger";
 import Message from "../utils/Message";
 import {confirmDoubleInput} from "../utils/ConfirmInput";
+import {userResetPassword} from "../../calls/user";
 
 const ResetPassword = (props) => {
     const [values, setValues] = useState({
@@ -33,30 +34,18 @@ const ResetPassword = (props) => {
         const queryParams = props.location.search.split("="); // Looks like ["?token", "4d2d2b71-4947-4efc-8daf-01672cede685"]
         const resetToken = queryParams[1];
         if(password === confirmationPassword){
-            try{
-                const apiResponse = await axios({
-                    method: "PUT",
-                    url: "/api/v1/user/password/reset",
-                    data: {
-                        reset_password_token: resetToken,
-                        new_password: password
-                    }
-                });
+                const apiResponse = await userResetPassword(resetToken, password);
                 if (apiResponse.status === 204){
                     setShowMessage(true);
                     setMessageType("success");
-                    setMessageText("Your password was successfully reset");
+                    setMessageText("Your password was successfully reset.");
                     setResetSuccessfull(true);
                 } else {
                     setShowMessage(true);
                     setMessageType("warning");
-                    setMessageText("Something went wrong. Please try again.")
+                    setMessageText("Something went wrong. Please try again.");
+                    log.debug(apiResponse.log);
                 }
-            } catch {
-                setShowMessage(true);
-                setMessageType("success");
-                setMessageText("Changed your user data")
-            }
         } else {
             setShowMessage(true);
             setMessageType("warning");

@@ -26,7 +26,7 @@ export const userRegistration = async (username, email, password) => {
 }
 
 export const userLogin = async (username, password) => {
-    try{
+    try {
         return await axios({
             method: "POST",
             url: "/api/v1/user/login",
@@ -104,7 +104,7 @@ export const changeUserData = async (username, email, oldPassword) => {
 }
 
 export const getUserInfo = async () => {
-    try{
+    try {
         return await axios({
             method: "POST",
             url: "/api/v1/user/info",
@@ -134,6 +134,50 @@ export const userDelete = async (confirmDeletePassword) => {
     } catch {
         return {
             log: "Failed axios request was caught: userDelete"
+        }
+    }
+}
+
+export const userResetPassword = async (resetToken, password) => {
+    try {
+        return await axios({
+            method: "PUT",
+            url: "/api/v1/user/password/reset",
+            data: {
+                reset_password_token: resetToken,
+                new_password: password
+            }
+        });
+    } catch {
+        return {
+            log: "Failed axios request was caught: userResetPassword"
+        }
+    }
+}
+
+export const userRequestPasswordReset = async (username, email) => {
+    try {
+        if (username !== "") {
+            return await axios({
+                method: "POST",
+                url: "/api/v1/user/password/reset",
+                data: {
+                    username,
+                    email
+                }
+            })
+        } else {
+            return await axios({
+                method: "POST",
+                url: "/api/v1/user/password/reset",
+                data: {
+                    email
+                }
+            })
+        }
+    } catch {
+        return {
+            log: "Failed axios request was caught: userRequestPasswordReset"
         }
     }
 }
