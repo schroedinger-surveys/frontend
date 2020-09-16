@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import log from "../../log/Logger";
 import Message from "../utils/Message";
 import storageManager from "../../storage/LocalStorageManager";
-import {userLogin} from "../../calls/user/useraccount";
+import {userLogin} from "../../calls/user";
 
 /**
  * Login provides functionalities for a user to log in to the application

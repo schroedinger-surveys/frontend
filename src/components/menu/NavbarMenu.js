@@ -7,6 +7,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 
 import catIcon from "./icons/cat.png";
 import axios from "axios";
+import {userLogout} from "../../calls/user";
 
 /**
  * The Navbar that will be displayed at every page
@@ -56,8 +57,9 @@ const NavbarMenu = () => {
      * which removes the jwt token from session and local storage
      * triggered by click on nav-link Logout
      */
-    const logoutUser = () => {
+    const logoutUser = async () => {
         storageManager.clearToken();
+        await userLogout();
     }
 
     /**

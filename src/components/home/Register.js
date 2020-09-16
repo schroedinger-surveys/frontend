@@ -5,7 +5,7 @@ import axios from "axios";
 
 import log from "../../log/Logger";
 import Message from "../utils/Message";
-import {userRegistration} from "../../calls/user/useraccount";
+import {userRegistration} from "../../calls/user";
 
 /**
  * Register provides functionalities for a user to register a new user account

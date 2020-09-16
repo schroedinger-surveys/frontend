@@ -4,6 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import "./SideMenu.css";
 import storageManager from "../../../storage/LocalStorageManager";
 import {useLocation} from "react-router-dom";
+import {userLogout} from "../../../calls/user";
 
 const SideMenu = () => {
     const location = useLocation(); // Current url path, e.g. "/login"
@@ -21,6 +22,16 @@ const SideMenu = () => {
         } else { // Inactive Page
             return {color: "white"};
         }
+    }
+
+    /**
+     * Calls the storageManager method clearToken()
+     * which removes the jwt token from session and local storage
+     * triggered by click on nav-link Logout
+     */
+    const logoutUser = async () => {
+        storageManager.clearToken();
+        await userLogout();
     }
 
     return(
@@ -41,7 +52,7 @@ const SideMenu = () => {
             <Nav>
                 <label style={{color: "lightgrey", fontWeight: "bolder"}}>Account</label>
                 <Nav.Link className={"side_nav_link"}  href="/settings" style={activePage("/settings")}>Settings</Nav.Link>
-                <Nav.Link className={"side_nav_logout_link"}  href="/" style={{color: "white"}} onClick={() => storageManager.clearToken()}>Logout</Nav.Link> {/** If clicked, the logoutUser function is called and the nav-link redirects to home **/}
+                <Nav.Link className={"side_nav_logout_link"}  href="/" style={{color: "white"}} onClick={logoutUser}>Logout</Nav.Link> {/** If clicked, the logoutUser function is called and the nav-link redirects to home **/}
             </Nav>
         </div>
     )
