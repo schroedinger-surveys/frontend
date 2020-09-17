@@ -218,6 +218,19 @@ class SurveyAPIHandler {
         }
     }
 
+    static async getSinglePublicSurvey(id){
+        try{
+            return await axios({
+                method: "GET",
+                url: "/api/v1/survey/public/" + id
+            });
+        } catch (e) {
+            log.error("Error in getSinglePublicSurvey:", e);
+            return {
+                log: "Failed axios request was caught: getSinglePublicSurvey"
+            }
+        }
+    }
 
 }
 

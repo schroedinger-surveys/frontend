@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import axios from "axios";
-
 import log from "../../../log/Logger";
 import storageManager from "../../../storage/LocalStorageManager";
 import LoadingScreen from "../../utils/LoadingScreen";
@@ -60,7 +58,6 @@ const PrivateSurvey = (props) => {
                 setMessageText("That did not work. Maybe the token is invalid. Please try again or contact the survey creator!");
                 setShowMessage(true);
             } else {
-                log.debug("Survey could not be fetched");
                 setMessageType("danger");
                 setMessageText("That did not work. Please try again!");
                 setShowMessage(true);
