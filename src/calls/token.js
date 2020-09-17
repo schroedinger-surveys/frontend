@@ -1,5 +1,6 @@
 import axios from "axios";
 import storageManager from "../storage/LocalStorageManager";
+import log from "../log/Logger";
 
 /**
  * used in:
@@ -19,7 +20,8 @@ class TokenAPIHandler {
                     amount
                 }
             });
-        } catch {
+        } catch (e){
+            log.error("Error in createToken:",e);
             return {
                 log: "Failed axios request was caught: createToken"
             };
@@ -39,7 +41,8 @@ class TokenAPIHandler {
                     emails: mails
                 }
             });
-        } catch {
+        } catch (e){
+            log.error("Error in sendLinkPerMail:",e);
             return {
                 log: "Failed axios request was caught: sendLinkPerMail"
             };
@@ -65,7 +68,8 @@ class TokenAPIHandler {
                     }
                 })
             }
-        } catch {
+        } catch (e){
+            log.error("Error in getSurveyToken:",e);
             return {
                 log: "Failed axios request was caught: getSurveyToken"
             };
@@ -81,7 +85,8 @@ class TokenAPIHandler {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
-        } catch {
+        } catch (e) {
+            log.error("Error in tokenDelete:",e);
             return {
                 log: "Failed axios request was caught: tokenDelete"
             };
@@ -107,9 +112,10 @@ class TokenAPIHandler {
                     }
                 });
             }
-        } catch {
+        } catch (e){
+            log.error("Error in tokenCount:",e);
             return {
-                log: "Failed axios request was caught: tokenDelete"
+                log: "Failed axios request was caught: tokenCount"
             };
         }
     }

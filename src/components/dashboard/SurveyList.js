@@ -2,9 +2,9 @@ import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {ListGroup} from "react-bootstrap";
 import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
-import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
 import {getCurrentStatus} from "../utils/SurveyStatus";
+import SurveyAPIHandler from "../../calls/survey";
 
 const SurveyList = (props) => {
     const [pagination, setPagination] = useState({
@@ -16,7 +16,7 @@ const SurveyList = (props) => {
 
     const privatePagination = () => {
         const changePage = async (index) => {
-            const surveys = await getPrivateSurveys(index)
+            const surveys = await SurveyAPIHandler.surveyPrivateGet(index)
             props.setPrivateSurveys(surveys);
         }
 
@@ -36,7 +36,7 @@ const SurveyList = (props) => {
 
     const publicPagination = () => {
         const changePage = async(index) => {
-            const surveys = await getPublicSurveys(index)
+            const surveys = await SurveyAPIHandler.surveyPublicGet(index)
             props.setPublicSurveys(surveys);
         }
 

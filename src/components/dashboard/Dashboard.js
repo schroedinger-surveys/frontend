@@ -11,7 +11,8 @@ import SurveySpotlight from "./survey-spotlight/SurveySpotlight";
 import UserPrompt from "./UserPrompt";
 import SideMenu from "../menu/side-menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
-import {privateSurveyCount, publicSurveyCount, setAllSurveyCounts} from "../utils/CountFunctions";
+import {setAllSurveyCounts} from "../utils/CountFunctions";
+import SurveyAPIHandler from "../../calls/survey";
 import {
     setActiveCount, setClosedCount,
     setOverallCount,
@@ -21,7 +22,6 @@ import {
 } from "../../redux/actions/SurveyCount";
 import LoadingScreen from "../utils/LoadingScreen";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
-import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 
 /**
@@ -42,9 +42,9 @@ const Dashboard = (props) => {
         try {
             setLoading(true);
 
-            const listPrivateSurveys = await getPrivateSurveys();
+            const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet();
             props.setPrivateSurveys(listPrivateSurveys);
-            const listPublicSurveys = await getPublicSurveys();
+            const listPublicSurveys = await SurveyAPIHandler.surveyPublicGet();
             props.setPublicSurveys(listPublicSurveys);
 
             const allCounts = setAllSurveyCounts(listPrivateSurveys, listPublicSurveys);
@@ -52,10 +52,10 @@ const Dashboard = (props) => {
             props.setPendingCount(allCounts[1]);
             props.setClosedCount(allCounts[2]);
 
-            const privateSurveys = await privateSurveyCount();
+            const privateSurveys = await SurveyAPIHandler.privateSurveyCount();
             props.setPrivateCount(privateSurveys);
 
-            const publicSurveys = await publicSurveyCount();
+            const publicSurveys = await SurveyAPIHandler.publicSurveyCount();
             props.setPublicCount(publicSurveys);
 
             props.setOverallCount(privateSurveys + publicSurveys); // Sets the count of overall surveys belonging to the user

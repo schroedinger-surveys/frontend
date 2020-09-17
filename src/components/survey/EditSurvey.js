@@ -5,13 +5,13 @@ import SideMenu from "../menu/side-menu/SideMenu";
 import {Container} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
 import {TimeConverter} from "../utils/TimeConverter";
 import {sortQuestions} from "../utils/SortQuestions";
-import storageManager from "../../storage/LocalStorageManager";
 import Message from "../utils/Message";
-import {DeleteModal, deleteSurveyRequest} from "./delete-survey-utils";
+import {DeleteModal} from "./delete-survey-utils";
 import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
+import SurveyAPIHandler from "../../calls/survey";
+import log from "../../log/Logger";
 
 const EditSurvey = (props) => {
     const {history} = props;
@@ -140,13 +140,14 @@ const EditSurvey = (props) => {
     }
 
     const deleteSurvey = async() => {
-        const deleteSurveyResponse = await deleteSurveyRequest(survey.id);
-        if(deleteSurveyResponse === 204){
+        const apiResponse = await SurveyAPIHandler.surveyDelete(survey.id);
+        if(apiResponse === 204){
             history.push("/dashboard");
         } else {
             setShowMessageDelete(true);
             setMessageTypeDelete("danger");
             setMessageTextDelete("That did not work. Please try again.");
+            log.debug(apiResponse.log);
         }
     }
 
@@ -373,31 +374,19 @@ const EditSurvey = (props) => {
 
     const updateSurvey = async() => {
         const secured = document.getElementById("securedStatusPrivate").checked;
-        const updateResponse = await axios({
-            method: "PUT",
-            url: "/api/v1/survey/" + survey.id,
-            headers: {
-                "Authorization": storageManager.getJWTToken()
-            },
-            data: {
-                title,
-                description,
-                start_date,
-                end_date,
-                secured,
-                added_constrained_questions: addedConstrainedQuestions,
-                added_freestyle_questions: addedFreestyleQuestions,
-                deleted_constrained_questions: deletedConstrainedQuestions,
-                deleted_freestyle_questions: deletedFreestyleQuestions
-            }
-        });
-        if (updateResponse.status === 204){
+        const apiResponse = await SurveyAPIHandler.surveyUpdate(survey.id, title, description, start_date, end_date, secured, addedConstrainedQuestions, addedFreestyleQuestions, deletedConstrainedQuestions, deletedFreestyleQuestions)
+        if (apiResponse.status === 204){
             setShowMessageUpdate(true);
             setMessageTypeUpdate("success");
             setMessageTextUpdate("Survey was updated");
             setTimeout(()=> {
                 history.push("/dashboard");
             }, 3000);
+        } else {
+            setShowMessageUpdate(true);
+            setMessageTypeUpdate("warning");
+            setMessageTextUpdate("Something did not work. Please try again.");
+            log.debug(apiResponse.log);
         }
     }
 

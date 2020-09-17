@@ -6,6 +6,8 @@ import log from "../../../log/Logger";
 import LoadingScreen from "../../utils/LoadingScreen";
 import Message from "../../utils/Message";
 import {checkSurveyStatus, collectAnswers, submitAnsweredSurvey, validateSubmission} from "./Utils";
+import SurveyAPIHandler from "../../../calls/survey";
+import SubmissionAPIHandler from "../../../calls/submission";
 
 /**
  * If a user opens a public survey trough the provided link
@@ -36,22 +38,19 @@ const PublicSurvey = () => {
     const [messageText, setMessageText] = useState("");
     const [messageType, setMessageType] = useState("");
 
-    const getSurvey = () => {
-        axios({
-            method: "GET",
-            url: "/api/v1/survey/public/" + id
-        }).then(async (response) => {
-            log.debug(response.data);
-            if (response.status === 200) {
-                await setSurvey(response.data)
+    const getSurvey = async() => {
+        const apiResponse = await SurveyAPIHandler.getSinglePublicSurvey(id);
+            if (apiResponse.status === 200) {
+                await setSurvey(apiResponse.data)
                 setLoadedSurvey(true);
                 setLoading(false);
+            } else {
+                setMessageType("danger");
+                setMessageText("That did not work. Please try again!");
+                setShowMessage(true);
+                log.debug(apiResponse.log);
             }
-        }).catch((error) => {
-            log.debug("Could not fetch individual survey", error.response);
-        })
     }
-
 
     const submitPublicSurvey = async () => {
         const answers = await collectAnswers(survey);
@@ -59,7 +58,7 @@ const PublicSurvey = () => {
 
         const validationCheck = validateSubmission(answers.constrainedAnswers, answers.freestyleAnswers, survey);
         if (validationCheck.valid){
-            const submissionResponse = await submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, null);
+            const submissionResponse = await SubmissionAPIHandler.submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, null);
             setShowMessage(submissionResponse.status);
             setMessageType(submissionResponse.type);
             setMessageText(submissionResponse.message);

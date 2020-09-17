@@ -5,17 +5,15 @@ import SideMenu from "../menu/side-menu/SideMenu";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
-import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
-import axios from "axios";
-import storageManager from "../../storage/LocalStorageManager";
 import LoadingScreen from "../utils/LoadingScreen";
 import {getCurrentStatus, getSurveyStatus} from "../utils/SurveyStatus";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
-import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
+import SurveyAPIHandler from "../../calls/survey";
 import Message from "../utils/Message";
 import {Redirect} from "react-router-dom";
-import {DeleteModal, deleteSurveyRequest} from "./delete-survey-utils";
+import {DeleteModal} from "./delete-survey-utils";
+import SubmissionAPIHandler from "../../calls/submission";
 
 const SurveyOverview = () => {
     const [matching, setMatching] = useState(true);
@@ -39,17 +37,17 @@ const SurveyOverview = () => {
 
     const getSurveyLists = async () => {
         setMatching(true);
-        const listPrivateSurveys = await getPrivateSurveys(0, itemsPerPage);
-        const listPublicSurveys = await getPublicSurveys(0, itemsPerPage);
+        const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet(0, itemsPerPage);
+        const listPublicSurveys = await SurveyAPIHandler.surveyPublicGet(0, itemsPerPage);
         await matchPrivateSurveys(listPrivateSurveys)
         await matchPublicSurveys(listPublicSurveys);
         setMatching(false);
     }
 
     const getSurveyCounts = async () => {
-        const privateSurveyCounts = await privateSurveyCount();
+        const privateSurveyCounts = await SurveyAPIHandler.privateSurveyCount();
         setPrivateCount(privateSurveyCounts);
-        const publicSurveysCounts = await publicSurveyCount();
+        const publicSurveysCounts = await SurveyAPIHandler.publicSurveyCount();
         setPublicCount(publicSurveysCounts);
     }
 
@@ -57,18 +55,12 @@ const SurveyOverview = () => {
         // TODO match Seen-Count when backend api is ready
         const tempListPrivateSurveys = [];
         for (let i = 0; i < privateList.length; i++) {
-            const fetchSubmissionCount = await axios({
-                method: "GET",
-                url: "/api/v1/submission/count?survey_id=" + privateList[i].id,
-                headers: {
-                    "Authorization": storageManager.getJWTToken()
-                }
-            });
-            if (fetchSubmissionCount.status === 200) {
+            const apiResponse = await SubmissionAPIHandler.submissionCount(privateList[i].id);
+            if (apiResponse.status === 200) {
                 tempListPrivateSurveys.push({
                     secured: true,
                     survey: privateList[i],
-                    submissionCount: fetchSubmissionCount.data.count
+                    submissionCount: apiResponse.data.count
                 })
             }
         }
@@ -79,18 +71,12 @@ const SurveyOverview = () => {
         // TODO match Seen-Count when backend api is ready
         const tempListPublicSurveys = [];
         for (let i = 0; i < publicList.length; i++) {
-            const fetchSubmissionCount = await axios({
-                method: "GET",
-                url: "/api/v1/submission/count?survey_id=" + publicList[i].id,
-                headers: {
-                    "Authorization": storageManager.getJWTToken()
-                }
-            });
-            if (fetchSubmissionCount.status === 200) {
+            const apiResponse = await SubmissionAPIHandler.submissionCount(publicList[i].id);
+            if (apiResponse.status === 200) {
                 tempListPublicSurveys.push({
                     secured: false,
                     survey: publicList[i],
-                    submissionCount: fetchSubmissionCount.data.count
+                    submissionCount: apiResponse.data.count
                 })
             }
         }
@@ -185,7 +171,7 @@ const SurveyOverview = () => {
     }
 
     const deleteSurvey = async () => {
-        const deleteSurveyResponse = await deleteSurveyRequest(surveyToDelete.id);
+        const deleteSurveyResponse = await SurveyAPIHandler.surveyDelete(surveyToDelete.id);
         if (deleteSurveyResponse === 204) {
             await getSurveyLists();
             await getSurveyCounts();
@@ -248,7 +234,7 @@ const SurveyOverview = () => {
 
     const privatePagination = () => {
         const changePage = async (index) => {
-            const listPrivateSurveys = await getPrivateSurveys(index, itemsPerPage);
+            const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet(index, itemsPerPage);
             await matchPrivateSurveys(listPrivateSurveys);
         }
 
@@ -258,7 +244,7 @@ const SurveyOverview = () => {
 
     const publicPagination = () => {
         const changePage = async (index) => {
-            const listPublicSurveys = await getPublicSurveys(index, itemsPerPage);
+            const listPublicSurveys = await SurveyAPIHandler.surveyPublicGet(index, itemsPerPage);
             await matchPublicSurveys(listPublicSurveys);
         }
 

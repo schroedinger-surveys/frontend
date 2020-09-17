@@ -28,7 +28,8 @@ class UserAPIHandler {
                 }
             });
             return apiResponse;
-        } catch {
+        } catch (e){
+            log.error("Error in userRegistration:",e);
             return {
                 log: "Failed axios request was caught: userRegistration"
             };
@@ -48,7 +49,8 @@ class UserAPIHandler {
                     password
                 }
             });
-        } catch {
+        } catch (e){
+            log.error("Error in userLogin:",e);
             return {
                 log: "Failed axios request was caught: userLogin"
             };
@@ -65,7 +67,8 @@ class UserAPIHandler {
                 }
             });
             log.debug("User token was banned, user logged out", apiResponse.status);
-        } catch {
+        } catch (e){
+            log.error("Error in userLogout:",e);
             log.debug("User token could not be banned: userLogout")
         }
     }
@@ -85,7 +88,8 @@ class UserAPIHandler {
                     new_password: password
                 }
             });
-        } catch {
+        } catch (e){
+            log.error("Error in changeUserPassword:",e);
             return {
                 log: "Failed axios request was caught: changeUserPassword"
             }
@@ -106,7 +110,8 @@ class UserAPIHandler {
                     old_password: oldPassword
                 }
             });
-        } catch {
+        } catch (e){
+            log.error("Error in changeUserData:",e);
             return {
                 log: "Failed axios request was caught: changeUserData"
             }
@@ -122,7 +127,8 @@ class UserAPIHandler {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
-        } catch {
+        } catch (e){
+            log.error("Error in getUserInfo:",e);
             return {
                 log: "Failed axios request was caught: getUserInfo"
             }
@@ -141,7 +147,8 @@ class UserAPIHandler {
                     password: confirmDeletePassword
                 }
             });
-        } catch {
+        } catch (e){
+            log.error("Error in userDelete:",e);
             return {
                 log: "Failed axios request was caught: userDelete"
             }
@@ -158,7 +165,8 @@ class UserAPIHandler {
                     new_password: password
                 }
             });
-        } catch {
+        } catch (e){
+            log.error("Error in userResetPassword:",e);
             return {
                 log: "Failed axios request was caught: userResetPassword"
             }
@@ -185,7 +193,8 @@ class UserAPIHandler {
                     }
                 })
             }
-        } catch {
+        } catch (e){
+            log.error("Error in userRequestPasswordReset:",e);
             return {
                 log: "Failed axios request was caught: userRequestPasswordReset"
             }
