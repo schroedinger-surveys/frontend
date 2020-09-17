@@ -8,6 +8,7 @@ import log from "../../log/Logger";
 import axios from "axios";
 import storageManager from "../../storage/LocalStorageManager";
 import {sortQuestions} from "../utils/SortQuestions";
+import SubmissionAPIHandler from "../../calls/submission";
 
 const SubmissionSpotlight = (props) => {
     const survey = props.location.state.survey;
@@ -35,15 +36,11 @@ const SubmissionSpotlight = (props) => {
     const getSubmissions = async (pageNumber = 0) => {
         // eslint-disable-next-line no-undefined
         if (survey !== undefined) {
-            const submissionsResponse = await axios({
-                method: "GET",
-                url: "/api/v1/submission?survey_id=" + survey.id + "&page_number=" + pageNumber + "&page_size=" + itemsPerPage,
-                headers: {
-                    "Authorization": storageManager.getJWTToken()
-                }
-            });
-            if (submissionsResponse.status === 200) {
-                setSubmissions(submissionsResponse.data);
+            const apiResponse = await SubmissionAPIHandler.submissionGet(survey.id, pageNumber, itemsPerPage)
+            if (apiResponse.status === 200) {
+                setSubmissions(apiResponse.data);
+            }else {
+                // TODO
             }
         }
     }

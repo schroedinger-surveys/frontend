@@ -6,6 +6,7 @@ import LoadingScreen from "../../utils/LoadingScreen";
 import {checkSurveyStatus, collectAnswers, submitAnsweredSurvey, validateSubmission} from "./Utils";
 import Message from "../../utils/Message";
 import SurveyAPIHandler from "../../../calls/survey";
+import SubmissionAPIHandler from "../../../calls/submission";
 
 /**
  * If a User opens a private survey over the provided link, this component is shown
@@ -90,7 +91,7 @@ const PrivateSurvey = (props) => {
         const validationCheck = validateSubmission(answers.constrainedAnswers, answers.freestyleAnswers, survey);
 
         if (validationCheck.valid) {
-            const submissionResponse = await submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, token);
+            const submissionResponse = await SubmissionAPIHandler.submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, token);
             setShowMessage(submissionResponse.status);
             setMessageType(submissionResponse.type);
             setMessageText(submissionResponse.message);

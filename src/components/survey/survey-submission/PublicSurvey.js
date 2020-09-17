@@ -7,6 +7,7 @@ import LoadingScreen from "../../utils/LoadingScreen";
 import Message from "../../utils/Message";
 import {checkSurveyStatus, collectAnswers, submitAnsweredSurvey, validateSubmission} from "./Utils";
 import SurveyAPIHandler from "../../../calls/survey";
+import SubmissionAPIHandler from "../../../calls/submission";
 
 /**
  * If a user opens a public survey trough the provided link
@@ -51,14 +52,13 @@ const PublicSurvey = () => {
             }
     }
 
-
     const submitPublicSurvey = async () => {
         const answers = await collectAnswers(survey);
         log.debug("collected Answers", answers);
 
         const validationCheck = validateSubmission(answers.constrainedAnswers, answers.freestyleAnswers, survey);
         if (validationCheck.valid){
-            const submissionResponse = await submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, null);
+            const submissionResponse = await SubmissionAPIHandler.submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, null);
             setShowMessage(submissionResponse.status);
             setMessageType(submissionResponse.type);
             setMessageText(submissionResponse.message);
