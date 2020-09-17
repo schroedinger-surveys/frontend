@@ -25,7 +25,8 @@ class SurveyAPIHandler {
                 }
             });
             return response.data.count;
-        } catch{
+        } catch (e){
+            log.error("Error in privateSurveyCount:",e);
             log.debug("Failed axios request was caught: privateSurveyCount");
             return 0;
         }
@@ -48,7 +49,8 @@ class SurveyAPIHandler {
                 }
             });
             return response.data.count;
-        } catch {
+        } catch (e) {
+            log.error("Error in publicSurveyCount:",e);
             log.debug("Failed axios request was caught: publicSurveyCount");
             return 0;
         }
@@ -73,7 +75,8 @@ class SurveyAPIHandler {
                     freestyle_questions: freestyleQuestions
                 }
             });
-        } catch {
+        } catch (e){
+            log.error("Error in createSurvey:",e)
             return {
                 log: "Failed axios request was caught: createSurvey"
             }
@@ -89,7 +92,8 @@ class SurveyAPIHandler {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
-        } catch {
+        } catch (e) {
+            log.error("Error in surveyDelete:",e);
             return {
                 log: "Failed axios request was caught: surveyDelete"
             }
@@ -116,7 +120,8 @@ class SurveyAPIHandler {
                     deleted_freestyle_questions: deletedFreestyleQuestions
                 }
             });
-        } catch {
+        } catch (e) {
+            log.error("Error in surveyUpdate:",e);
             return {
                 log: "Failed axios request was caught: surveyUpdate"
             }

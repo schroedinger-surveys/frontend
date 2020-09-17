@@ -1,5 +1,6 @@
 import axios from "axios";
 import storageManager from "../storage/LocalStorageManager";
+import log from "../log/Logger";
 
 /**
  * Used in:
@@ -17,7 +18,8 @@ class SubmissionAPIHandler {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
-        } catch{
+        } catch (e){
+            log.error("Error in submissionCount:",e);
             return {
                 log: "Failed axios request was caught: submissionCount"
             };
