@@ -11,7 +11,8 @@ import SurveySpotlight from "./survey-spotlight/SurveySpotlight";
 import UserPrompt from "./UserPrompt";
 import SideMenu from "../menu/side-menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
-import {privateSurveyCount, publicSurveyCount, setAllSurveyCounts} from "../utils/CountFunctions";
+import {setAllSurveyCounts} from "../utils/CountFunctions";
+import SurveyAPIHandler from "../../calls/survey";
 import {
     setActiveCount, setClosedCount,
     setOverallCount,
@@ -52,10 +53,10 @@ const Dashboard = (props) => {
             props.setPendingCount(allCounts[1]);
             props.setClosedCount(allCounts[2]);
 
-            const privateSurveys = await privateSurveyCount();
+            const privateSurveys = await SurveyAPIHandler.privateSurveyCount();
             props.setPrivateCount(privateSurveys);
 
-            const publicSurveys = await publicSurveyCount();
+            const publicSurveys = await SurveyAPIHandler.publicSurveyCount();
             props.setPublicCount(publicSurveys);
 
             props.setOverallCount(privateSurveys + publicSurveys); // Sets the count of overall surveys belonging to the user

@@ -5,6 +5,7 @@ import log from "../log/Logger";
 /**
  * Used in:
  * - Submissions
+ * - SurveyOverview
  */
 class SurveyAPIHandler {
 

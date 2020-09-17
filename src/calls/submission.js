@@ -4,6 +4,7 @@ import storageManager from "../storage/LocalStorageManager";
 /**
  * Used in:
  * - Submissions
+ * - SurveyOverview
  */
 class SubmissionAPIHandler {
 
