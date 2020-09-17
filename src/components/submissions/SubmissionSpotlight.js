@@ -39,8 +39,6 @@ const SubmissionSpotlight = (props) => {
             const apiResponse = await SubmissionAPIHandler.submissionGet(survey.id, pageNumber, itemsPerPage)
             if (apiResponse.status === 200) {
                 setSubmissions(apiResponse.data);
-            }else {
-                // TODO
             }
         }
     }

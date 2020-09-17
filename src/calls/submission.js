@@ -70,7 +70,7 @@ class SubmissionAPIHandler {
                 return {status: true, type: "danger", message: "Something went wrong. Please try again!"}
             }
         } catch (e) {
-            log.error("Submission could not be submit", e);
+            log.error("Error in submitAnsweredSurvey:", e);
             return {status: true, type: "danger", message: "Something went wrong. Please try again!"}
         }
     }
@@ -85,7 +85,7 @@ class SubmissionAPIHandler {
                 }
             });
         }catch (e) {
-
+            log.error("Error in submissionGet:", e);
         }
     }
 }
