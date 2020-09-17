@@ -5,6 +5,7 @@ import axios from "axios";
 
 import log from "../../log/Logger";
 import Message from "../utils/Message";
+import {userRegistration} from "../../calls/user";
 
 /**
  * Register provides functionalities for a user to register a new user account
@@ -40,35 +41,24 @@ const Register = (props) => {
      * if username or email already exist an error message is shown
      * @param event - click
      */
-    const registerNewUser = (event) => {
+    const registerNewUser = async (event) => {
         event.preventDefault();
-        log.debug("Someone wants to register a user account");
-        axios({
-            method: "POST",
-            url: "/api/v1/user",
-            headers: {
-                "content-type": "application/json"
-            },
-            data: {
-                username,
-                email,
-                password
-            }
-        }).then((response) => {
-            if(response.status === 201){
-                setShowMessage(true);
-                setMessageText("Your account was created, you can login now.");
-                setMessageType("success");
-            }
-            log.debug("registered new user", response.status);
-        }).catch((error) => {
-            if(error.response.status === 409){
-                setShowMessage(true);
-                setMessageText(error.response.statusText);
-                setMessageType("danger");
-            }
-            log.debug("user could not be registered", error.response.status, error.response);
-        })
+        const apiResponse = await userRegistration(username, email, password);
+        if (apiResponse.status === 201) {
+            setShowMessage(true);
+            setMessageText("Your account was created, you can login now.");
+            setMessageType("success");
+            log.debug("User Registration successful");
+        } else if (apiResponse.status === 409) {
+            setShowMessage(true);
+            setMessageText("Conflict! Username or email already taken.");
+            setMessageType("warning");
+        } else {
+            setShowMessage(true);
+            setMessageText("Something went wrong. Please try again");
+            setMessageType("danger");
+            log.debug(apiResponse.log);
+        }
     }
 
     /**
@@ -83,7 +73,10 @@ const Register = (props) => {
 
     return (
         <div>
-            <Form style={{width: single ? "30%" : "100%", margin: "30px auto"}}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
+            <Form style={{
+                width: single ? "30%" : "100%",
+                margin: "30px auto"
+            }}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
                 <h3>Register a new user account</h3>
                 <Form.Group controlId="username">
                     <Form.Label>Username*</Form.Label>
@@ -92,7 +85,8 @@ const Register = (props) => {
                 </Form.Group>
                 <Form.Group controlId="email">
                     <Form.Label>Email address*</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" value={email} onChange={handleUserInput("email")}/>
+                    <Form.Control type="email" placeholder="Enter email" value={email}
+                                  onChange={handleUserInput("email")}/>
                 </Form.Group>
                 <Form.Group controlId="password">
                     <Form.Label>Password*</Form.Label>
