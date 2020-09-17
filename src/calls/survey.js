@@ -137,7 +137,7 @@ class SurveyAPIHandler {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
-            // TODO - remove after BUG is fixed
+            // remove after BUG is fixed
             if (response.status === 200) {
                 for (let i = 0; i < response.data.length; i++) {
                     if (response.data[i].constrained_questions === null) {
@@ -167,7 +167,7 @@ class SurveyAPIHandler {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
-            // TODO - remove after BUG is fixed
+            // remove after BUG is fixed
             if (response.status === 200) {
                 for (let i = 0; i < response.data.length; i++) {
                     if (response.data[i].constrained_questions === null) {
