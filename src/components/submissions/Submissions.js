@@ -6,9 +6,8 @@ import Row from "react-bootstrap/Row";
 import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 import {Redirect} from "react-router-dom";
 import LoadingScreen from "../utils/LoadingScreen";
-import {privateSurveyCount, publicSurveyCount} from "../utils/CountFunctions";
-import axios from "axios";
-import storageManager from "../../storage/LocalStorageManager";
+import SurveyAPIHandler from "../../calls/survey";
+import SubmissionAPIHandler from "../../calls/submission";
 
 const Submissions = () => {
     const itemsPerPage = 10;
@@ -34,7 +33,7 @@ const Submissions = () => {
             const privateSurveyList = await getPrivateSurveys(page_number, itemsPerPage);
 
             if(!pagination){
-                const privateSurveyCounts = await privateSurveyCount();
+                const privateSurveyCounts = await SurveyAPIHandler.privateSurveyCount();
                 setPrivateSurveysCount(privateSurveyCounts);
             }
 
@@ -54,7 +53,7 @@ const Submissions = () => {
             const publicSurveyList = await getPublicSurveys(page_number, itemsPerPage);
 
             if (!pagination){
-                const publicSurveysCounts = await publicSurveyCount();
+                const publicSurveysCounts = await SurveyAPIHandler.publicSurveyCount();
                 setPublicSurveyCount(publicSurveysCounts);
             }
 
@@ -70,17 +69,11 @@ const Submissions = () => {
     const matchSubmissionCount = async (surveys) => {
         const tempSurveyList = [];
         for (let i = 0; i < surveys.length; i++) {
-            const fetchSubmissionCount = await axios({
-                method: "GET",
-                url: "/api/v1/submission/count?survey_id=" + surveys[i].id,
-                headers: {
-                    "Authorization": storageManager.getJWTToken()
-                }
-            });
-            if (fetchSubmissionCount.status === 200) {
+            const apiResponse = await SubmissionAPIHandler.submissionCount(surveys[i].id)
+            if (apiResponse.status === 200) {
                 tempSurveyList.push({
                     survey: surveys[i],
-                    submissionCount: fetchSubmissionCount.data.count
+                    submissionCount: apiResponse.data.count
                 })
             }
         }
