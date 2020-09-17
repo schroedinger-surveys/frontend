@@ -8,10 +8,9 @@ import log from "../../../log/Logger";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Message from "../../utils/Message";
-import {createToken, getSurveyToken, sendLinkPerMail, tokenCount, tokenDelete} from "../../../calls/token";
+import TokenAPIHandler from "../../../calls/token";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
-import {getPublicSurveys} from "../../utils/GetSurveys";
 
 const ShareLinks = (props) => {
     const itemsPerPage = 5;
@@ -38,7 +37,7 @@ const ShareLinks = (props) => {
     const [messageType, setMessageType] = useState("");
 
     const getToken = async () => {
-        const apiResponse = await createToken(props.selectedSurvey.id, amount);
+        const apiResponse = await TokenAPIHandler.createToken(props.selectedSurvey.id, amount);
         if (apiResponse.status === 201) {
             setLinks(apiResponse.data);
         } else {
@@ -110,7 +109,7 @@ const ShareLinks = (props) => {
 
     const unusedTokenPagination = () => {
         const changePage = async (index) => {
-            const apiResponseUnusedToken = await getSurveyToken(props.selectedSurvey.id, false, index, itemsPerPage);
+            const apiResponseUnusedToken = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, false, index, itemsPerPage);
             if (apiResponseUnusedToken.status === 200){
                 setUnusedToken(apiResponseUnusedToken.data);
                 setCurrentPageUnusedToken(index);
@@ -149,7 +148,7 @@ const ShareLinks = (props) => {
 
     const displayUnusedToken = () => {
         const deleteToken = async (token) => {
-            const apiResponse = await tokenDelete(token.id);
+            const apiResponse = await TokenAPIHandler.tokenDelete(token.id);
             if (apiResponse.status === 204){
                 log.debug("Token was deleted");
                 await createdAndUsedToken();
@@ -225,20 +224,20 @@ const ShareLinks = (props) => {
     }, [links])
 
     const createdAndUsedToken = async () => {
-        const apiResponseUnusedToken = await getSurveyToken(props.selectedSurvey.id, false, currentPageUnusedToken);
+        const apiResponseUnusedToken = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, false, currentPageUnusedToken);
         if (apiResponseUnusedToken.status === 200){
             setUnusedToken(apiResponseUnusedToken.data);
         }
-        const apiResponseUnusedTokenCount = await tokenCount(props.selectedSurvey.id, false);
+        const apiResponseUnusedTokenCount = await TokenAPIHandler.tokenCount(props.selectedSurvey.id, false);
         if (apiResponseUnusedTokenCount.status === 200){
             setUnusedTokenCount(apiResponseUnusedTokenCount.data.count);
         }
 
-        const apiResponseUsedToken = await getSurveyToken(props.selectedSurvey.id, true);
+        const apiResponseUsedToken = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, true);
         if (apiResponseUsedToken.status === 200){
             setUsedToken(apiResponseUsedToken.data);
         }
-        const apiResponseUsedTokenCount = await tokenCount(props.selectedSurvey.id, true);
+        const apiResponseUsedTokenCount = await TokenAPIHandler.tokenCount(props.selectedSurvey.id, true);
         if (apiResponseUsedTokenCount.status === 200){
             setUsedTokenCount(apiResponseUsedTokenCount.data.count);
         }
@@ -316,7 +315,7 @@ const ShareLinks = (props) => {
         for (let i = 0; i < mails.length; i++) {
             mails[i] = mails[i].trim()
         }
-        const apiResponse = await sendLinkPerMail(props.selectedSurvey.id, mails);
+        const apiResponse = await TokenAPIHandler.sendLinkPerMail(props.selectedSurvey.id, mails);
         if (apiResponse.status === 201 || apiResponse.status === 204) {
             setShowMessage(true);
             setMessageType("success");
