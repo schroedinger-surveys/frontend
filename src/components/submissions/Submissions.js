@@ -3,7 +3,6 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import SideMenu from "../menu/side-menu/SideMenu";
 import Row from "react-bootstrap/Row";
-import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 import {Redirect} from "react-router-dom";
 import LoadingScreen from "../utils/LoadingScreen";
 import SurveyAPIHandler from "../../calls/survey";
@@ -30,7 +29,7 @@ const Submissions = () => {
         if (privateSurveys.length === 0 || pagination) {
             setLoading(true);
 
-            const privateSurveyList = await getPrivateSurveys(page_number, itemsPerPage);
+            const privateSurveyList = await SurveyAPIHandler.surveyPrivateGet(page_number, itemsPerPage);
 
             if(!pagination){
                 const privateSurveyCounts = await SurveyAPIHandler.privateSurveyCount();
@@ -50,7 +49,7 @@ const Submissions = () => {
         if (publicSurveys.length === 0 || pagination) {
             setLoading(true);
 
-            const publicSurveyList = await getPublicSurveys(page_number, itemsPerPage);
+            const publicSurveyList = await SurveyAPIHandler.surveyPublicGet(page_number, itemsPerPage);
 
             if (!pagination){
                 const publicSurveysCounts = await SurveyAPIHandler.publicSurveyCount();

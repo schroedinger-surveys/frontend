@@ -5,7 +5,6 @@ import SideMenu from "../menu/side-menu/SideMenu";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
-import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 import LoadingScreen from "../utils/LoadingScreen";
 import {getCurrentStatus, getSurveyStatus} from "../utils/SurveyStatus";
 import Card from "react-bootstrap/Card";
@@ -13,7 +12,7 @@ import Accordion from "react-bootstrap/Accordion";
 import SurveyAPIHandler from "../../calls/survey";
 import Message from "../utils/Message";
 import {Redirect} from "react-router-dom";
-import {DeleteModal, deleteSurveyRequest} from "./delete-survey-utils";
+import {DeleteModal} from "./delete-survey-utils";
 import SubmissionAPIHandler from "../../calls/submission";
 
 const SurveyOverview = () => {
@@ -38,8 +37,8 @@ const SurveyOverview = () => {
 
     const getSurveyLists = async () => {
         setMatching(true);
-        const listPrivateSurveys = await getPrivateSurveys(0, itemsPerPage);
-        const listPublicSurveys = await getPublicSurveys(0, itemsPerPage);
+        const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet(0, itemsPerPage);
+        const listPublicSurveys = await SurveyAPIHandler.surveyPublicGet(0, itemsPerPage);
         await matchPrivateSurveys(listPrivateSurveys)
         await matchPublicSurveys(listPublicSurveys);
         setMatching(false);
@@ -172,7 +171,7 @@ const SurveyOverview = () => {
     }
 
     const deleteSurvey = async () => {
-        const deleteSurveyResponse = await deleteSurveyRequest(surveyToDelete.id);
+        const deleteSurveyResponse = await SurveyAPIHandler.surveyDelete(surveyToDelete.id);
         if (deleteSurveyResponse === 204) {
             await getSurveyLists();
             await getSurveyCounts();
@@ -235,7 +234,7 @@ const SurveyOverview = () => {
 
     const privatePagination = () => {
         const changePage = async (index) => {
-            const listPrivateSurveys = await getPrivateSurveys(index, itemsPerPage);
+            const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet(index, itemsPerPage);
             await matchPrivateSurveys(listPrivateSurveys);
         }
 
@@ -245,7 +244,7 @@ const SurveyOverview = () => {
 
     const publicPagination = () => {
         const changePage = async (index) => {
-            const listPublicSurveys = await getPublicSurveys(index, itemsPerPage);
+            const listPublicSurveys = await SurveyAPIHandler.surveyPublicGet(index, itemsPerPage);
             await matchPublicSurveys(listPublicSurveys);
         }
 

@@ -22,7 +22,6 @@ import {
 } from "../../redux/actions/SurveyCount";
 import LoadingScreen from "../utils/LoadingScreen";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
-import {getPrivateSurveys, getPublicSurveys} from "../utils/GetSurveys";
 import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 
 /**
@@ -43,9 +42,9 @@ const Dashboard = (props) => {
         try {
             setLoading(true);
 
-            const listPrivateSurveys = await getPrivateSurveys();
+            const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet();
             props.setPrivateSurveys(listPrivateSurveys);
-            const listPublicSurveys = await getPublicSurveys();
+            const listPublicSurveys = await SurveyAPIHandler.surveyPublicGet();
             props.setPublicSurveys(listPublicSurveys);
 
             const allCounts = setAllSurveyCounts(listPrivateSurveys, listPublicSurveys);

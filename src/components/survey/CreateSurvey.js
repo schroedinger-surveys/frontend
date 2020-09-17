@@ -4,14 +4,14 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import axios from "axios";
+import log from "../../log/Logger";
 import Message from "../utils/Message";
 import SurveyValidator from "./SurveyValidator";
-import storageManager from "../../storage/LocalStorageManager";
 import {TimeConverter} from "../utils/TimeConverter";
 import {sortQuestions} from "../utils/SortQuestions";
 import SideMenu from "../menu/side-menu/SideMenu";
 import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
+import SurveyAPIHandler from "../../calls/survey";
 
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
@@ -220,31 +220,16 @@ const CreateSurvey = () => {
 
         const validationResponse = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions); // Validates Survey based on user input
         if (validationResponse.status) { // Indicates if Survey data is valid - true || false
-            const createSurveyResponse = await axios({
-                method: "POST",
-                url: "/api/v1/survey",
-                headers: {
-                    "content-type": "application/json",
-                    "Authorization": storageManager.getJWTToken()
-                },
-                data: {
-                    title,
-                    description,
-                    start_date,
-                    end_date,
-                    secured: securedInput,
-                    constrained_questions: constrainedQuestions,
-                    freestyle_questions: freestyleQuestions
-                }
-            });
-            if (createSurveyResponse.status === 201){
+            const apiResponse = await SurveyAPIHandler.surveyCreate(title, description, start_date, end_date, securedInput, constrainedQuestions, freestyleQuestions);
+            if (apiResponse.status === 201){
                 setShowMessage(true);
                 setMessageType("success");
                 setMessageText("Survey was successfully created.")
             } else {
                 setShowMessage(true);
                 setMessageType("warning");
-                setMessageText(`${createSurveyResponse.status} ${createSurveyResponse.statusText}`);
+                setMessageText("Something went wrong. Please try again!");
+                log.debug(apiResponse.log)
             }
         } else {
             setShowMessage(true);

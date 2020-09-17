@@ -1,20 +1,7 @@
 import React from "react";
-import axios from "axios";
-import storageManager from "../../storage/LocalStorageManager";
 import Modal from "react-bootstrap/Modal";
-import Message from "../utils/Message";
 import Button from "react-bootstrap/Button";
 
-export const deleteSurveyRequest = async(id) => {
-    const deleteSurveyResponse = await axios({
-        method: "DELETE",
-        url: "/api/v1/survey/"+ id,
-        headers: {
-            "Authorization": storageManager.getJWTToken()
-        }
-    });
-    return deleteSurveyResponse.status;
-}
 
 export const DeleteModal = (props) => {
     const {parameter} = props;
