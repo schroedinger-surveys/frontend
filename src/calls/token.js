@@ -1,6 +1,10 @@
 import axios from "axios";
 import storageManager from "../storage/LocalStorageManager";
 
+/**
+ * used in:
+ * - ShareLinks
+ */
 class TokenAPIHandler {
     static async createToken(id, amount) {
         try {

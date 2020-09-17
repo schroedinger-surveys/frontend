@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import log from "../../log/Logger";
 import Message from "../utils/Message";
 import {confirmDoubleInput} from "../utils/ConfirmInput";
-import {userResetPassword} from "../../calls/user";
+import UserAPIHandler from "../../calls/user";
 
 const ResetPassword = (props) => {
     const [values, setValues] = useState({
@@ -34,7 +34,7 @@ const ResetPassword = (props) => {
         const queryParams = props.location.search.split("="); // Looks like ["?token", "4d2d2b71-4947-4efc-8daf-01672cede685"]
         const resetToken = queryParams[1];
         if(password === confirmationPassword){
-                const apiResponse = await userResetPassword(resetToken, password);
+                const apiResponse = await UserAPIHandler.userResetPassword(resetToken, password);
                 if (apiResponse.status === 204){
                     setShowMessage(true);
                     setMessageType("success");

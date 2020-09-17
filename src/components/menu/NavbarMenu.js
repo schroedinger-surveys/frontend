@@ -6,8 +6,7 @@ import storageManager from "../../storage/LocalStorageManager";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
 import catIcon from "./icons/cat.png";
-import axios from "axios";
-import {getUserInfo, userLogout} from "../../calls/user";
+import UserAPIHandler from "../../calls/user";
 
 /**
  * The Navbar that will be displayed at every page
@@ -21,7 +20,7 @@ const NavbarMenu = () => {
     const [username, setUsername] = useState("");
 
     const getUserName = async() => {
-        const apiResponse = await getUserInfo();
+        const apiResponse = await UserAPIHandler.getUserInfo();
         if (apiResponse.status === 200){
             setUsername(apiResponse.data.username);
         }
@@ -53,7 +52,7 @@ const NavbarMenu = () => {
      */
     const logoutUser = async () => {
         storageManager.clearToken();
-        await userLogout();
+        await UserAPIHandler.userLogout();
     }
 
     /**

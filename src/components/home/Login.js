@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import axios from "axios";
 import {withRouter} from 'react-router-dom';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -7,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import log from "../../log/Logger";
 import Message from "../utils/Message";
 import storageManager from "../../storage/LocalStorageManager";
-import {userLogin} from "../../calls/user";
+import UserAPIHandler from "../../calls/user";
 
 /**
  * Login provides functionalities for a user to log in to the application
@@ -45,7 +44,7 @@ const Login = (props) => {
     const login = async (event) => {
         event.preventDefault();
 
-        const apiResponse = await userLogin(username, password);
+        const apiResponse = await UserAPIHandler.userLogin(username, password);
         if (apiResponse.status === 200) {
             const userToken = apiResponse.data.jwt; // The jwt token belonging to the user
             const rememberUser = document.getElementById("rememberMe").checked; // Based on this the jwt token will be saved to local or session storage

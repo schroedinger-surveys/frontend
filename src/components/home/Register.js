@@ -1,11 +1,10 @@
 import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
 
 import log from "../../log/Logger";
 import Message from "../utils/Message";
-import {userRegistration} from "../../calls/user";
+import UserAPIHandler from "../../calls/user";
 
 /**
  * Register provides functionalities for a user to register a new user account
@@ -43,7 +42,7 @@ const Register = (props) => {
      */
     const registerNewUser = async (event) => {
         event.preventDefault();
-        const apiResponse = await userRegistration(username, email, password);
+        const apiResponse = await UserAPIHandler.userRegistration(username, email, password);
         if (apiResponse.status === 201) {
             setShowMessage(true);
             setMessageText("Your account was created, you can login now.");

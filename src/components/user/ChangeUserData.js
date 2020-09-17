@@ -5,13 +5,12 @@ import Col from "react-bootstrap/Col";
 import SideMenu from "../menu/side-menu/SideMenu";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
-import axios from "axios";
 import storageManager from "../../storage/LocalStorageManager";
 import Message from "../utils/Message";
 import Modal from "react-bootstrap/Modal";
 import log from "../../log/Logger";
 import {confirmDoubleInput} from "../utils/ConfirmInput";
-import {changeUserData, changeUserPassword, getUserInfo, userDelete, userLogout} from "../../calls/user";
+import UserAPIHandler from "../../calls/user";
 
 const ChangeUserData = (props) => {
     const {history} = props;
@@ -46,7 +45,7 @@ const ChangeUserData = (props) => {
     const [messageTypeDelete, setMessageTypeDelete] = useState("");
 
     const advancedUserInformation = async () => {
-        const apiResponse = await getUserInfo();
+        const apiResponse = await UserAPIHandler.getUserInfo();
         if (apiResponse.status === 200) {
             setUserData(apiResponse.data);
         } else {
@@ -80,13 +79,13 @@ const ChangeUserData = (props) => {
         if (validInput.valid) {
             let apiResponse;
             if (password === "") {
-                apiResponse = await changeUserData(username, email, oldPassword);
+                apiResponse = await UserAPIHandler.changeUserData(username, email, oldPassword);
             } else {
-                apiResponse = await changeUserPassword(username, email, oldPassword, password);
+                apiResponse = await UserAPIHandler.changeUserPassword(username, email, oldPassword, password);
                 // Logout the user immediately and send to Home
                 if (apiResponse.status === 204) {
                     storageManager.clearToken();
-                    await userLogout();
+                    await UserAPIHandler.userLogout();
                     history.push("/");
                 }
             }
@@ -143,9 +142,10 @@ const ChangeUserData = (props) => {
 
     const deleteUser = async () => {
         if (confirmDeleteUsername === userData.username) {
-            const apiResponse = await userDelete(confirmDeletePassword);
+            const apiResponse = await UserAPIHandler.userDelete(confirmDeletePassword);
             if (apiResponse.status === 200) {
                 storageManager.clearToken();
+                await UserAPIHandler.userLogout();
                 history.push("/");
             } else {
                 log.debug("User could not be deleted", apiResponse.log);

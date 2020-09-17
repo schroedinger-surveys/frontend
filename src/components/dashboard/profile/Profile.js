@@ -2,12 +2,9 @@ import React, {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import storageManager from "../../../storage/LocalStorageManager";
 import RandomIcon from "./RandomIcon";
 import SurveyCounts from "./SurveyCounts";
-import axios from "axios";
-import {getUserInfo} from "../../../calls/user";
-import log from "../../../log/Logger";
+import UserAPIHandler from "../../../calls/user";
 
 /**
  * Component greets the User by name (data from jwt in storage)
@@ -20,7 +17,7 @@ const Profile = () => {
     const [username, setUsername] = useState("");
 
     const getUserName = async () => {
-        const apiResponse = await getUserInfo();
+        const apiResponse = await UserAPIHandler.getUserInfo();
         if (apiResponse.status === 200) {
             setUsername(apiResponse.data.username);
         }

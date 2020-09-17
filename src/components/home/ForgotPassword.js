@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Message from "../utils/Message";
-import {userRequestPasswordReset} from "../../calls/user";
+import UserAPIHandler from "../../calls/user";
 
 const ForgotPassword = (props) => {
     const {single} = props;
@@ -27,7 +27,7 @@ const ForgotPassword = (props) => {
     }
 
     const requestPasswordReset = async () => {
-        const apiResponse = await userRequestPasswordReset(username, email);
+        const apiResponse = await UserAPIHandler.userRequestPasswordReset(username, email);
         if (apiResponse.status === 200) {
             setMessageText(apiResponse.data);
             setMessageType("info");
