@@ -16,8 +16,7 @@ class SurveyAPIHandler {
 
     static cacheMiddleware = (func, name) => {
         let Cache = localStorage.getItem("CACHE");
-        console.log(Cache);
-        if(Cache === null || Cache[name] === null){
+        if(Cache === null || JSON.parse(Cache)[name] === null){
             console.log("FETCH");
             return func();
         } else {
