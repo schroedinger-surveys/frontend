@@ -28,6 +28,7 @@ const ShareLinks = (props) => {
     const [usedTokenCount, setUsedTokenCount] = useState(0);
 
     const [chosenSubmissionId, setChosenSubmissionId] = useState("");
+    const [chosenSubmissionToken, setChosenSubmissionToken] = useState("");
     const [redirectToUsedTokenSubmission, setRedirectToUsedTokenSubmission] = useState(false);
 
     /**
@@ -217,7 +218,7 @@ const ShareLinks = (props) => {
                                         /s/{props.selectedSurvey.id}
                                         ?token={token.id}</span>
                                     <button style={{border: "none", backgroundColor: "transparent", float: "right"}}
-                                            onClick={() => setChosenSubmission(token.submission_id)}
+                                            onClick={() => setChosenSubmission(token)}
                                     >
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-search"
                                              fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -236,8 +237,9 @@ const ShareLinks = (props) => {
         )
     }
 
-    const setChosenSubmission = (id) => {
-        setChosenSubmissionId(id);
+    const setChosenSubmission = (token) => {
+        setChosenSubmissionToken(token.id);
+        setChosenSubmissionId(token.submission_id);
         setRedirectToUsedTokenSubmission(true);
     }
 
@@ -246,7 +248,8 @@ const ShareLinks = (props) => {
             <Redirect to={{
                 pathname: "/submission/" + chosenSubmissionId,
                 state: {
-                    submission_id: chosenSubmissionId
+                    submission_id: chosenSubmissionId,
+                    token: chosenSubmissionToken
                 }
             }}/>
         )
