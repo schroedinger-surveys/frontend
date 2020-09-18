@@ -2,6 +2,10 @@ import axios from "axios";
 import storageManager from "../storage/LocalStorageManager";
 import log from "../log/Logger";
 
+const InitialCache = {
+    submissions: null
+}
+
 /**
  * Used in:
  * - Submissions
@@ -9,6 +13,33 @@ import log from "../log/Logger";
  */
 class SubmissionAPIHandler {
 
+    static cacheMiddleware(func, name){
+        let Cache = localStorage.getItem("SUBMISSION_CACHE");
+        if(Cache === null || JSON.parse(Cache)[name] === null){
+            return func();
+        } else {
+            Cache = JSON.parse(Cache);
+            return Cache[name]
+        }
+    }
+
+    static setStorage(name, data){
+        let Cache = localStorage.getItem("SUBMISSION_CACHE");
+        if(Cache === null){
+            InitialCache[name] = data;
+            localStorage.setItem("SUBMISSION_CACHE", JSON.stringify(InitialCache));
+        } else {
+            const CacheObject = JSON.parse(Cache);
+            CacheObject[name] = data;
+            localStorage.setItem("SUBMISSION_CACHE", JSON.stringify(CacheObject));
+        }
+    }
+
+    /**
+     * Gets the count of all submission belonging to one specific survey
+     * @param id
+     * @returns {Promise<{log: string}|AxiosResponse<any>>}
+     */
     static async submissionCount(id){
         try{
             return await axios({
@@ -93,14 +124,19 @@ class SubmissionAPIHandler {
      * @returns {Promise<AxiosResponse<any>>}
      */
     static async submissionGet(id, pageNumber= 0, itemsPerPage= 3){
+        log.debug("GET ALL SUBMISSIONS FROM A SURVEY");
         try{
-            return await axios({
+            const response = await axios({
                 method: "GET",
                 url: "/api/v1/submission?survey_id=" + id + "&page_number=" + pageNumber + "&page_size=" + itemsPerPage,
                 headers: {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
+            if(response.status === 200){
+                SubmissionAPIHandler.setStorage("submissions", response);
+            }
+            return response
         }catch (e) {
             log.error("Error in submissionGet:", e.response);
         }

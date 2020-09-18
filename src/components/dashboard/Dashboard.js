@@ -42,9 +42,9 @@ const Dashboard = (props) => {
         try {
             setLoading(true);
 
-            const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet();
+            const listPrivateSurveys = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.surveyPrivateGet, "privateSurveys");
             props.setPrivateSurveys(listPrivateSurveys);
-            const listPublicSurveys = await SurveyAPIHandler.surveyPublicGet();
+            const listPublicSurveys = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.surveyPublicGet, "publicSurveys");
             props.setPublicSurveys(listPublicSurveys);
 
             const allCounts = setAllSurveyCounts(listPrivateSurveys, listPublicSurveys);
@@ -52,10 +52,10 @@ const Dashboard = (props) => {
             props.setPendingCount(allCounts[1]);
             props.setClosedCount(allCounts[2]);
 
-            const privateSurveys = await SurveyAPIHandler.privateSurveyCount();
+            const privateSurveys = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.privateSurveyCount, "privateSurveyCount");
             props.setPrivateCount(privateSurveys);
 
-            const publicSurveys = await SurveyAPIHandler.publicSurveyCount();
+            const publicSurveys = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.publicSurveyCount, "publicSurveyCount");
             props.setPublicCount(publicSurveys);
 
             props.setOverallCount(privateSurveys + publicSurveys); // Sets the count of overall surveys belonging to the user
