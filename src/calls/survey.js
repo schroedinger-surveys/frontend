@@ -3,7 +3,8 @@ import storageManager from "../storage/LocalStorageManager";
 import log from "../log/Logger";
 
 const InitialCache = {
-    privateSurveyCount: null
+    privateSurveyCount: null,
+    publicSurveyCount: null
 }
 
 /**
@@ -15,9 +16,12 @@ class SurveyAPIHandler {
 
     static cacheMiddleware = (func, name) => {
         let Cache = localStorage.getItem("CACHE");
+        console.log(Cache);
         if(Cache === null || Cache[name] === null){
+            console.log("FETCH");
             return func();
         } else {
+            console.log("NOT fetch")
             Cache = JSON.parse(Cache);
             return Cache[name]
         }
@@ -25,13 +29,14 @@ class SurveyAPIHandler {
 
     static setStorage(name, data){
         let Cache = localStorage.getItem("CACHE");
+        console.log(Cache);
         if(Cache === null){
             InitialCache[name] = data;
             localStorage.setItem("CACHE", JSON.stringify(InitialCache));
         } else {
             const CacheObject = JSON.parse(Cache);
             CacheObject[name] = data;
-            localStorage.setItem("CACHE", CacheObject);
+            localStorage.setItem("CACHE", JSON.stringify(CacheObject));
         }
     }
 
@@ -66,6 +71,7 @@ class SurveyAPIHandler {
      * @returns {Promise<*>}
      */
     static async publicSurveyCount() {
+        console.log("FETCH PUBLIC SURVEY COUNT");
         const jwt = storageManager.getJWTToken();
         const userData = storageManager.getUserData();
         try {
@@ -76,6 +82,7 @@ class SurveyAPIHandler {
                     "Authorization": jwt
                 }
             });
+            SurveyAPIHandler.setStorage("publicSurveyCount", response.data.count);
             return response.data.count;
         } catch (e) {
             log.error("Error in publicSurveyCount:", e.response);
