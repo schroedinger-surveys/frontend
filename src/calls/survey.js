@@ -189,10 +189,22 @@ class SurveyAPIHandler {
 
     static async getSinglePrivateSurveyToken(id, token) {
         try {
-            return await axios({
+            const response = await axios({
                 method: "GET",
                 url: "/api/v1/survey/secured/" + id + "?token=" + token
-            })
+            });
+            // remove after BUG is fixed
+            if (response.status === 200) {
+                if (response.data.constrained_questions === null) {
+                    response.data.constrained_questions = [];
+                }
+                if (response.data.freestyle_questions === null) {
+                    response.data.freestyle_questions = [];
+                }
+                return response;
+            } else {
+                return {}
+            }
         } catch (e) {
             log.error("Error in getSinglePrivateSurveyToken:", e);
             return {
@@ -203,13 +215,25 @@ class SurveyAPIHandler {
 
     static async getSinglePrivateSurveyJWT(id) {
         try {
-            return await axios({
+            const response = await axios({
                 method: "GET",
                 url: "/api/v1/survey/secured/" + id,
                 headers: {
                     "Authorization": storageManager.getJWTToken() // Only valid if the JWT belongs to the creator of the survey
                 }
             })
+            // remove after BUG is fixed
+            if (response.status === 200) {
+                if (response.data.constrained_questions === null) {
+                    response.data.constrained_questions = [];
+                }
+                if (response.data.freestyle_questions === null) {
+                    response.data.freestyle_questions = [];
+                }
+                return response;
+            } else {
+                return {}
+            }
         } catch (e) {
             log.error("Error in getSinglePrivateSurveyToken:", e);
             return {
@@ -218,12 +242,24 @@ class SurveyAPIHandler {
         }
     }
 
-    static async getSinglePublicSurvey(id){
-        try{
-            return await axios({
+    static async getSinglePublicSurvey(id) {
+        try {
+            const response = await axios({
                 method: "GET",
                 url: "/api/v1/survey/public/" + id
             });
+            // remove after BUG is fixed
+            if (response.status === 200) {
+                if (response.data.constrained_questions === null) {
+                    response.data.constrained_questions = [];
+                }
+                if (response.data.freestyle_questions === null) {
+                    response.data.freestyle_questions = [];
+                }
+                return response;
+            } else {
+                return {}
+            }
         } catch (e) {
             log.error("Error in getSinglePublicSurvey:", e);
             return {

@@ -48,6 +48,7 @@ const PrivateSurvey = (props) => {
             log.debug("WITH TOKEN");
             setToken(queryParams[1])
             const apiResponse = await SurveyAPIHandler.getSinglePrivateSurveyToken(id, queryParams[1])
+            console.log(apiResponse);
             if (apiResponse.status === 200) {
                 setSurvey(apiResponse.data);
                 await setSurvey(apiResponse.data)
@@ -105,7 +106,7 @@ const PrivateSurvey = (props) => {
 
     useEffect(() => {
         getSurvey();
-    });
+    }, []);
 
     return (
         <div>

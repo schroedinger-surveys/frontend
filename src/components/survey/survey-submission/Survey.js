@@ -10,7 +10,9 @@ import {sortQuestions} from "../../utils/SortQuestions";
  * @constructor
  */
 export const SurveyForm = (survey) => {
+    console.log("Survey in SurveyForm", survey);
     const sortedQuestions = sortQuestions(survey.constrained_questions, survey.freestyle_questions);
+    console.log("sorted Questions in SurveyForm", sortedQuestions);
     return(
         <div>
             <h2>{survey.title}</h2>

@@ -5,7 +5,9 @@
  */
 export const sortQuestions = (constrainedQuestions, freestyleQuestions, sortProperty = "position", typeIndicator = "options") => {
     const allQuestions = [...constrainedQuestions, ...freestyleQuestions];
+    console.log("unsorted questions", allQuestions);
     allQuestions.sort((a, b) => (a[`${sortProperty}`] > b[`${sortProperty}`] ) ? 1 : -1);  // Sort questions based on position property
+    console.log("sorted Questions", allQuestions);
     for (let i = 0; i < allQuestions.length; i++) {
         let temp = allQuestions[i];
         if (allQuestions[i].hasOwnProperty(typeIndicator)) {
