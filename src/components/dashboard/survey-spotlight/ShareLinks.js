@@ -21,6 +21,7 @@ const ShareLinks = (props) => {
 
     const [unusedToken, setUnusedToken] = useState([]);
     const [usedToken, setUsedToken] = useState([]);
+    const [loadingToken, setLoadingToken] = useState(true);
 
     const [currentPageUnusedToken, setCurrentPageUnusedToken] = useState(0);
 
@@ -52,7 +53,6 @@ const ShareLinks = (props) => {
             log.debug(apiResponse.log);
         }
     }
-
     const privateSurvey = () => {
         return (
             <div>
@@ -97,11 +97,11 @@ const ShareLinks = (props) => {
                         </li>
                     ))}
                 </ul>
-                {(unusedToken.length > 0 || usedToken.length > 0) && (
+                {(unusedToken.length > 0 || usedToken.length > 0) && !loadingToken && (
                     <div>
                         <hr/>
                         <Accordion>
-                            {unusedToken.length > 0 && displayUnusedToken()}
+                            {unusedToken.length > 0 &&  displayUnusedToken()}
                             {usedToken.length > 0 && displayUsedToken()}
                         </Accordion>
                     </div>
@@ -256,8 +256,9 @@ const ShareLinks = (props) => {
     }
 
     useEffect(() => {
+        setLoadingToken(true);
         createdAndUsedToken();
-    }, [links])
+    }, [links, props.selectedSurvey])
 
     const createdAndUsedToken = async () => {
         const apiResponseUnusedToken = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, false, currentPageUnusedToken);
@@ -277,7 +278,7 @@ const ShareLinks = (props) => {
         if (apiResponseUsedTokenCount.status === 200) {
             setUsedTokenCount(apiResponseUsedTokenCount.data.count);
         }
-
+        setLoadingToken(false);
     }
 
     /**
