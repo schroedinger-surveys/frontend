@@ -19,16 +19,18 @@ const NavbarMenu = () => {
 
     const [username, setUsername] = useState("");
 
-    const getUserName = async() => {
-        const apiResponse = await UserAPIHandler.getUserInfo();
-        if (apiResponse.status === 200){
-            setUsername(apiResponse.data.username);
+    const getUserName = async () => {
+        if(storageManager.getJWTToken() !== ""){
+            const apiResponse = await UserAPIHandler.getUserInfo();
+            if (apiResponse.status === 200) {
+                setUsername(apiResponse.data.username);
+            }
         }
     }
 
     useEffect(() => {
         getUserName()
-    }, [])
+    }, [location.pathname])
 
     /**
      * Used to change the styling of the nav-links
@@ -77,15 +79,20 @@ const NavbarMenu = () => {
     const loggedIn = () => {
         return (
             <Nav className="ml-auto">
-                <Navbar.Brand href="/" style={{marginRight: "0"}}><img src={catIcon} style={{height: "40px"}}/></Navbar.Brand>
+                <Navbar.Brand href="/" style={{marginRight: "0"}}><img src={catIcon}
+                                                                       style={{height: "40px"}}/></Navbar.Brand>
                 <NavDropdown title="Menu" id="nav-dropdown" alignRight style={{lineHeight: "40px"}}>
-                    <NavDropdown.Item id={1} title={username} style={{fontWeight: "Bolder", lineHeight: "25px"}}>{username}</NavDropdown.Item>
+                    <NavDropdown.Item id={1} title={username}
+                                      style={{fontWeight: "Bolder", lineHeight: "25px"}}>{username}</NavDropdown.Item>
                     <NavDropdown.Divider/>
-                    <Nav.Link href="/settings" style={{paddingLeft: "25px", lineHeight: "25px"}}>Account Settings</Nav.Link>
-                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Terms of Service</Nav.Link>
+                    <Nav.Link href="/settings" style={{paddingLeft: "25px", lineHeight: "25px"}}>Account
+                        Settings</Nav.Link>
+                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Terms of
+                        Service</Nav.Link>
                     <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Info</Nav.Link>
                     <NavDropdown.Divider/>
-                    <Nav.Link href="/" onClick={logoutUser} style={{paddingLeft: "25px", lineHeight: "25px", color: "darkred"}}>Logout</Nav.Link>
+                    <Nav.Link href="/" onClick={logoutUser}
+                              style={{paddingLeft: "25px", lineHeight: "25px", color: "darkred"}}>Logout</Nav.Link>
                 </NavDropdown>
             </Nav>
         )
