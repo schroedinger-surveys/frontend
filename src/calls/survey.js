@@ -2,6 +2,10 @@ import axios from "axios";
 import storageManager from "../storage/LocalStorageManager";
 import log from "../log/Logger";
 
+const InitialCache = {
+    privateSurveyCount: null
+}
+
 /**
  * Used in:
  * - Submissions
@@ -9,12 +13,35 @@ import log from "../log/Logger";
  */
 class SurveyAPIHandler {
 
+    static cacheMiddleware = (func, name) => {
+        let Cache = localStorage.getItem("CACHE");
+        if(Cache === null || Cache[name] === null){
+            return func();
+        } else {
+            Cache = JSON.parse(Cache);
+            return Cache[name]
+        }
+    }
+
+    static setStorage(name, data){
+        let Cache = localStorage.getItem("CACHE");
+        if(Cache === null){
+            InitialCache[name] = data;
+            localStorage.setItem("CACHE", JSON.stringify(InitialCache));
+        } else {
+            const CacheObject = JSON.parse(Cache);
+            CacheObject[name] = data;
+            localStorage.setItem("CACHE", CacheObject);
+        }
+    }
+
     /**
      * Fetched the count of private (secured = true) surveys
      * scenario: Dashboard displays the number of surveys belonging to the user
      * @returns {Promise<*>}
      */
-    static async privateSurveyCount() {
+    static async privateSurveyCount(){
+        console.log("FETCH PRIVATE SURVEY COUNT");
         try {
             const jwt = storageManager.getJWTToken();
             const response = await axios({
@@ -24,6 +51,7 @@ class SurveyAPIHandler {
                     "Authorization": jwt
                 }
             });
+            SurveyAPIHandler.setStorage("privateSurveyCount", response.data.count);
             return response.data.count;
         } catch (e) {
             log.error("Error in privateSurveyCount:", e);
@@ -267,7 +295,6 @@ class SurveyAPIHandler {
             }
         }
     }
-
 }
 
 export default SurveyAPIHandler;

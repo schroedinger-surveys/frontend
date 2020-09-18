@@ -52,7 +52,7 @@ const Dashboard = (props) => {
             props.setPendingCount(allCounts[1]);
             props.setClosedCount(allCounts[2]);
 
-            const privateSurveys = await SurveyAPIHandler.privateSurveyCount();
+            const privateSurveys = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.privateSurveyCount, "privateSurveyCount");
             props.setPrivateCount(privateSurveys);
 
             const publicSurveys = await SurveyAPIHandler.publicSurveyCount();
