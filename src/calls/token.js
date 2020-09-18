@@ -21,7 +21,7 @@ class TokenAPIHandler {
                 }
             });
         } catch (e){
-            log.error("Error in createToken:",e);
+            log.error("Error in createToken:",e.response);
             return {
                 log: "Failed axios request was caught: createToken"
             };
@@ -42,7 +42,7 @@ class TokenAPIHandler {
                 }
             });
         } catch (e){
-            log.error("Error in sendLinkPerMail:",e);
+            log.error("Error in sendLinkPerMail:",e.response);
             return {
                 log: "Failed axios request was caught: sendLinkPerMail"
             };
@@ -69,7 +69,7 @@ class TokenAPIHandler {
                 })
             }
         } catch (e){
-            log.error("Error in getSurveyToken:",e);
+            log.error("Error in getSurveyToken:",e.response);
             return {
                 log: "Failed axios request was caught: getSurveyToken"
             };
@@ -86,7 +86,7 @@ class TokenAPIHandler {
                 }
             });
         } catch (e) {
-            log.error("Error in tokenDelete:",e);
+            log.error("Error in tokenDelete:",e.response);
             return {
                 log: "Failed axios request was caught: tokenDelete"
             };
@@ -113,7 +113,7 @@ class TokenAPIHandler {
                 });
             }
         } catch (e){
-            log.error("Error in tokenCount:",e);
+            log.error("Error in tokenCount:",e.response);
             return {
                 log: "Failed axios request was caught: tokenCount"
             };

@@ -50,7 +50,7 @@ class SurveyAPIHandler {
             });
             return response.data.count;
         } catch (e) {
-            log.error("Error in publicSurveyCount:", e);
+            log.error("Error in publicSurveyCount:", e.response);
             log.debug("Failed axios request was caught: publicSurveyCount");
             return 0;
         }
@@ -76,7 +76,7 @@ class SurveyAPIHandler {
                 }
             });
         } catch (e) {
-            log.error("Error in createSurvey:", e)
+            log.error("Error in createSurvey:", e.response)
             return {
                 log: "Failed axios request was caught: createSurvey"
             }
@@ -93,7 +93,7 @@ class SurveyAPIHandler {
                 }
             });
         } catch (e) {
-            log.error("Error in surveyDelete:", e);
+            log.error("Error in surveyDelete:", e.response);
             return {
                 log: "Failed axios request was caught: surveyDelete"
             }
@@ -121,7 +121,7 @@ class SurveyAPIHandler {
                 }
             });
         } catch (e) {
-            log.error("Error in surveyUpdate:", e);
+            log.error("Error in surveyUpdate:", e.response);
             return {
                 log: "Failed axios request was caught: surveyUpdate"
             }
@@ -152,7 +152,7 @@ class SurveyAPIHandler {
                 return [];
             }
         } catch (e) {
-            log.error(e, "Failed axios request was caught: surveyPrivateGet");
+            log.error(e.response, "Failed axios request was caught: surveyPrivateGet");
             return [];
         }
     }
@@ -182,19 +182,31 @@ class SurveyAPIHandler {
                 return []
             }
         } catch (e) {
-            log.error(e, "Failed axios request was caught: surveyPublicGet");
+            log.error(e.response, "Failed axios request was caught: surveyPublicGet");
             return [];
         }
     }
 
     static async getSinglePrivateSurveyToken(id, token) {
         try {
-            return await axios({
+            const response = await axios({
                 method: "GET",
                 url: "/api/v1/survey/secured/" + id + "?token=" + token
-            })
+            });
+            // remove after BUG is fixed
+            if (response.status === 200) {
+                if (response.data.constrained_questions === null) {
+                    response.data.constrained_questions = [];
+                }
+                if (response.data.freestyle_questions === null) {
+                    response.data.freestyle_questions = [];
+                }
+                return response;
+            } else {
+                return {}
+            }
         } catch (e) {
-            log.error("Error in getSinglePrivateSurveyToken:", e);
+            log.error("Error in getSinglePrivateSurveyToken:", e.response);
             return {
                 log: "Failed axios request was caught: getSinglePrivateSurveyToken"
             }
@@ -203,29 +215,53 @@ class SurveyAPIHandler {
 
     static async getSinglePrivateSurveyJWT(id) {
         try {
-            return await axios({
+            const response = await axios({
                 method: "GET",
                 url: "/api/v1/survey/secured/" + id,
                 headers: {
                     "Authorization": storageManager.getJWTToken() // Only valid if the JWT belongs to the creator of the survey
                 }
             })
+            // remove after BUG is fixed
+            if (response.status === 200) {
+                if (response.data.constrained_questions === null) {
+                    response.data.constrained_questions = [];
+                }
+                if (response.data.freestyle_questions === null) {
+                    response.data.freestyle_questions = [];
+                }
+                return response;
+            } else {
+                return {}
+            }
         } catch (e) {
-            log.error("Error in getSinglePrivateSurveyToken:", e);
+            log.error("Error in getSinglePrivateSurveyToken:", e.response);
             return {
                 log: "Failed axios request was caught: getSinglePrivateSurveyToken"
             }
         }
     }
 
-    static async getSinglePublicSurvey(id){
-        try{
-            return await axios({
+    static async getSinglePublicSurvey(id) {
+        try {
+            const response = await axios({
                 method: "GET",
                 url: "/api/v1/survey/public/" + id
             });
+            // remove after BUG is fixed
+            if (response.status === 200) {
+                if (response.data.constrained_questions === null) {
+                    response.data.constrained_questions = [];
+                }
+                if (response.data.freestyle_questions === null) {
+                    response.data.freestyle_questions = [];
+                }
+                return response;
+            } else {
+                return {}
+            }
         } catch (e) {
-            log.error("Error in getSinglePublicSurvey:", e);
+            log.error("Error in getSinglePublicSurvey:", e.response);
             return {
                 log: "Failed axios request was caught: getSinglePublicSurvey"
             }

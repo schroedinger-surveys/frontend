@@ -29,7 +29,7 @@ class UserAPIHandler {
             });
             return apiResponse;
         } catch (e){
-            log.error("Error in userRegistration:",e);
+            log.error("Error in userRegistration:",e.response);
             return {
                 log: "Failed axios request was caught: userRegistration"
             };
@@ -50,7 +50,7 @@ class UserAPIHandler {
                 }
             });
         } catch (e){
-            log.error("Error in userLogin:",e);
+            log.error("Error in userLogin:",e.response);
             return {
                 log: "Failed axios request was caught: userLogin"
             };
@@ -68,7 +68,7 @@ class UserAPIHandler {
             });
             log.debug("User token was banned, user logged out", apiResponse.status);
         } catch (e){
-            log.error("Error in userLogout:",e);
+            log.error("Error in userLogout:",e.response);
             log.debug("User token could not be banned: userLogout")
         }
     }
@@ -89,7 +89,7 @@ class UserAPIHandler {
                 }
             });
         } catch (e){
-            log.error("Error in changeUserPassword:",e);
+            log.error("Error in changeUserPassword:",e.response);
             return {
                 log: "Failed axios request was caught: changeUserPassword"
             }
@@ -111,7 +111,7 @@ class UserAPIHandler {
                 }
             });
         } catch (e){
-            log.error("Error in changeUserData:",e);
+            log.error("Error in changeUserData:",e.response);
             return {
                 log: "Failed axios request was caught: changeUserData"
             }
@@ -128,7 +128,7 @@ class UserAPIHandler {
                 }
             });
         } catch (e){
-            log.error("Error in getUserInfo:",e);
+            log.error("Error in getUserInfo:",e.response);
             return {
                 log: "Failed axios request was caught: getUserInfo"
             }
@@ -148,7 +148,7 @@ class UserAPIHandler {
                 }
             });
         } catch (e){
-            log.error("Error in userDelete:",e);
+            log.error("Error in userDelete:",e.response);
             return {
                 log: "Failed axios request was caught: userDelete"
             }
@@ -166,7 +166,7 @@ class UserAPIHandler {
                 }
             });
         } catch (e){
-            log.error("Error in userResetPassword:",e);
+            log.error("Error in userResetPassword:",e.response);
             return {
                 log: "Failed axios request was caught: userResetPassword"
             }
@@ -194,7 +194,7 @@ class UserAPIHandler {
                 })
             }
         } catch (e){
-            log.error("Error in userRequestPasswordReset:",e);
+            log.error("Error in userRequestPasswordReset:",e.response);
             return {
                 log: "Failed axios request was caught: userRequestPasswordReset"
             }

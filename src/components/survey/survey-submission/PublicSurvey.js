@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import axios from "axios";
 
 import log from "../../../log/Logger";
 import LoadingScreen from "../../utils/LoadingScreen";
 import Message from "../../utils/Message";
-import {checkSurveyStatus, collectAnswers, submitAnsweredSurvey, validateSubmission} from "./Utils";
+import {checkSurveyStatus, collectAnswers, validateSubmission} from "./Utils";
 import SurveyAPIHandler from "../../../calls/survey";
 import SubmissionAPIHandler from "../../../calls/submission";
 

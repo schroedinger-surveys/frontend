@@ -89,9 +89,9 @@ const PrivateSurvey = (props) => {
         log.debug("collected Answers", answers);
 
         const validationCheck = validateSubmission(answers.constrainedAnswers, answers.freestyleAnswers, survey);
-
         if (validationCheck.valid) {
             const submissionResponse = await SubmissionAPIHandler.submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, token);
+            console.log("SubmissionResponse", submissionResponse);
             setShowMessage(submissionResponse.status);
             setMessageType(submissionResponse.type);
             setMessageText(submissionResponse.message);
@@ -105,7 +105,7 @@ const PrivateSurvey = (props) => {
 
     useEffect(() => {
         getSurvey();
-    });
+    }, []);
 
     return (
         <div>
