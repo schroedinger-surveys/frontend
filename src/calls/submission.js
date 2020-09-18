@@ -85,6 +85,13 @@ class SubmissionAPIHandler {
         }
     }
 
+    /**
+     * Gets all Submissions belonging to a survey
+     * @param id of the Survey the requested submission belong to
+     * @param pageNumber
+     * @param itemsPerPage
+     * @returns {Promise<AxiosResponse<any>>}
+     */
     static async submissionGet(id, pageNumber= 0, itemsPerPage= 3){
         try{
             return await axios({
@@ -98,6 +105,30 @@ class SubmissionAPIHandler {
             log.error("Error in submissionGet:", e.response);
         }
     }
+
+    /**
+     * Gets a specific submission based on a given submission_id
+     * scenario: Look at submission tied to a used token in ShareLinks
+     * @param id of the requested submission
+     * @returns {Promise<void>}
+     */
+    static async usedTokenSubmissionGet(id){
+        try{
+            return await axios({
+                method: "GET",
+                url: "/api/v1/submission/"+ id,
+                headers: {
+                    "Authorization": storageManager.getJWTToken()
+                }
+            })
+        } catch (e){
+            log.error("Error in usedTokenSubmissionGet:", e.response);
+            return {
+                log: "Failed axios request was caught: usedTokenSubmissionGet"
+            };
+        }
+    }
+
 }
 
 export default SubmissionAPIHandler;

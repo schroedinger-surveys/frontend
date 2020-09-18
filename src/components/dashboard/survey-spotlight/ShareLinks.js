@@ -114,7 +114,7 @@ const ShareLinks = (props) => {
     const unusedTokenPagination = () => {
         const changePage = async (index) => {
             const apiResponseUnusedToken = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, false, index, itemsPerPage);
-            if (apiResponseUnusedToken.status === 200){
+            if (apiResponseUnusedToken.status === 200) {
                 setUnusedToken(apiResponseUnusedToken.data);
                 setCurrentPageUnusedToken(index);
             }
@@ -153,7 +153,7 @@ const ShareLinks = (props) => {
     const displayUnusedToken = () => {
         const deleteToken = async (token) => {
             const apiResponse = await TokenAPIHandler.tokenDelete(token.id);
-            if (apiResponse.status === 204){
+            if (apiResponse.status === 204) {
                 log.debug("Token was deleted");
                 await createdAndUsedToken();
             } else {
@@ -174,11 +174,12 @@ const ShareLinks = (props) => {
                         <ul>
                             {unusedToken.map((token, i) => (
                                 <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
-                                    <span style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                                    <span
+                                        style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                         /s/{props.selectedSurvey.id}
                                         ?token={token.id}</span>
                                     <button style={{border: "none", backgroundColor: "transparent", float: "right"}}
-                                        onClick={() => deleteToken(token)}
+                                            onClick={() => deleteToken(token)}
                                     >
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash"
                                              fill="currentColor"
@@ -211,11 +212,12 @@ const ShareLinks = (props) => {
                         <ul>
                             {usedToken.map((token, i) => (
                                 <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
-                                    <span style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                                    <span
+                                        style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                         /s/{props.selectedSurvey.id}
                                         ?token={token.id}</span>
                                     <button style={{border: "none", backgroundColor: "transparent", float: "right"}}
-                                        onClick={() => setChosenSubmission(token.submission_id)}
+                                            onClick={() => setChosenSubmission(token.submission_id)}
                                     >
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-search"
                                              fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -241,7 +243,12 @@ const ShareLinks = (props) => {
 
     const redirectToSubmission = () => {
         return (
-            <Redirect to={"/submission/"+ chosenSubmissionId}/>
+            <Redirect to={{
+                pathname: "/submission/" + chosenSubmissionId,
+                state: {
+                    submission_id: chosenSubmissionId
+                }
+            }}/>
         )
     }
 
@@ -251,20 +258,20 @@ const ShareLinks = (props) => {
 
     const createdAndUsedToken = async () => {
         const apiResponseUnusedToken = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, false, currentPageUnusedToken);
-        if (apiResponseUnusedToken.status === 200){
+        if (apiResponseUnusedToken.status === 200) {
             setUnusedToken(apiResponseUnusedToken.data);
         }
         const apiResponseUnusedTokenCount = await TokenAPIHandler.tokenCount(props.selectedSurvey.id, false);
-        if (apiResponseUnusedTokenCount.status === 200){
+        if (apiResponseUnusedTokenCount.status === 200) {
             setUnusedTokenCount(apiResponseUnusedTokenCount.data.count);
         }
 
         const apiResponseUsedToken = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, true);
-        if (apiResponseUsedToken.status === 200){
+        if (apiResponseUsedToken.status === 200) {
             setUsedToken(apiResponseUsedToken.data);
         }
         const apiResponseUsedTokenCount = await TokenAPIHandler.tokenCount(props.selectedSurvey.id, true);
-        if (apiResponseUsedTokenCount.status === 200){
+        if (apiResponseUsedTokenCount.status === 200) {
             setUsedTokenCount(apiResponseUsedTokenCount.data.count);
         }
 
