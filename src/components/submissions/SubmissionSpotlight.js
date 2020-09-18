@@ -5,8 +5,6 @@ import SideMenu from "../menu/side-menu/SideMenu";
 import Row from "react-bootstrap/Row";
 import {Redirect} from "react-router-dom";
 import log from "../../log/Logger";
-import axios from "axios";
-import storageManager from "../../storage/LocalStorageManager";
 import {sortQuestions} from "../utils/SortQuestions";
 import SubmissionAPIHandler from "../../calls/submission";
 
@@ -36,10 +34,8 @@ const SubmissionSpotlight = (props) => {
     const getSubmissions = async (pageNumber = 0) => {
         // eslint-disable-next-line no-undefined
         if (survey !== undefined) {
-            const apiResponse = await SubmissionAPIHandler.submissionGet(survey.id, pageNumber, itemsPerPage)
-            if (apiResponse.status === 200) {
-                setSubmissions(apiResponse.data);
-            }
+            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() =>SubmissionAPIHandler.submissionGet(survey.id, pageNumber, itemsPerPage), "submissions")
+            setSubmissions(apiResponse);
         }
     }
 
@@ -57,7 +53,6 @@ const SubmissionSpotlight = (props) => {
     }
 
     const changeSubmission = async (submission) => {
-        log.debug(constrainedOptions);
         await renameSubmissionProperties(submission)
         setSpotlight(submission);
         setRenamed(true);
