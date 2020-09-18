@@ -35,7 +35,7 @@ const SubmissionSpotlight = (props) => {
         // eslint-disable-next-line no-undefined
         if (survey !== undefined) {
             const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() =>SubmissionAPIHandler.submissionGet(survey.id, pageNumber, itemsPerPage), "submissions")
-            setSubmissions(apiResponse);
+            setSubmissions(apiResponse.data);
         }
     }
 

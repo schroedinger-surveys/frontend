@@ -13,13 +13,11 @@ const InitialCache = {
  */
 class SubmissionAPIHandler {
 
-    static cacheMiddleware = (func, name) => {
+    static cacheMiddleware(func, name){
         let Cache = localStorage.getItem("SUBMISSION_CACHE");
         if(Cache === null || JSON.parse(Cache)[name] === null){
-            console.log("FETCH");
             return func();
         } else {
-            console.log("NOT fetch")
             Cache = JSON.parse(Cache);
             return Cache[name]
         }

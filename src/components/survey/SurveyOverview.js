@@ -37,17 +37,17 @@ const SurveyOverview = () => {
 
     const getSurveyLists = async () => {
         setMatching(true);
-        const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet(0, itemsPerPage);
-        const listPublicSurveys = await SurveyAPIHandler.surveyPublicGet(0, itemsPerPage);
+        const listPrivateSurveys = await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPrivateGet(0, itemsPerPage), "privateSurveys");
+        const listPublicSurveys = await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPublicGet(0, itemsPerPage), "publicSurveys");
         await matchPrivateSurveys(listPrivateSurveys)
         await matchPublicSurveys(listPublicSurveys);
         setMatching(false);
     }
 
     const getSurveyCounts = async () => {
-        const privateSurveyCounts = await SurveyAPIHandler.privateSurveyCount();
+        const privateSurveyCounts = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.privateSurveyCount, "privateSurveyCount");
         setPrivateCount(privateSurveyCounts);
-        const publicSurveysCounts = await SurveyAPIHandler.publicSurveyCount();
+        const publicSurveysCounts = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.publicSurveyCount, "publicSurveyCount");
         setPublicCount(publicSurveysCounts);
     }
 

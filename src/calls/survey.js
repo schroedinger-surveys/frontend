@@ -16,13 +16,11 @@ const InitialCache = {
  */
 class SurveyAPIHandler {
 
-    static cacheMiddleware = (func, name) => {
+    static cacheMiddleware(func, name){
         let Cache = localStorage.getItem("SURVEY_CACHE");
         if(Cache === null || JSON.parse(Cache)[name] === null){
-            console.log("FETCH");
             return func();
         } else {
-            console.log("NOT fetch")
             Cache = JSON.parse(Cache);
             return Cache[name]
         }
@@ -46,7 +44,7 @@ class SurveyAPIHandler {
      * @returns {Promise<*>}
      */
     static async privateSurveyCount(){
-        console.log("FETCH PRIVATE SURVEY COUNT");
+        log.debug("FETCH PRIVATE SURVEY COUNT");
         try {
             const jwt = storageManager.getJWTToken();
             const response = await axios({
@@ -71,7 +69,7 @@ class SurveyAPIHandler {
      * @returns {Promise<*>}
      */
     static async publicSurveyCount() {
-        console.log("FETCH PUBLIC SURVEY COUNT");
+        log.debug("FETCH PUBLIC SURVEY COUNT");
         const jwt = storageManager.getJWTToken();
         const userData = storageManager.getUserData();
         try {
@@ -164,7 +162,7 @@ class SurveyAPIHandler {
     }
 
     static async surveyPrivateGet(page_number = 0, page_size = 3) {
-        console.log("FETCH PRIVATESURVEYS");
+        log.debug("FETCH PRIVATESURVEYS");
         try {
             const response = await axios({
                 method: "GET",
@@ -195,7 +193,7 @@ class SurveyAPIHandler {
     }
 
     static async surveyPublicGet(page_number = 0, page_size = 3) {
-        console.log("FETCH PUBLICSURVEYS");
+        log.debug("FETCH PUBLICSURVEYS");
         try {
             const userData = storageManager.getUserData();
             const response = await axios({
