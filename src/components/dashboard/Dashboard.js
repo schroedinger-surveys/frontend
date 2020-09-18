@@ -42,9 +42,9 @@ const Dashboard = (props) => {
         try {
             setLoading(true);
 
-            const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet();
+            const listPrivateSurveys = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.surveyPrivateGet, "privateSurveys");
             props.setPrivateSurveys(listPrivateSurveys);
-            const listPublicSurveys = await SurveyAPIHandler.surveyPublicGet();
+            const listPublicSurveys = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.surveyPublicGet, "publicSurveys");
             props.setPublicSurveys(listPublicSurveys);
 
             const allCounts = setAllSurveyCounts(listPrivateSurveys, listPublicSurveys);

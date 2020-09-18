@@ -4,7 +4,9 @@ import log from "../log/Logger";
 
 const InitialCache = {
     privateSurveyCount: null,
-    publicSurveyCount: null
+    publicSurveyCount: null,
+    privateSurveys: null,
+    publicSurveys: null
 }
 
 /**
@@ -28,7 +30,6 @@ class SurveyAPIHandler {
 
     static setStorage(name, data){
         let Cache = localStorage.getItem("CACHE");
-        console.log(Cache);
         if(Cache === null){
             InitialCache[name] = data;
             localStorage.setItem("CACHE", JSON.stringify(InitialCache));
@@ -163,6 +164,7 @@ class SurveyAPIHandler {
     }
 
     static async surveyPrivateGet(page_number = 0, page_size = 3) {
+        console.log("FETCH PRIVATESURVEYS");
         try {
             const response = await axios({
                 method: "GET",
@@ -181,6 +183,7 @@ class SurveyAPIHandler {
                         response.data[i].freestyle_questions = [];
                     }
                 }
+                SurveyAPIHandler.setStorage("privateSurveys", response.data)
                 return response.data;
             } else {
                 return [];
@@ -192,6 +195,7 @@ class SurveyAPIHandler {
     }
 
     static async surveyPublicGet(page_number = 0, page_size = 3) {
+        console.log("FETCH PUBLICSURVEYS");
         try {
             const userData = storageManager.getUserData();
             const response = await axios({
@@ -211,6 +215,7 @@ class SurveyAPIHandler {
                         response.data[i].freestyle_questions = [];
                     }
                 }
+                SurveyAPIHandler.setStorage("publicSurveys", response.data)
                 return response.data;
             } else {
                 return []
