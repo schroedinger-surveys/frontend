@@ -50,7 +50,7 @@ class SurveyAPIHandler {
             });
             return response.data.count;
         } catch (e) {
-            log.error("Error in publicSurveyCount:", e);
+            log.error("Error in publicSurveyCount:", e.response);
             log.debug("Failed axios request was caught: publicSurveyCount");
             return 0;
         }
@@ -76,7 +76,7 @@ class SurveyAPIHandler {
                 }
             });
         } catch (e) {
-            log.error("Error in createSurvey:", e)
+            log.error("Error in createSurvey:", e.response)
             return {
                 log: "Failed axios request was caught: createSurvey"
             }
@@ -93,7 +93,7 @@ class SurveyAPIHandler {
                 }
             });
         } catch (e) {
-            log.error("Error in surveyDelete:", e);
+            log.error("Error in surveyDelete:", e.response);
             return {
                 log: "Failed axios request was caught: surveyDelete"
             }
@@ -121,7 +121,7 @@ class SurveyAPIHandler {
                 }
             });
         } catch (e) {
-            log.error("Error in surveyUpdate:", e);
+            log.error("Error in surveyUpdate:", e.response);
             return {
                 log: "Failed axios request was caught: surveyUpdate"
             }
@@ -152,7 +152,7 @@ class SurveyAPIHandler {
                 return [];
             }
         } catch (e) {
-            log.error(e, "Failed axios request was caught: surveyPrivateGet");
+            log.error(e.response, "Failed axios request was caught: surveyPrivateGet");
             return [];
         }
     }
@@ -182,7 +182,7 @@ class SurveyAPIHandler {
                 return []
             }
         } catch (e) {
-            log.error(e, "Failed axios request was caught: surveyPublicGet");
+            log.error(e.response, "Failed axios request was caught: surveyPublicGet");
             return [];
         }
     }
@@ -206,7 +206,7 @@ class SurveyAPIHandler {
                 return {}
             }
         } catch (e) {
-            log.error("Error in getSinglePrivateSurveyToken:", e);
+            log.error("Error in getSinglePrivateSurveyToken:", e.response);
             return {
                 log: "Failed axios request was caught: getSinglePrivateSurveyToken"
             }
@@ -235,7 +235,7 @@ class SurveyAPIHandler {
                 return {}
             }
         } catch (e) {
-            log.error("Error in getSinglePrivateSurveyToken:", e);
+            log.error("Error in getSinglePrivateSurveyToken:", e.response);
             return {
                 log: "Failed axios request was caught: getSinglePrivateSurveyToken"
             }
@@ -261,7 +261,7 @@ class SurveyAPIHandler {
                 return {}
             }
         } catch (e) {
-            log.error("Error in getSinglePublicSurvey:", e);
+            log.error("Error in getSinglePublicSurvey:", e.response);
             return {
                 log: "Failed axios request was caught: getSinglePublicSurvey"
             }
