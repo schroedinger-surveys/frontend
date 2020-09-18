@@ -21,6 +21,7 @@ import SubmissionSpotlight from "./components/submissions/SubmissionSpotlight";
 import ChangeUserData from "./components/user/ChangeUserData";
 import EditSurvey from "./components/survey/EditSurvey";
 import ResetPassword from "./components/home/ResetPassword";
+import UsedTokenSubmission from "./components/submissions/UsedTokenSubmission";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                     <ProtectedRoute path={"/survey/overview"} component={SurveyOverview}/>
                     <ProtectedRoute path={"/survey/submissions"} component={Submissions}/>
                     <ProtectedRoute path={"/survey/submission/spotlight"} component={SubmissionSpotlight}/>
+                    <ProtectedRoute path={"/submission/:submission_id"} component={UsedTokenSubmission}/>
                     <ProtectedRoute path={"/settings"} component={ChangeUserData}/>
                     <Route exact path="/survey/search" component={Search}/>
                     <Route path={"/pub/:id"} component={PublicSurvey}/>

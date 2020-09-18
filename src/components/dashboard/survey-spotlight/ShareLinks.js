@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import {Redirect} from "react-router-dom";
 import {connect} from "react-redux";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
@@ -25,6 +26,9 @@ const ShareLinks = (props) => {
 
     const [unusedTokenCount, setUnusedTokenCount] = useState(0);
     const [usedTokenCount, setUsedTokenCount] = useState(0);
+
+    const [chosenSubmissionId, setChosenSubmissionId] = useState("");
+    const [redirectToUsedTokenSubmission, setRedirectToUsedTokenSubmission] = useState(false);
 
     /**
      * Used as props for the child Component Message
@@ -210,12 +214,34 @@ const ShareLinks = (props) => {
                                     <span style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                         /s/{props.selectedSurvey.id}
                                         ?token={token.id}</span>
+                                    <button style={{border: "none", backgroundColor: "transparent", float: "right"}}
+                                        onClick={() => setChosenSubmission(token.submission_id)}
+                                    >
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-search"
+                                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fillRule="evenodd"
+                                                  d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                            <path fillRule="evenodd"
+                                                  d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                        </svg>
+                                    </button>
                                 </li>
                             ))}
                         </ul>
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>
+        )
+    }
+
+    const setChosenSubmission = (id) => {
+        setChosenSubmissionId(id);
+        setRedirectToUsedTokenSubmission(true);
+    }
+
+    const redirectToSubmission = () => {
+        return (
+            <Redirect to={"/submission/"+ chosenSubmissionId}/>
         )
     }
 
@@ -329,6 +355,7 @@ const ShareLinks = (props) => {
 
     return (
         <div>
+            {redirectToUsedTokenSubmission && redirectToSubmission()}
             {props.selectedSurvey && props.selectedSurvey.secured && (
                 privateSurvey()
             )}
