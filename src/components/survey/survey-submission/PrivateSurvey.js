@@ -48,7 +48,6 @@ const PrivateSurvey = (props) => {
             log.debug("WITH TOKEN");
             setToken(queryParams[1])
             const apiResponse = await SurveyAPIHandler.getSinglePrivateSurveyToken(id, queryParams[1])
-            console.log(apiResponse);
             if (apiResponse.status === 200) {
                 setSurvey(apiResponse.data);
                 await setSurvey(apiResponse.data)
@@ -90,9 +89,9 @@ const PrivateSurvey = (props) => {
         log.debug("collected Answers", answers);
 
         const validationCheck = validateSubmission(answers.constrainedAnswers, answers.freestyleAnswers, survey);
-
         if (validationCheck.valid) {
             const submissionResponse = await SubmissionAPIHandler.submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, token);
+            console.log("SubmissionResponse", submissionResponse);
             setShowMessage(submissionResponse.status);
             setMessageType(submissionResponse.type);
             setMessageText(submissionResponse.message);

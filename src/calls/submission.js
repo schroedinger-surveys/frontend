@@ -19,7 +19,7 @@ class SubmissionAPIHandler {
                 }
             });
         } catch (e){
-            log.error("Error in submissionCount:",e);
+            log.error("Error in submissionCount:",e.response);
             return {
                 log: "Failed axios request was caught: submissionCount"
             };
@@ -38,25 +38,35 @@ class SubmissionAPIHandler {
         try {
             let submitResponse
             if (survey.secured){
-                submitResponse = await axios({
-                    method: "POST",
-                    url: "/api/v1/submission?token="+token,
-                    data: {
-                        survey_id: survey.id,
-                        constrained_answers: constrainedAnswers,
-                        freestyle_answers: freestyleAnswers
-                    }
-                });
+                try{
+                    submitResponse = await axios({
+                        method: "POST",
+                        url: "/api/v1/submission?token=" + token,
+                        data: {
+                            survey_id: survey.id,
+                            constrained_answers: constrainedAnswers,
+                            freestyle_answers: freestyleAnswers
+                        }
+                    });
+                }catch (e){
+                    log.debug("Error in submitAnsweredSurvey:", e.response);
+                    return {status: true, type: "danger", message: e.response.data.human_message}
+                }
             } else {
-                submitResponse = await axios({
-                    method: "POST",
-                    url: "/api/v1/submission",
-                    data: {
-                        survey_id: survey.id,
-                        constrained_answers: constrainedAnswers,
-                        freestyle_answers: freestyleAnswers
-                    }
-                });
+                try{
+                    submitResponse = await axios({
+                        method: "POST",
+                        url: "/api/v1/submission",
+                        data: {
+                            survey_id: survey.id,
+                            constrained_answers: constrainedAnswers,
+                            freestyle_answers: freestyleAnswers
+                        }
+                    });
+                } catch (e) {
+                    log.debug("Error in submitAnsweredSurvey:", e.response);
+                    return {status: true, type: "danger", message: e.response.data.human_message}
+                }
             }
             log.debug("Response of submitting the submission", submitResponse);
             if (submitResponse.status === 201) {
@@ -70,7 +80,7 @@ class SubmissionAPIHandler {
                 return {status: true, type: "danger", message: "Something went wrong. Please try again!"}
             }
         } catch (e) {
-            log.error("Error in submitAnsweredSurvey:", e);
+            log.error("Error in submitAnsweredSurvey:", e.response);
             return {status: true, type: "danger", message: "Something went wrong. Please try again!"}
         }
     }
@@ -85,7 +95,7 @@ class SubmissionAPIHandler {
                 }
             });
         }catch (e) {
-            log.error("Error in submissionGet:", e);
+            log.error("Error in submissionGet:", e.response);
         }
     }
 }
