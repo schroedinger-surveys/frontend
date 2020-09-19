@@ -89,6 +89,17 @@ class SurveyAPIHandler {
         }
     }
 
+    /**
+     * Sends a request to create a new Survey with all given Data from the user
+     * @param title
+     * @param description
+     * @param start_date
+     * @param end_date
+     * @param securedInput
+     * @param constrainedQuestions
+     * @param freestyleQuestions
+     * @returns {Promise<{log: string}|AxiosResponse<any>>}
+     */
     static async surveyCreate(title, description, start_date, end_date, securedInput, constrainedQuestions, freestyleQuestions) {
         try {
             return await axios({
