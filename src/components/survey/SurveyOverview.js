@@ -143,7 +143,11 @@ const SurveyOverview = () => {
 
     const redirectSurveyEdit = () => {
         return (
-            <Redirect to={"/survey/edit/" + surveyToEdit.id}/>
+            <Redirect to={{pathname: "/survey/edit/" +surveyToEdit.id,
+                state: {
+                    survey: surveyToEdit
+                }
+            }}/>
         )
     }
 
