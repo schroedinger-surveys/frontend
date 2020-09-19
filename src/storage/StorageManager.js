@@ -129,6 +129,14 @@ class StorageManager {
         sessionStorage.removeItem("USER_CACHE");
     }
 
+    /**
+     * deletes only the user cache
+     * scenario: user creates new survey
+     */
+    clearSurveyCache(){
+        sessionStorage.removeItem("SURVEY_CACHE");
+    }
+
 }
 
 const storageManager = new StorageManager(); // Create a Singleton object and export it
