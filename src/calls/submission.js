@@ -22,9 +22,7 @@ class SubmissionAPIHandler {
      */
     static cacheMiddleware(func, name, survey_id){
         let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
-        console.log("Cache in cacheMiddleware:", Cache);
         if(Cache === null || JSON.parse(Cache).submissions === null){
-            console.log("FETCH: submission Count");
             return func();
         }else{
             Cache = JSON.parse(Cache);
@@ -33,7 +31,6 @@ class SubmissionAPIHandler {
             if (countMap.has(survey_id)){
                 return countMap.get(survey_id);
             } else {
-                console.log("FETCH: submission Count");
                 return func();
             }
         }
@@ -47,19 +44,15 @@ class SubmissionAPIHandler {
      */
     static setStorage(name, data, id){
         let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
-        console.log("Cache in setStorage:", Cache);
         if(Cache === null){
-            console.log("Cache === null");
             InitialCache.submissions = new Map();
             InitialCache.submissions.set(id, data);
-            console.log("Submissions Map:",InitialCache);
 
             // Map can not be persisted in storage, has to be converted to an array !
             sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify([...InitialCache.submissions]));
         } else {
             const CacheObject = JSON.parse(Cache);
             const countMap = new Map(CacheObject.map(i => [i[0], i[1]])) // Convert Array back to Map
-            console.log("CacheObject in setStorage",countMap);
             if(countMap.has(id)){
                 countMap.delete(id);
             }
@@ -84,7 +77,6 @@ class SubmissionAPIHandler {
                 }
             });
             if (response.status === 200){
-                console.log("apiResponse:", response.data.count);
                 SubmissionAPIHandler.setStorage("submissions", response.data.count, id);
                 return response.data.count;
             }
