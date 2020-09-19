@@ -14,6 +14,7 @@ import Message from "../utils/Message";
 import {Redirect} from "react-router-dom";
 import {DeleteModal} from "./delete-survey-utils";
 import SubmissionAPIHandler from "../../calls/submission";
+import storageManager from "../../storage/StorageManager";
 
 const SurveyOverview = () => {
     const [matching, setMatching] = useState(true);
@@ -162,8 +163,10 @@ const SurveyOverview = () => {
     }
 
     const deleteSurvey = async () => {
-        const deleteSurveyResponse = await SurveyAPIHandler.surveyDelete(surveyToDelete.id);
-        if (deleteSurveyResponse === 204) {
+        const apiResponse = await SurveyAPIHandler.surveyDelete(surveyToDelete.id);
+        console.log(apiResponse);
+        if (apiResponse.status === 204) {
+            storageManager.clearSurveyCache();
             await getSurveyLists();
             await getSurveyCounts();
             setShowDeleteModal(false);
