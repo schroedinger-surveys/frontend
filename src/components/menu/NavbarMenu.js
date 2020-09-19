@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import storageManager from "../../storage/LocalStorageManager";
+import storageManager from "../../storage/StorageManager";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
 import catIcon from "./icons/cat.png";

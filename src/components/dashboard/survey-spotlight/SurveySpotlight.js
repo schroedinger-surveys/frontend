@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 
 import RawSurvey from "./RawSurvey";
 import ShareLinks from "./ShareLinks";
-import storageManager from "../../../storage/LocalStorageManager";
+import storageManager from "../../../storage/StorageManager";
 import log from "../../../log/Logger";
 import Submissions from "./Submissions";
 import NoSubmissions from "./NoSubmissions";

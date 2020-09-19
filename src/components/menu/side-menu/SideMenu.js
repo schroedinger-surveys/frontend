@@ -2,7 +2,7 @@ import React from "react";
 import Nav from "react-bootstrap/Nav";
 
 import "./SideMenu.css";
-import storageManager from "../../../storage/LocalStorageManager";
+import storageManager from "../../../storage/StorageManager";
 import {useLocation} from "react-router-dom";
 import UserAPIHandler from "../../../calls/user";
 

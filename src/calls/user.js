@@ -1,6 +1,6 @@
 import axios from "axios";
 import log from "../log/Logger";
-import storageManager from "../storage/LocalStorageManager";
+import storageManager from "../storage/StorageManager";
 
 const InitialCache = {
     userData: {}

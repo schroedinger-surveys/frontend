@@ -1,5 +1,5 @@
 import axios from "axios";
-import storageManager from "../storage/LocalStorageManager";
+import storageManager from "../storage/StorageManager";
 import log from "../log/Logger";
 
 /**

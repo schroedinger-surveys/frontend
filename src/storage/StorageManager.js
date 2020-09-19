@@ -3,7 +3,7 @@
  * handles JWT-token coming from the backend after user login
  * saves, lookes up, validates and removes the token
  */
-class LocalStorageManager {
+class StorageManager {
     constructor() {
         this.JWT_STORAGE_KEY = "JWT";
     }
@@ -112,7 +112,24 @@ class LocalStorageManager {
         sessionStorage.removeItem(this.JWT_STORAGE_KEY);
     }
 
+    /**
+     * Clears the sessionStorage from the Cache entries
+     * scenario: User creates, updates or deletes survey
+     */
+    clearCache(){
+        sessionStorage.removeItem("SURVEY_CACHE");
+        sessionStorage.removeItem("SUBMISSION_CACHE");
+    }
+
+    /**
+     * deletes only the user cache
+     * scenario: user changes userdata in ChangeUserData
+     */
+    clearUserCache(){
+        sessionStorage.removeItem("USER_CACHE");
+    }
+
 }
 
-const storageManager = new LocalStorageManager(); // Create a Singleton object and export it
+const storageManager = new StorageManager(); // Create a Singleton object and export it
 export default storageManager;

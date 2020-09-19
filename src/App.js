@@ -10,7 +10,7 @@ import Search from "./components/search/Search";
 import NavbarMenu from "./components/menu/NavbarMenu";
 import Register from "./components/home/Register";
 import Login from "./components/home/Login";
-import storageManager from "./storage/LocalStorageManager";
+import storageManager from "./storage/StorageManager";
 import {createStore} from "redux";
 import RootReducer from "./redux/reducer/RootReducer";
 import PublicSurvey from "./components/survey/survey-submission/PublicSurvey";

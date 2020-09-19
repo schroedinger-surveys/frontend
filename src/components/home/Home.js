@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {Redirect} from "react-router-dom";
 
-import storageManager from "../../storage/LocalStorageManager";
+import storageManager from "../../storage/StorageManager";
 import Login from "./Login";
 import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
