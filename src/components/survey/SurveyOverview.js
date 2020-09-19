@@ -55,14 +55,14 @@ const SurveyOverview = () => {
         // TODO match Seen-Count when backend api is ready
         const tempListPrivateSurveys = [];
         for (let i = 0; i < privateList.length; i++) {
-            const apiResponse = await SubmissionAPIHandler.submissionCount(privateList[i].id);
-            if (apiResponse.status === 200) {
-                tempListPrivateSurveys.push({
-                    secured: true,
-                    survey: privateList[i],
-                    submissionCount: apiResponse.data.count
-                })
-            }
+            console.log("match and fetch submission count", privateList[i].id);
+            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(SubmissionAPIHandler.submissionCount(privateList[i].id), "submissions", privateList[i].id);
+            tempListPrivateSurveys.push({
+                secured: true,
+                survey: privateList[i],
+                submissionCount: apiResponse
+            })
+
         }
         await setPrivateSurveys(tempListPrivateSurveys);
     }
@@ -71,14 +71,13 @@ const SurveyOverview = () => {
         // TODO match Seen-Count when backend api is ready
         const tempListPublicSurveys = [];
         for (let i = 0; i < publicList.length; i++) {
-            const apiResponse = await SubmissionAPIHandler.submissionCount(publicList[i].id);
-            if (apiResponse.status === 200) {
-                tempListPublicSurveys.push({
-                    secured: false,
-                    survey: publicList[i],
-                    submissionCount: apiResponse.data.count
-                })
-            }
+            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(SubmissionAPIHandler.submissionCount(publicList[i].id), "submissions", publicList[i].id);
+            tempListPublicSurveys.push({
+                secured: false,
+                survey: publicList[i],
+                submissionCount: apiResponse
+            })
+
         }
         await setPublicSurveys(tempListPublicSurveys);
     }
