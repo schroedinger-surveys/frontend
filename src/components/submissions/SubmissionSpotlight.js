@@ -19,24 +19,26 @@ const SubmissionSpotlight = (props) => {
     const [renamed, setRenamed] = useState(false);
     const [constrainedOptions, setConstrainedOptions] = useState(new Map());
 
-    const setupConstrainedQuestionOptions = () => {
-        let sortedConstrainedQuestions = new Map();
-        for (let i = 0; i < survey.constrained_questions.length; i++) {
-            sortedConstrainedQuestions.set(survey.constrained_questions[i].position, survey.constrained_questions[i].options)
-        }
-        setConstrainedOptions(sortedConstrainedQuestions);
-    }
-
     useEffect(() => {
+        getSubmissions();
         setupConstrainedQuestionOptions()
     }, [])
 
     const getSubmissions = async (pageNumber = 0) => {
         // eslint-disable-next-line no-undefined
         if (survey !== undefined) {
-            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() =>SubmissionAPIHandler.submissionGet(survey.id, pageNumber, itemsPerPage), "submissions")
+            const apiResponse = await SubmissionAPIHandler.submissionGet(survey.id, pageNumber, itemsPerPage)
             setSubmissions(apiResponse.data);
         }
+    }
+    const setupConstrainedQuestionOptions = () => {
+        console.log(sortQuestions(survey.constrained_questions, survey.freestyle_questions));
+        let sortedConstrainedQuestions = new Map();
+        for (let i = 0; i < survey.constrained_questions.length; i++) {
+            sortedConstrainedQuestions.set(survey.constrained_questions[i].position, survey.constrained_questions[i].options)
+        }
+        setConstrainedOptions(sortedConstrainedQuestions);
+        console.log(sortedConstrainedQuestions);
     }
 
     const renameSubmissionProperties = (submission) => {
@@ -53,9 +55,20 @@ const SubmissionSpotlight = (props) => {
     }
 
     const changeSubmission = async (submission) => {
-        await renameSubmissionProperties(submission)
+        await renameSubmissionProperties(submission);
+        console.log(submission);
         setSpotlight(submission);
         setRenamed(true);
+    }
+
+    const showOptions = (key) => {
+        console.log(constrainedOptions, key);
+        const options = constrainedOptions.get(key);
+        let optionValues = [];
+        for (let i = 0; i < options.length; i++) {
+            optionValues.push(options[i].answer);
+        }
+        return "(" + optionValues.join(", ") + ")";
     }
 
     const submissionPagination = () => {
@@ -81,21 +94,7 @@ const SubmissionSpotlight = (props) => {
                 </ul>
             </div>
         )
-
     }
-
-    const showOptions = (key) => {
-        const options = constrainedOptions.get(key);
-        let optionValues = [];
-        for (let i = 0; i < options.length; i++) {
-            optionValues.push(options[i].answer);
-        }
-        return "(" + optionValues.join(", ") + ")";
-    }
-
-    useEffect(() => {
-        getSubmissions()
-    }, [])
 
     return (
         <Container fluid>
