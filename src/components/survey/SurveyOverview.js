@@ -14,6 +14,7 @@ import Message from "../utils/Message";
 import {Redirect} from "react-router-dom";
 import {DeleteModal} from "./delete-survey-utils";
 import SubmissionAPIHandler from "../../calls/submission";
+import storageManager from "../../storage/StorageManager";
 
 const SurveyOverview = () => {
     const [matching, setMatching] = useState(true);
@@ -55,14 +56,12 @@ const SurveyOverview = () => {
         // TODO match Seen-Count when backend api is ready
         const tempListPrivateSurveys = [];
         for (let i = 0; i < privateList.length; i++) {
-            const apiResponse = await SubmissionAPIHandler.submissionCount(privateList[i].id);
-            if (apiResponse.status === 200) {
-                tempListPrivateSurveys.push({
-                    secured: true,
-                    survey: privateList[i],
-                    submissionCount: apiResponse.data.count
-                })
-            }
+            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() => SubmissionAPIHandler.submissionCount(privateList[i].id), "submissions", privateList[i].id);
+            tempListPrivateSurveys.push({
+                secured: true,
+                survey: privateList[i],
+                submissionCount: apiResponse
+            })
         }
         await setPrivateSurveys(tempListPrivateSurveys);
     }
@@ -71,14 +70,12 @@ const SurveyOverview = () => {
         // TODO match Seen-Count when backend api is ready
         const tempListPublicSurveys = [];
         for (let i = 0; i < publicList.length; i++) {
-            const apiResponse = await SubmissionAPIHandler.submissionCount(publicList[i].id);
-            if (apiResponse.status === 200) {
-                tempListPublicSurveys.push({
-                    secured: false,
-                    survey: publicList[i],
-                    submissionCount: apiResponse.data.count
-                })
-            }
+            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() => SubmissionAPIHandler.submissionCount(publicList[i].id), "submissions", publicList[i].id);
+            tempListPublicSurveys.push({
+                secured: false,
+                survey: publicList[i],
+                submissionCount: apiResponse
+            })
         }
         await setPublicSurveys(tempListPublicSurveys);
     }
@@ -146,7 +143,11 @@ const SurveyOverview = () => {
 
     const redirectSurveyEdit = () => {
         return (
-            <Redirect to={"/survey/edit/" + surveyToEdit.id}/>
+            <Redirect to={{pathname: "/survey/edit/" +surveyToEdit.id,
+                state: {
+                    survey: surveyToEdit
+                }
+            }}/>
         )
     }
 
@@ -166,8 +167,10 @@ const SurveyOverview = () => {
     }
 
     const deleteSurvey = async () => {
-        const deleteSurveyResponse = await SurveyAPIHandler.surveyDelete(surveyToDelete.id);
-        if (deleteSurveyResponse === 204) {
+        const apiResponse = await SurveyAPIHandler.surveyDelete(surveyToDelete.id);
+        console.log(apiResponse);
+        if (apiResponse.status === 204) {
+            storageManager.clearSurveyCache();
             await getSurveyLists();
             await getSurveyCounts();
             setShowDeleteModal(false);

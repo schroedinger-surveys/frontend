@@ -12,6 +12,7 @@ import {sortQuestions} from "../utils/SortQuestions";
 import SideMenu from "../menu/side-menu/SideMenu";
 import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 import SurveyAPIHandler from "../../calls/survey";
+import storageManager from "../../storage/StorageManager";
 
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
@@ -224,7 +225,8 @@ const CreateSurvey = () => {
             if (apiResponse.status === 201){
                 setShowMessage(true);
                 setMessageType("success");
-                setMessageText("Survey was successfully created.")
+                setMessageText("Survey was successfully created.");
+                storageManager.clearSurveyCache();
             } else {
                 setShowMessage(true);
                 setMessageType("warning");

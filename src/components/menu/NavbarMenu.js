@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import storageManager from "../../storage/LocalStorageManager";
+import storageManager from "../../storage/StorageManager";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
 import catIcon from "./icons/cat.png";
@@ -21,10 +21,8 @@ const NavbarMenu = () => {
 
     const getUserName = async () => {
         if(storageManager.getJWTToken() !== ""){
-            const apiResponse = await UserAPIHandler.getUserInfo();
-            if (apiResponse.status === 200) {
-                setUsername(apiResponse.data.username);
-            }
+            const apiResponse = await UserAPIHandler.cacheMiddleware(UserAPIHandler.getUserInfo, "userData");
+            setUsername(apiResponse.username);
         }
     }
 

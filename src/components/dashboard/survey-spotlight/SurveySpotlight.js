@@ -4,12 +4,13 @@ import {connect} from "react-redux";
 
 import RawSurvey from "./RawSurvey";
 import ShareLinks from "./ShareLinks";
-import storageManager from "../../../storage/LocalStorageManager";
+import storageManager from "../../../storage/StorageManager";
 import log from "../../../log/Logger";
 import Submissions from "./Submissions";
 import NoSubmissions from "./NoSubmissions";
 import {Redirect} from "react-router-dom";
 import {getSurveyStatus} from "../../utils/SurveyStatus";
+import SubmissionAPIHandler from "../../../calls/submission";
 
 const SurveySpotlight = (props) => {
     const [showSubmissions, setShowSubmissions] = useState(false);
@@ -18,6 +19,8 @@ const SurveySpotlight = (props) => {
     const [submissionCount, setSubmissionCount] = useState(0);
 
     const [redirect, setRedirect] = useState(false);
+
+    const [fetchedCount, setFetchedCount] = useState(false);
 
     const manageVisibility = (name) => {
         if (name === "raw") {
@@ -37,17 +40,9 @@ const SurveySpotlight = (props) => {
 
     const getSubmissionCount = async () => {
         if (props.selectedSurvey) {
-            const response = await axios({
-                method: "GET",
-                url: "/api/v1/submission/count?survey_id=" + props.selectedSurvey.id,
-                headers: {
-                    "Authorization": storageManager.getJWTToken()
-                }
-            });
-            log.debug("Fetched submission count", response);
-            if (response.status === 200) {
-                setSubmissionCount(response.data.count)
-            }
+            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() =>SubmissionAPIHandler.submissionCount(props.selectedSurvey.id), "submissions", props.selectedSurvey.id);
+            setSubmissionCount(apiResponse);
+            setFetchedCount(true);
         }
     }
 
@@ -71,7 +66,11 @@ const SurveySpotlight = (props) => {
         <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
             {redirect && redirectSurveyEdit()}
             {props.selectedSurvey && (
-                <h3>{props.selectedSurvey.title} - {submissionCount} submissions</h3>
+                <div>
+                    <h3>{props.selectedSurvey.title}</h3>
+                    {fetchedCount && <p>{submissionCount} submissions</p>}
+                </div>
+
             )}
             <button style={{
                 borderRadius: "5px",

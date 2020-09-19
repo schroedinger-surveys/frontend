@@ -12,6 +12,7 @@ import {DeleteModal} from "./delete-survey-utils";
 import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 import SurveyAPIHandler from "../../calls/survey";
 import log from "../../log/Logger";
+import storageManager from "../../storage/StorageManager";
 
 const EditSurvey = (props) => {
     const {history} = props;
@@ -141,7 +142,8 @@ const EditSurvey = (props) => {
 
     const deleteSurvey = async() => {
         const apiResponse = await SurveyAPIHandler.surveyDelete(survey.id);
-        if(apiResponse === 204){
+        if(apiResponse.status === 204){
+            storageManager.clearSurveyCache();
             history.push("/dashboard");
         } else {
             setShowMessageDelete(true);
@@ -379,6 +381,7 @@ const EditSurvey = (props) => {
             setShowMessageUpdate(true);
             setMessageTypeUpdate("success");
             setMessageTextUpdate("Survey was updated");
+            storageManager.clearSurveyCache();
             setTimeout(()=> {
                 history.push("/dashboard");
             }, 3000);

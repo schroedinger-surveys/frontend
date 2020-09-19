@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 
 import log from "../../log/Logger";
 import Message from "../utils/Message";
-import storageManager from "../../storage/LocalStorageManager";
+import storageManager from "../../storage/StorageManager";
 import UserAPIHandler from "../../calls/user";
 
 /**

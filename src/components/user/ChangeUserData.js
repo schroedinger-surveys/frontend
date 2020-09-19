@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import SideMenu from "../menu/side-menu/SideMenu";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
-import storageManager from "../../storage/LocalStorageManager";
+import storageManager from "../../storage/StorageManager";
 import Message from "../utils/Message";
 import Modal from "react-bootstrap/Modal";
 import log from "../../log/Logger";
@@ -45,12 +45,9 @@ const ChangeUserData = (props) => {
     const [messageTypeDelete, setMessageTypeDelete] = useState("");
 
     const advancedUserInformation = async () => {
-        const apiResponse = await UserAPIHandler.getUserInfo();
-        if (apiResponse.status === 200) {
-            setUserData(apiResponse.data);
-        } else {
-            log.debug(apiResponse.log);
-        }
+        const apiResponse = await UserAPIHandler.cacheMiddleware(UserAPIHandler.getUserInfo, "userData");
+        setUserData(apiResponse);
+
     }
 
     const handleUserInput = (name) => (event) => {
@@ -93,6 +90,7 @@ const ChangeUserData = (props) => {
                 setShowMessage(true);
                 setMessageType("success");
                 setMessageText("Change successful.");
+                storageManager.clearUserCache();
             } else {
                 setShowMessage(true);
                 setMessageType("danger");

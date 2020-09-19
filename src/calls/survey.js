@@ -1,5 +1,5 @@
 import axios from "axios";
-import storageManager from "../storage/LocalStorageManager";
+import storageManager from "../storage/StorageManager";
 import log from "../log/Logger";
 
 const InitialCache = {
@@ -17,7 +17,7 @@ const InitialCache = {
 class SurveyAPIHandler {
 
     static cacheMiddleware(func, name){
-        let Cache = localStorage.getItem("SURVEY_CACHE");
+        let Cache = sessionStorage.getItem("SURVEY_CACHE");
         if(Cache === null || JSON.parse(Cache)[name] === null){
             return func();
         } else {
@@ -27,14 +27,14 @@ class SurveyAPIHandler {
     }
 
     static setStorage(name, data){
-        let Cache = localStorage.getItem("SURVEY_CACHE");
+        let Cache = sessionStorage.getItem("SURVEY_CACHE");
         if(Cache === null){
             InitialCache[name] = data;
-            localStorage.setItem("SURVEY_CACHE", JSON.stringify(InitialCache));
+            sessionStorage.setItem("SURVEY_CACHE", JSON.stringify(InitialCache));
         } else {
             const CacheObject = JSON.parse(Cache);
             CacheObject[name] = data;
-            localStorage.setItem("SURVEY_CACHE", JSON.stringify(CacheObject));
+            sessionStorage.setItem("SURVEY_CACHE", JSON.stringify(CacheObject));
         }
     }
 
@@ -89,6 +89,17 @@ class SurveyAPIHandler {
         }
     }
 
+    /**
+     * Sends a request to create a new Survey with all given Data from the user
+     * @param title
+     * @param description
+     * @param start_date
+     * @param end_date
+     * @param securedInput
+     * @param constrainedQuestions
+     * @param freestyleQuestions
+     * @returns {Promise<{log: string}|AxiosResponse<any>>}
+     */
     static async surveyCreate(title, description, start_date, end_date, securedInput, constrainedQuestions, freestyleQuestions) {
         try {
             return await axios({

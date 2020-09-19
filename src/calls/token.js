@@ -1,5 +1,5 @@
 import axios from "axios";
-import storageManager from "../storage/LocalStorageManager";
+import storageManager from "../storage/StorageManager";
 import log from "../log/Logger";
 
 /**
@@ -49,6 +49,14 @@ class TokenAPIHandler {
         }
     }
 
+    /**
+     * Get the token belonging to a survey
+     * @param id survey_id
+     * @param used - null: fetches all token - true: fetches used tokens - false:
+     * @param page_number
+     * @param page_size
+     * @returns {Promise<{log: string}|AxiosResponse<any>>}
+     */
     static async getSurveyToken(id, used = null, page_number = 0, page_size = 5) {
         try {
             if (used !== null) {

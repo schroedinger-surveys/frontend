@@ -1,5 +1,5 @@
 import axios from "axios";
-import storageManager from "../storage/LocalStorageManager";
+import storageManager from "../storage/StorageManager";
 import log from "../log/Logger";
 
 const InitialCache = {
@@ -13,26 +13,67 @@ const InitialCache = {
  */
 class SubmissionAPIHandler {
 
-    static cacheMiddleware(func, name){
-        let Cache = localStorage.getItem("SUBMISSION_CACHE");
-        if(Cache === null || JSON.parse(Cache)[name] === null){
+    /**
+     * Cache only works for submissionCount !!!
+     * @param func
+     * @param name
+     * @param survey_id
+     * @returns {*}
+     */
+    static cacheMiddleware(func, name, survey_id){
+        let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
+        if(Cache === null || JSON.parse(Cache).submissions === null){
             return func();
-        } else {
-            Cache = JSON.parse(Cache);
-            return Cache[name]
+        }else{
+            const now = Math.round(new Date().getTime()/1000);
+            const lastCheck = JSON.parse(sessionStorage.getItem("SUBMISSION_LAST_UPDATE"));
+
+            if(lastCheck !== null && ((lastCheck + 120) < now)){ // Cache for Submission count is valid for 2 minutes
+                sessionStorage.removeItem("SUBMISSION_CACHE");
+                return func();
+            } else {
+                Cache = JSON.parse(Cache);
+                const countArray = Cache; // Only the submission Array is in Cache
+                const countMap = new Map(countArray.map(i => [i[0], i[1]])) // Convert Array back to Map
+                if (countMap.has(survey_id)) {
+                    return countMap.get(survey_id);
+                } else {
+                    return func();
+                }
+            }
         }
     }
 
-    static setStorage(name, data){
-        let Cache = localStorage.getItem("SUBMISSION_CACHE");
+    /**
+     * Works specifically only for submissionCount !!!
+     * @param name
+     * @param data
+     * @param id
+     */
+    static setStorage(name, data, id){
+        let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
+        const now = Math.round(new Date().getTime()/1000);
         if(Cache === null){
-            InitialCache[name] = data;
-            localStorage.setItem("SUBMISSION_CACHE", JSON.stringify(InitialCache));
+            InitialCache.submissions = new Map();
+            InitialCache.submissions.set(id, data);
+
+            // Map can not be persisted in storage, has to be converted to an array !
+            sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify([...InitialCache.submissions]));
+
+            sessionStorage.setItem("SUBMISSION_LAST_UPDATE", JSON.stringify(now));
         } else {
             const CacheObject = JSON.parse(Cache);
-            CacheObject[name] = data;
-            localStorage.setItem("SUBMISSION_CACHE", JSON.stringify(CacheObject));
+            const countMap = new Map(CacheObject.map(i => [i[0], i[1]])) // Convert Array back to Map
+            if(countMap.has(id)){
+                countMap.delete(id);
+            }
+            countMap.set(id, data);
+            sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify([...countMap]));
+
+            sessionStorage.removeItem("SUBMISSION_LAST_UPDATE");
+            sessionStorage.setItem("SUBMISSION_LAST_UPDATE", JSON.stringify(now))
         }
+
     }
 
     /**
@@ -41,19 +82,43 @@ class SubmissionAPIHandler {
      * @returns {Promise<{log: string}|AxiosResponse<any>>}
      */
     static async submissionCount(id){
+        log.debug("GET SUBMISSION COUNT", id);
         try{
-            return await axios({
+            const response = await axios({
                 method: "GET",
                 url: "/api/v1/submission/count?survey_id=" + id,
                 headers: {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
+            if (response.status === 200){
+                SubmissionAPIHandler.setStorage("submissions", response.data.count, id);
+                return response.data.count;
+            }
         } catch (e){
-            log.error("Error in submissionCount:",e.response);
-            return {
-                log: "Failed axios request was caught: submissionCount"
-            };
+            log.error("Error in submissionCount:",e);
+        }
+    }
+
+    /**
+     * Gets all Submissions belonging to a survey
+     * @param id of the Survey the requested submission belong to
+     * @param pageNumber
+     * @param itemsPerPage
+     * @returns {Promise<AxiosResponse<any>>}
+     */
+    static async submissionGet(id, pageNumber= 0, itemsPerPage= 3){
+        log.debug("GET ALL SUBMISSIONS FROM A SURVEY");
+        try{
+            return await axios({
+                method: "GET",
+                url: "/api/v1/submission?survey_id=" + id + "&page_number=" + pageNumber + "&page_size=" + itemsPerPage,
+                headers: {
+                    "Authorization": storageManager.getJWTToken()
+                }
+            });
+        }catch (e) {
+            log.error("Error in submissionGet:", e.response);
         }
     }
 
@@ -113,32 +178,6 @@ class SubmissionAPIHandler {
         } catch (e) {
             log.error("Error in submitAnsweredSurvey:", e.response);
             return {status: true, type: "danger", message: "Something went wrong. Please try again!"}
-        }
-    }
-
-    /**
-     * Gets all Submissions belonging to a survey
-     * @param id of the Survey the requested submission belong to
-     * @param pageNumber
-     * @param itemsPerPage
-     * @returns {Promise<AxiosResponse<any>>}
-     */
-    static async submissionGet(id, pageNumber= 0, itemsPerPage= 3){
-        log.debug("GET ALL SUBMISSIONS FROM A SURVEY");
-        try{
-            const response = await axios({
-                method: "GET",
-                url: "/api/v1/submission?survey_id=" + id + "&page_number=" + pageNumber + "&page_size=" + itemsPerPage,
-                headers: {
-                    "Authorization": storageManager.getJWTToken()
-                }
-            });
-            if(response.status === 200){
-                SubmissionAPIHandler.setStorage("submissions", response);
-            }
-            return response
-        }catch (e) {
-            log.error("Error in submissionGet:", e.response);
         }
     }
 
