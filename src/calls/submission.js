@@ -25,13 +25,22 @@ class SubmissionAPIHandler {
         if(Cache === null || JSON.parse(Cache).submissions === null){
             return func();
         }else{
-            Cache = JSON.parse(Cache);
-            const countArray = Cache; // Only the submission Array is in Cache
-            const countMap = new Map(countArray.map(i => [i[0], i[1]])) // Convert Array back to Map
-            if (countMap.has(survey_id)){
-                return countMap.get(survey_id);
-            } else {
+            const now = Math.round(new Date().getTime()/1000);
+            const lastCheck = JSON.parse(sessionStorage.getItem("SUBMISSION_LAST_UPDATE"));
+
+            if(lastCheck !== null && ((lastCheck + 120) < now)){ // Cache for Submission count is valid for 2 minutes
+                console.log("SUbmissions outdated")
+                sessionStorage.removeItem("SUBMISSION_CACHE");
                 return func();
+            } else {
+                Cache = JSON.parse(Cache);
+                const countArray = Cache; // Only the submission Array is in Cache
+                const countMap = new Map(countArray.map(i => [i[0], i[1]])) // Convert Array back to Map
+                if (countMap.has(survey_id)) {
+                    return countMap.get(survey_id);
+                } else {
+                    return func();
+                }
             }
         }
     }
@@ -44,12 +53,15 @@ class SubmissionAPIHandler {
      */
     static setStorage(name, data, id){
         let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
+        const now = Math.round(new Date().getTime()/1000);
         if(Cache === null){
             InitialCache.submissions = new Map();
             InitialCache.submissions.set(id, data);
 
             // Map can not be persisted in storage, has to be converted to an array !
             sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify([...InitialCache.submissions]));
+
+            sessionStorage.setItem("SUBMISSION_LAST_UPDATE", JSON.stringify(now));
         } else {
             const CacheObject = JSON.parse(Cache);
             const countMap = new Map(CacheObject.map(i => [i[0], i[1]])) // Convert Array back to Map
@@ -58,7 +70,11 @@ class SubmissionAPIHandler {
             }
             countMap.set(id, data);
             sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify([...countMap]));
+
+            sessionStorage.removeItem("SUBMISSION_LAST_UPDATE");
+            sessionStorage.setItem("SUBMISSION_LAST_UPDATE", JSON.stringify(now))
         }
+
     }
 
     /**
