@@ -2,6 +2,10 @@ import axios from "axios";
 import log from "../log/Logger";
 import storageManager from "../storage/LocalStorageManager";
 
+const InitialCache = {
+    userData: {}
+}
+
 /**
  * Used in:
  * - Register
@@ -12,6 +16,29 @@ import storageManager from "../storage/LocalStorageManager";
  * - ResetPassword
  */
 class UserAPIHandler {
+
+    static cacheMiddleware(func, name){
+        let Cache = sessionStorage.getItem("USER_CACHE");
+        if(Cache === null || JSON.parse(Cache)[name] === null){
+            return func();
+        } else {
+            Cache = JSON.parse(Cache);
+            return Cache[name]
+        }
+    }
+
+    static setStorage(name, data){
+        let Cache = sessionStorage.getItem("USER_CACHE");
+        if(Cache === null){
+            InitialCache[name] = data;
+            sessionStorage.setItem("USER_CACHE", JSON.stringify(InitialCache));
+        } else {
+            const CacheObject = JSON.parse(Cache);
+            CacheObject[name] = data;
+            sessionStorage.setItem("USER_CACHE", JSON.stringify(CacheObject));
+        }
+    }
+
     static async userRegistration(username, email, password) {
         log.debug("Someone wants to register a user account");
         try {
@@ -119,14 +146,19 @@ class UserAPIHandler {
     }
 
     static async getUserInfo() {
+        log.debug("FETCH USER INFO");
         try {
-            return await axios({
+            const response =  await axios({
                 method: "POST",
                 url: "/api/v1/user/info",
                 headers: {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
+            if (response.status === 200){
+                UserAPIHandler.setStorage("userData", response.data);
+                return response.data;
+            }
         } catch (e){
             log.error("Error in getUserInfo:",e.response);
             return {

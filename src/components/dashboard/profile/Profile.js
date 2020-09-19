@@ -17,10 +17,8 @@ const Profile = () => {
     const [username, setUsername] = useState("");
 
     const getUserName = async () => {
-        const apiResponse = await UserAPIHandler.getUserInfo();
-        if (apiResponse.status === 200) {
-            setUsername(apiResponse.data.username);
-        }
+        const apiResponse = await UserAPIHandler.cacheMiddleware(UserAPIHandler.getUserInfo, "userData");
+        setUsername(apiResponse.username);
     }
 
     useEffect(() => {

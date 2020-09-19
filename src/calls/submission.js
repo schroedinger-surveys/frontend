@@ -14,7 +14,7 @@ const InitialCache = {
 class SubmissionAPIHandler {
 
     static cacheMiddleware(func, name){
-        let Cache = localStorage.getItem("SUBMISSION_CACHE");
+        let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
         if(Cache === null || JSON.parse(Cache)[name] === null){
             return func();
         } else {
@@ -24,14 +24,14 @@ class SubmissionAPIHandler {
     }
 
     static setStorage(name, data){
-        let Cache = localStorage.getItem("SUBMISSION_CACHE");
+        let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
         if(Cache === null){
             InitialCache[name] = data;
-            localStorage.setItem("SUBMISSION_CACHE", JSON.stringify(InitialCache));
+            sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify(InitialCache));
         } else {
             const CacheObject = JSON.parse(Cache);
             CacheObject[name] = data;
-            localStorage.setItem("SUBMISSION_CACHE", JSON.stringify(CacheObject));
+            sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify(CacheObject));
         }
     }
 

@@ -17,7 +17,7 @@ const InitialCache = {
 class SurveyAPIHandler {
 
     static cacheMiddleware(func, name){
-        let Cache = localStorage.getItem("SURVEY_CACHE");
+        let Cache = sessionStorage.getItem("SURVEY_CACHE");
         if(Cache === null || JSON.parse(Cache)[name] === null){
             return func();
         } else {
@@ -27,14 +27,14 @@ class SurveyAPIHandler {
     }
 
     static setStorage(name, data){
-        let Cache = localStorage.getItem("SURVEY_CACHE");
+        let Cache = sessionStorage.getItem("SURVEY_CACHE");
         if(Cache === null){
             InitialCache[name] = data;
-            localStorage.setItem("SURVEY_CACHE", JSON.stringify(InitialCache));
+            sessionStorage.setItem("SURVEY_CACHE", JSON.stringify(InitialCache));
         } else {
             const CacheObject = JSON.parse(Cache);
             CacheObject[name] = data;
-            localStorage.setItem("SURVEY_CACHE", JSON.stringify(CacheObject));
+            sessionStorage.setItem("SURVEY_CACHE", JSON.stringify(CacheObject));
         }
     }
 

@@ -21,10 +21,8 @@ const NavbarMenu = () => {
 
     const getUserName = async () => {
         if(storageManager.getJWTToken() !== ""){
-            const apiResponse = await UserAPIHandler.getUserInfo();
-            if (apiResponse.status === 200) {
-                setUsername(apiResponse.data.username);
-            }
+            const apiResponse = await UserAPIHandler.cacheMiddleware(UserAPIHandler.getUserInfo, "userData");
+            setUsername(apiResponse.username);
         }
     }
 

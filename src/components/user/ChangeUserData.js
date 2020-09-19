@@ -45,12 +45,9 @@ const ChangeUserData = (props) => {
     const [messageTypeDelete, setMessageTypeDelete] = useState("");
 
     const advancedUserInformation = async () => {
-        const apiResponse = await UserAPIHandler.getUserInfo();
-        if (apiResponse.status === 200) {
-            setUserData(apiResponse.data);
-        } else {
-            log.debug(apiResponse.log);
-        }
+        const apiResponse = await UserAPIHandler.cacheMiddleware(UserAPIHandler.getUserInfo, "userData");
+        setUserData(apiResponse);
+
     }
 
     const handleUserInput = (name) => (event) => {
