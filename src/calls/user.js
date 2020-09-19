@@ -85,7 +85,6 @@ class UserAPIHandler {
     }
 
     static async userLogout() {
-        console.log("LOGOUT");
         try {
             const apiResponse = await axios({
                 method: "POST",

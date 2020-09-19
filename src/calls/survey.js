@@ -128,7 +128,6 @@ class SurveyAPIHandler {
     }
 
     static async surveyDelete(id) {
-        console.log("DELETE SURVEY");
         try {
             return await axios({
                 method: "DELETE",

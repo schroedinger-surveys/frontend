@@ -29,7 +29,6 @@ class SubmissionAPIHandler {
             const lastCheck = JSON.parse(sessionStorage.getItem("SUBMISSION_LAST_UPDATE"));
 
             if(lastCheck !== null && ((lastCheck + 120) < now)){ // Cache for Submission count is valid for 2 minutes
-                console.log("SUbmissions outdated")
                 sessionStorage.removeItem("SUBMISSION_CACHE");
                 return func();
             } else {
