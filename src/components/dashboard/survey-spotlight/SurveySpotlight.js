@@ -40,11 +40,9 @@ const SurveySpotlight = (props) => {
 
     const getSubmissionCount = async () => {
         if (props.selectedSurvey) {
-            const apiResponse = await SubmissionAPIHandler.submissionCount(props.selectedSurvey.id);
-            if (apiResponse.status === 200) {
-                setSubmissionCount(apiResponse.data.count);
-                setFetchedCount(true);
-            }
+            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() =>SubmissionAPIHandler.submissionCount(props.selectedSurvey.id), "submissions", props.selectedSurvey.id);
+            setSubmissionCount(apiResponse);
+            setFetchedCount(true);
         }
     }
 

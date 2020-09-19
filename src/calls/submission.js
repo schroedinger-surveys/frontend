@@ -13,24 +13,53 @@ const InitialCache = {
  */
 class SubmissionAPIHandler {
 
-    static cacheMiddleware(func, name){
+    /**
+     * Cache only works for submissionCount !!!
+     * @param func
+     * @param name
+     * @param survey_id
+     * @returns {*}
+     */
+    static cacheMiddleware(func, name, survey_id){
         let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
-        if(Cache === null || JSON.parse(Cache)[name] === null){
+        console.log("Cache in cacheMiddleware:", Cache);
+        if(Cache === null || JSON.parse(Cache).submissions === null){
+            console.log("FETCH: submission Count");
             return func();
         } else {
+            console.log("No fetch: submissionCount");
             Cache = JSON.parse(Cache);
-            return Cache[name]
+            const countArray = Cache; //only the submission Array is in Cache
+            console.log("Coutn array", countArray);
+            const countMap = new Map(countArray.map(i => [i[0], i[1]]))
+            console.log("count map", countMap);
+            console.log("count in map", countMap.get(survey_id));
+            return countMap.get(survey_id);
         }
     }
 
-    static setStorage(name, data){
+    /**
+     * Works specifically only for submissionCount !!!
+     * @param name
+     * @param data
+     * @param id
+     */
+    static setStorage(name, data, id){
         let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
+        console.log("Cache in setStorage:", Cache);
         if(Cache === null){
-            InitialCache[name] = data;
-            sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify(InitialCache));
+            console.log("Cache === null");
+            InitialCache.submissions = new Map();
+            InitialCache.submissions.set(id, data);
+            console.log("Submissions Map:",InitialCache);
+
+            // Map can not be persisted in storage, has to be converted to an array !
+            sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify([...InitialCache.submissions]));
         } else {
             const CacheObject = JSON.parse(Cache);
-            CacheObject[name] = data;
+            console.log("CacheObject in setStorage",CacheObject);
+            CacheObject.submissions.delete(id);
+            CacheObject.submissions.set(id, data);
             sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify(CacheObject));
         }
     }
@@ -41,19 +70,44 @@ class SubmissionAPIHandler {
      * @returns {Promise<{log: string}|AxiosResponse<any>>}
      */
     static async submissionCount(id){
+        log.debug("GET SUBMISSION COUNT");
         try{
-            return await axios({
+            const response = await axios({
                 method: "GET",
                 url: "/api/v1/submission/count?survey_id=" + id,
                 headers: {
                     "Authorization": storageManager.getJWTToken()
                 }
             });
+            if (response.status === 200){
+                console.log("apiResponse:", response.data.count);
+                SubmissionAPIHandler.setStorage("submissions", response.data.count, id);
+                return response.data.count;
+            }
         } catch (e){
-            log.error("Error in submissionCount:",e.response);
-            return {
-                log: "Failed axios request was caught: submissionCount"
-            };
+            log.error("Error in submissionCount:",e);
+        }
+    }
+
+    /**
+     * Gets all Submissions belonging to a survey
+     * @param id of the Survey the requested submission belong to
+     * @param pageNumber
+     * @param itemsPerPage
+     * @returns {Promise<AxiosResponse<any>>}
+     */
+    static async submissionGet(id, pageNumber= 0, itemsPerPage= 3){
+        log.debug("GET ALL SUBMISSIONS FROM A SURVEY");
+        try{
+            return await axios({
+                method: "GET",
+                url: "/api/v1/submission?survey_id=" + id + "&page_number=" + pageNumber + "&page_size=" + itemsPerPage,
+                headers: {
+                    "Authorization": storageManager.getJWTToken()
+                }
+            });
+        }catch (e) {
+            log.error("Error in submissionGet:", e.response);
         }
     }
 
@@ -113,32 +167,6 @@ class SubmissionAPIHandler {
         } catch (e) {
             log.error("Error in submitAnsweredSurvey:", e.response);
             return {status: true, type: "danger", message: "Something went wrong. Please try again!"}
-        }
-    }
-
-    /**
-     * Gets all Submissions belonging to a survey
-     * @param id of the Survey the requested submission belong to
-     * @param pageNumber
-     * @param itemsPerPage
-     * @returns {Promise<AxiosResponse<any>>}
-     */
-    static async submissionGet(id, pageNumber= 0, itemsPerPage= 3){
-        log.debug("GET ALL SUBMISSIONS FROM A SURVEY");
-        try{
-            const response = await axios({
-                method: "GET",
-                url: "/api/v1/submission?survey_id=" + id + "&page_number=" + pageNumber + "&page_size=" + itemsPerPage,
-                headers: {
-                    "Authorization": storageManager.getJWTToken()
-                }
-            });
-            if(response.status === 200){
-                SubmissionAPIHandler.setStorage("submissions", response);
-            }
-            return response
-        }catch (e) {
-            log.error("Error in submissionGet:", e.response);
         }
     }
 
