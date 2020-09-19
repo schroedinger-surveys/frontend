@@ -85,6 +85,7 @@ class UserAPIHandler {
     }
 
     static async userLogout() {
+        console.log("LOGOUT");
         try {
             const apiResponse = await axios({
                 method: "POST",
@@ -98,6 +99,7 @@ class UserAPIHandler {
             log.error("Error in userLogout:",e.response);
             log.debug("User token could not be banned: userLogout")
         }
+
     }
 
     static async changeUserPassword(username, email, oldPassword, password) {

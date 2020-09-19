@@ -104,6 +104,10 @@ class LocalStorageManager {
      * scenario: User logout
      */
     clearToken() {
+        sessionStorage.removeItem("USER_CACHE");
+        sessionStorage.removeItem("SURVEY_CACHE");
+        sessionStorage.removeItem("SUBMISSION_CACHE");
+        sessionStorage.clear();
         localStorage.removeItem(this.JWT_STORAGE_KEY);
         sessionStorage.removeItem(this.JWT_STORAGE_KEY);
     }
