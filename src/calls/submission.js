@@ -26,15 +26,16 @@ class SubmissionAPIHandler {
         if(Cache === null || JSON.parse(Cache).submissions === null){
             console.log("FETCH: submission Count");
             return func();
-        } else {
-            console.log("No fetch: submissionCount");
+        }else{
             Cache = JSON.parse(Cache);
-            const countArray = Cache; //only the submission Array is in Cache
-            console.log("Coutn array", countArray);
-            const countMap = new Map(countArray.map(i => [i[0], i[1]]))
-            console.log("count map", countMap);
-            console.log("count in map", countMap.get(survey_id));
-            return countMap.get(survey_id);
+            const countArray = Cache; // Only the submission Array is in Cache
+            const countMap = new Map(countArray.map(i => [i[0], i[1]])) // Convert Array back to Map
+            if (countMap.has(survey_id)){
+                return countMap.get(survey_id);
+            } else {
+                console.log("FETCH: submission Count");
+                return func();
+            }
         }
     }
 
@@ -57,10 +58,13 @@ class SubmissionAPIHandler {
             sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify([...InitialCache.submissions]));
         } else {
             const CacheObject = JSON.parse(Cache);
-            console.log("CacheObject in setStorage",CacheObject);
-            CacheObject.submissions.delete(id);
-            CacheObject.submissions.set(id, data);
-            sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify(CacheObject));
+            const countMap = new Map(CacheObject.map(i => [i[0], i[1]])) // Convert Array back to Map
+            console.log("CacheObject in setStorage",countMap);
+            if(countMap.has(id)){
+                countMap.delete(id);
+            }
+            countMap.set(id, data);
+            sessionStorage.setItem("SUBMISSION_CACHE", JSON.stringify([...countMap]));
         }
     }
 
