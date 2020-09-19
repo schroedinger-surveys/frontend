@@ -382,6 +382,7 @@ const EditSurvey = (props) => {
             setMessageTypeUpdate("success");
             setMessageTextUpdate("Survey was updated");
             setTimeout(()=> {
+                storageManager.clearSurveyCache();
                 history.push("/dashboard");
             }, 3000);
         } else {
