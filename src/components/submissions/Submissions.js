@@ -101,7 +101,6 @@ const Submissions = () => {
                 survey: surveys[i],
                 submissionCount: apiResponse
             })
-
         }
         return tempSurveyList;
     }
