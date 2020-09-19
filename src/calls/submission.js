@@ -67,7 +67,7 @@ class SubmissionAPIHandler {
      * @returns {Promise<{log: string}|AxiosResponse<any>>}
      */
     static async submissionCount(id){
-        log.debug("GET SUBMISSION COUNT");
+        log.debug("GET SUBMISSION COUNT", id);
         try{
             const response = await axios({
                 method: "GET",
