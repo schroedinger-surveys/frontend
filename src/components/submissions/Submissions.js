@@ -8,14 +8,22 @@ import LoadingScreen from "../utils/LoadingScreen";
 import SurveyAPIHandler from "../../calls/survey";
 import SubmissionAPIHandler from "../../calls/submission";
 
+/**
+ * User can choose a Survey he wants to look at the individual submissions
+ * first pick type - (private|public)
+ * choose survey out of list (only surveys with more than zero submissions can be opened)
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const Submissions = () => {
     const itemsPerPage = 10;
+
+    // Used to change between the View of the public and private Surveys
     const [displayPrivate, setDisplayPrivate] = useState(false);
     const [displayPublic, setDisplayPublic] = useState(false);
 
     const [publicSurveys, setPublicSurveys] = useState([]);
     const [privateSurveys, setPrivateSurveys] = useState([]);
-
     const [privateSurveysCount, setPrivateSurveysCount] = useState(0);
     const [publicSurveysCount, setPublicSurveyCount] = useState(0);
 
@@ -23,8 +31,16 @@ const Submissions = () => {
     const [selectedSurvey, setSelectedSurvey] = useState({});
     const [selectedSurveySubmissionCount, setSelectedSurveySubmissionCount] = useState(0);
 
+    // Loading while surveys are fetched and matched with their specific submissionCount - manages visibility of LoadingScreen
     const [loading, setLoading] = useState(false);
 
+    /**
+     * Gets all private surveys and matched the submissionCount to it
+     * @param page_number
+     * @param pagination - function is used for setup after mounting and for fetching new submissions in pagination
+     * default is false (setup), in Pagination it is called with true
+     * @returns {Promise<void>}
+     */
     const setupPrivateSurveys = async (page_number = 0 , pagination = false) => {
         if (privateSurveys.length === 0 || pagination) {
             setLoading(true);
@@ -45,6 +61,13 @@ const Submissions = () => {
         setDisplayPrivate(true);
     }
 
+    /**
+     * Gets all public surveys and matched the submissionCount to it
+     * @param page_number
+     * @param pagination - function is used for setup after mounting and for fetching new submissions in pagination
+     * default is false (setup), in Pagination it is called with true
+     * @returns {Promise<void>}
+     */
     const setupPublicSurveys = async (page_number = 0, pagination = false) => {
         if (publicSurveys.length === 0 || pagination) {
             setLoading(true);
@@ -65,6 +88,12 @@ const Submissions = () => {
         setDisplayPublic(true);
     }
 
+    /**
+     * Fetched the submission Count of a specific survey
+     * returns a list containing objects for all surveys (private or public) with survey, and submissionCount
+     * @param surveys either private or public
+     * @returns {Promise<[]>}
+     */
     const matchSubmissionCount = async (surveys) => {
         const tempSurveyList = [];
         for (let i = 0; i < surveys.length; i++) {
@@ -79,31 +108,33 @@ const Submissions = () => {
         return tempSurveyList;
     }
 
+    /**
+     * Pagination for private and public survey list
+     * returns the JSX Element created by createPaginationMarker
+     * and gives the function changePage as callback for onCLick
+     * in changePage the function to fetch and match the surveys is called: setup---Surveys
+     * @returns {*}
+     */
     const privatePagination = () => {
         const changePage = async (index) => {
             await setupPrivateSurveys(index, true);
         }
-
         const pages = Math.ceil(privateSurveysCount / itemsPerPage);
         return createPaginationMarker(pages, changePage);
     }
-
     const publicPagination = () => {
         const changePage = async (index) => {
             await setupPublicSurveys(index, true);
         }
-
         const pages = Math.ceil(publicSurveysCount / itemsPerPage);
         return createPaginationMarker(pages, changePage);
     }
-
     const createPaginationMarker = (pages, clickMethod) => {
         let li = [];
         for (let i = 0; i < pages; i++) {
             li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
                         onClick={() => clickMethod(i)}>{i + 1}</li>)
         }
-
         return (
             <div style={{width: "100%"}}>
                 <ul style={{listStyle: "none"}}>
@@ -114,6 +145,12 @@ const Submissions = () => {
 
     }
 
+    /**
+     * If a survey (that has more than zero submissions) of the list is clicked
+     * the user is being redirected to SurveySpotlight
+     * @param survey - the chosen survey the user wants to see the submissions from
+     * @returns {JSX.Element}
+     */
     const redirectToSpotlight = (survey) => {
         return (
             <Redirect to={{

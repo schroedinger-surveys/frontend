@@ -4,10 +4,16 @@ import Col from "react-bootstrap/Col";
 import SideMenu from "../menu/side-menu/SideMenu";
 import Row from "react-bootstrap/Row";
 import {Redirect} from "react-router-dom";
-import log from "../../log/Logger";
 import {sortQuestions} from "../utils/SortQuestions";
 import SubmissionAPIHandler from "../../calls/submission";
 
+/**
+ * Shows all submissions belonging to a survey
+ * Each submission can be looked at individually
+ * @param props - survey and submissionCount
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const SubmissionSpotlight = (props) => {
     const survey = props.location.state.survey;
     const submissionCount = props.location.state.selectedSurveySubmissionCount;

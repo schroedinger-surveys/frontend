@@ -21,6 +21,7 @@ const UsedTokenSubmission = (props) => {
     const [submission, setSubmission] = useState({});
     const [loading, setLoading] = useState(true);
 
+
     const fetchSubmission = async () => {
         const apiResponse = await SubmissionAPIHandler.usedTokenSubmissionGet(submission_id);
         log.debug(apiResponse.data);
