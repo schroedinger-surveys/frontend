@@ -19,26 +19,41 @@ const SubmissionSpotlight = (props) => {
     const [renamed, setRenamed] = useState(false);
     const [constrainedOptions, setConstrainedOptions] = useState(new Map());
 
+    useEffect(() => {
+        getSubmissions();
+        setupConstrainedQuestionOptions()
+    }, [])
+
+    /**
+     *  Fetch the submissions from api - DO NOT CACHE it needs to be fetched for each survey individually
+     *  fetches only if survey was correctly passed trough props
+     **/
+    const getSubmissions = async (pageNumber = 0) => {
+        // eslint-disable-next-line no-undefined
+        if (survey !== undefined) {
+            const apiResponse = await SubmissionAPIHandler.submissionGet(survey.id, pageNumber, itemsPerPage)
+            setSubmissions(apiResponse.data);
+        }
+    }
+
+    /**
+     * Creates a Map,
+     * mapping the positions of the question in the survey to the answer options Map(2 => [y, n]);
+     * scenario: shown behind chosen answer of user
+     **/
     const setupConstrainedQuestionOptions = () => {
         let sortedConstrainedQuestions = new Map();
         for (let i = 0; i < survey.constrained_questions.length; i++) {
             sortedConstrainedQuestions.set(survey.constrained_questions[i].position, survey.constrained_questions[i].options)
         }
         setConstrainedOptions(sortedConstrainedQuestions);
+        console.log(sortedConstrainedQuestions);
     }
 
-    useEffect(() => {
-        setupConstrainedQuestionOptions()
-    }, [])
-
-    const getSubmissions = async (pageNumber = 0) => {
-        // eslint-disable-next-line no-undefined
-        if (survey !== undefined) {
-            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() =>SubmissionAPIHandler.submissionGet(survey.id, pageNumber, itemsPerPage), "submissions")
-            setSubmissions(apiResponse.data);
-        }
-    }
-
+    /**
+     * Renames some of the properties of the fetched submission json file
+     * for easier use with util functions like sortQuestions
+     **/
     const renameSubmissionProperties = (submission) => {
         for (let i = 0; i < submission.constrained_answers.length; i++) {
             submission.constrained_answers[i].question_text = submission.constrained_answers[i].constrained_question_question_text;
@@ -52,12 +67,37 @@ const SubmissionSpotlight = (props) => {
         }
     }
 
+    /**
+     * If user clicks on submission from list of submissions the Spotlight is reset
+     * the submissions properties are renamed and the boolean flag for Rename is set, ending the loading
+     **/
     const changeSubmission = async (submission) => {
-        await renameSubmissionProperties(submission)
+        await renameSubmissionProperties(submission);
         setSpotlight(submission);
         setRenamed(true);
     }
 
+    /**
+     * The Options belonging to an constrained question are returned as a string
+     * it uses the Map constrainedOptions, created and mapped in setupConstrainedQuestionOptions
+     * scenario: behind the chosen answer these are shown as a overview
+     **/
+    const showOptions = (key) => {
+        const options = constrainedOptions.get(key);
+        let optionValues = [];
+        for (let i = 0; i < options.length; i++) {
+            optionValues.push(options[i].answer);
+        }
+        return "(" + optionValues.join(", ") + ")";
+    }
+
+    /**
+     * Creates the Pagination for the list of submissions
+     * calls createPaginationMarker
+     * returns the JSX element resulting from createPaginationMarker
+     * gives the callback function changePage as onClick function
+     * changePage fetches the submissions based on the index (number of pagination marker) used as page_number in fetch call
+     **/
     const submissionPagination = () => {
         const changePage = async (index) => {
             await getSubmissions(index);
@@ -66,7 +106,6 @@ const SubmissionSpotlight = (props) => {
         const pages = Math.ceil(submissionCount / itemsPerPage);
         return createPaginationMarker(pages, changePage);
     }
-
     const createPaginationMarker = (pages, clickMethod) => {
         let li = [];
         for (let i = 0; i < pages; i++) {
@@ -81,21 +120,7 @@ const SubmissionSpotlight = (props) => {
                 </ul>
             </div>
         )
-
     }
-
-    const showOptions = (key) => {
-        const options = constrainedOptions.get(key);
-        let optionValues = [];
-        for (let i = 0; i < options.length; i++) {
-            optionValues.push(options[i].answer);
-        }
-        return "(" + optionValues.join(", ") + ")";
-    }
-
-    useEffect(() => {
-        getSubmissions()
-    }, [])
 
     return (
         <Container fluid>

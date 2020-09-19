@@ -11,12 +11,14 @@ export const sortQuestions = (constrainedQuestions, freestyleQuestions, sortProp
         if (allQuestions[i].hasOwnProperty(typeIndicator)) {
             allQuestions[i] = {
                 type: "constrained",
-                question: temp
+                question: temp,
+                position: i
             }
         } else {
             allQuestions[i] = {
                 type: "freestyle",
-                question: temp
+                question: temp,
+                position: i
             }
         }
     }
