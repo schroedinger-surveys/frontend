@@ -7,6 +7,7 @@ import log from "../../log/Logger";
 import Message from "../utils/Message";
 import storageManager from "../../storage/StorageManager";
 import UserAPIHandler from "../../calls/user";
+import {loginValidator} from "../../validation/user";
 
 /**
  * Login provides functionalities for a user to log in to the application
@@ -44,24 +45,33 @@ const Login = (props) => {
     const login = async (event) => {
         event.preventDefault();
 
-        const apiResponse = await UserAPIHandler.userLogin(username, password);
-        log.debug("Status in FE", apiResponse.status);
-        if (apiResponse.status === 200) {
-            const userToken = apiResponse.data.jwt; // The jwt token belonging to the user
-            const rememberUser = document.getElementById("rememberMe").checked; // Based on this the jwt token will be saved to local or session storage
-            if (rememberUser) {
-                storageManager.saveJWTTokenLocal(userToken);
+        const valid = loginValidator(username, password);
+        if (valid.status){
+            const apiResponse = await UserAPIHandler.userLogin(username, password);
+            log.debug("Status in FE", apiResponse.status);
+            if (apiResponse.status === 200) {
+                const userToken = apiResponse.data.jwt; // The jwt token belonging to the user
+                const rememberUser = document.getElementById("rememberMe").checked; // Based on this the jwt token will be saved to local or session storage
+                if (rememberUser) {
+                    storageManager.saveJWTTokenLocal(userToken);
+                } else {
+                    storageManager.saveJWTTokenSession(userToken);
+                }
+                history.push("/dashboard");
             } else {
-                storageManager.saveJWTTokenSession(userToken);
+                setShowMessage(true);
+                setMessageText(apiResponse.backend.data.human_message || "Something went wrong, please try again.");
+                setMessageType("danger");
+                log.debug("Error Login: ",apiResponse.log);
+                log.error("Error Login: ", apiResponse)
             }
-            history.push("/dashboard");
         } else {
             setShowMessage(true);
-            setMessageText(apiResponse.backend.data.human_message || "Something went wrong, please try again.");
-            setMessageType("danger");
-            log.debug("Error Login: ",apiResponse.log);
-            log.error("Error Login: ", apiResponse)
+            setMessageText(valid.text);
+            setMessageType(valid.type);
         }
+
+
     }
 
     /**
