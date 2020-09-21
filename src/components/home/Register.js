@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import log from "../../log/Logger";
 import Message from "../utils/Message";
 import UserAPIHandler from "../../calls/user";
+import {registrationValidator} from "../../validation/user";
 
 /**
  * Register provides functionalities for a user to register a new user account
@@ -42,21 +43,25 @@ const Register = (props) => {
      */
     const registerNewUser = async (event) => {
         event.preventDefault();
-        const apiResponse = await UserAPIHandler.userRegistration(username, email, password);
-        if (apiResponse.status === 201) {
-            setShowMessage(true);
-            setMessageText("Your account was created, you can login now.");
-            setMessageType("success");
-            log.debug("User Registration successful");
-        } else if (apiResponse.status === 409) {
-            setShowMessage(true);
-            setMessageText("Conflict! Username or email already taken.");
-            setMessageType("warning");
+        const valid = registrationValidator(username, email, password)
+        if(valid.status){
+            const apiResponse = await UserAPIHandler.userRegistration(username, email, password);
+            log.debug("Response in FE",apiResponse);
+            if (apiResponse.status === 201) {
+                setShowMessage(true);
+                setMessageText("Your account was created, you can login now.");
+                setMessageType("success");
+                log.debug("User Registration successful");
+            } else {
+                setShowMessage(true);
+                setMessageText(apiResponse.backend.data.human_message || "Something went wrong. Please try again");
+                setMessageType("danger");
+                log.debug(apiResponse.log);
+            }
         } else {
             setShowMessage(true);
-            setMessageText("Something went wrong. Please try again");
-            setMessageType("danger");
-            log.debug(apiResponse.log);
+            setMessageText(valid.text);
+            setMessageType(valid.type);
         }
     }
 

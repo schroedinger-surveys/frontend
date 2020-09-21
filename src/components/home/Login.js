@@ -44,7 +44,6 @@ const Login = (props) => {
      */
     const login = async (event) => {
         event.preventDefault();
-
         const valid = loginValidator(username, password);
         if (valid.status){
             const apiResponse = await UserAPIHandler.userLogin(username, password);
@@ -70,8 +69,6 @@ const Login = (props) => {
             setMessageText(valid.text);
             setMessageType(valid.type);
         }
-
-
     }
 
     /**

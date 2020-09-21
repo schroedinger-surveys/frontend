@@ -57,8 +57,10 @@ class UserAPIHandler {
             return apiResponse;
         } catch (e){
             log.error("Error in userRegistration:",e.response);
+            log.debug(e.response);
             return {
-                log: "Failed axios request was caught: userRegistration"
+                log: "Failed axios request was caught: userRegistration",
+                backend: e.response
             };
         }
     }
