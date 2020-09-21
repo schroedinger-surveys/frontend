@@ -57,6 +57,7 @@ const PublicSurvey = () => {
 
         const validationCheck = validateSubmission(answers.constrainedAnswers, answers.freestyleAnswers, survey);
         if (validationCheck.valid){
+            log.debug("Check questions", answers.constrainedAnswers, answers.freestyleAnswers);
             const submissionResponse = await SubmissionAPIHandler.submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, null);
             setShowMessage(submissionResponse.status);
             setMessageType(submissionResponse.type);

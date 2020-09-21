@@ -168,11 +168,7 @@ class SubmissionAPIHandler {
             if (submitResponse.status === 201) {
                 log.debug("Survey Submission was submitted", survey.id, constrainedAnswers, freestyleAnswers);
                 return {status: true, type: "success", message: "Your answers were submitted"}
-            } else if (submitResponse.status === 400) {
-                return {status: true, type: "warning", message: "We could not submit your answers, please try again!"}
-            } else if (submitResponse.status === 500) {
-                return {status: true, type: "danger", message: "Something went wrong. Please try again!"}
-            } else {
+            }else {
                 return {status: true, type: "danger", message: "Something went wrong. Please try again!"}
             }
         } catch (e) {
