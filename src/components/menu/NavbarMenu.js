@@ -65,6 +65,7 @@ const NavbarMenu = () => {
                 <Nav.Link href="/" style={activePage("/")}>Home</Nav.Link>
                 <Nav.Link href="/register" style={activePage("/register")}>Register</Nav.Link>
                 <Nav.Link href="/login" style={activePage("/login")}>Login</Nav.Link>
+                <Nav.Link href="/password/forgot" style={activePage("/password/forgot")}>Forgot Password</Nav.Link>
                 <Nav.Link href="/survey/search" style={activePage("/survey/search")}>Search</Nav.Link>
             </Nav>
         )

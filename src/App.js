@@ -22,6 +22,7 @@ import ChangeUserData from "./components/user/ChangeUserData";
 import EditSurvey from "./components/survey/EditSurvey";
 import ResetPassword from "./components/home/ResetPassword";
 import UsedTokenSubmission from "./components/submissions/UsedTokenSubmission";
+import ForgotPassword from "./components/home/ForgotPassword";
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
                     <Route path={"/pub/:id"} component={PublicSurvey}/>
                     <Route path={"/s/:id"} component={PrivateSurvey}/>
                     <Route path={"/reset-forgotten-password"} component={ResetPassword}/>
+                    <Route path={"/password/forgot"}><ForgotPassword single={true}/></Route>
                 </Switch>
             </Router>
         </Provider>
