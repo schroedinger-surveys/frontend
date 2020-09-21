@@ -268,6 +268,7 @@ const ShareLinks = (props) => {
         const apiResponseUnusedTokenCount = await TokenAPIHandler.tokenCount(props.selectedSurvey.id, false);
         if (apiResponseUnusedTokenCount.status === 200) {
             setUnusedTokenCount(apiResponseUnusedTokenCount.data.count);
+            log.debug("Count of usedToken", apiResponseUnusedTokenCount.data.count)
         }
 
         const apiResponseUsedToken = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, true);
@@ -277,6 +278,7 @@ const ShareLinks = (props) => {
         const apiResponseUsedTokenCount = await TokenAPIHandler.tokenCount(props.selectedSurvey.id, true);
         if (apiResponseUsedTokenCount.status === 200) {
             setUsedTokenCount(apiResponseUsedTokenCount.data.count);
+            log.debug("Count of usedToken", apiResponseUsedTokenCount.data.count)
         }
         setLoadingToken(false);
     }

@@ -28,7 +28,7 @@ class SubmissionAPIHandler {
             const now = Math.round(new Date().getTime()/1000);
             const lastCheck = JSON.parse(sessionStorage.getItem("SUBMISSION_LAST_UPDATE"));
 
-            if(lastCheck !== null && ((lastCheck + 120) < now)){ // Cache for Submission count is valid for 2 minutes
+            if(lastCheck !== null && ((lastCheck + 60) < now)){ // Cache for Submission count is valid for 2 minutes
                 sessionStorage.removeItem("SUBMISSION_CACHE");
                 return func();
             } else {
