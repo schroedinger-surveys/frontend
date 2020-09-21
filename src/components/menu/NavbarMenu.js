@@ -79,7 +79,7 @@ const NavbarMenu = () => {
         return (
             <Nav className="ml-auto">
                 <Navbar.Brand href="/" style={{marginRight: "0"}}><img src={catIcon}
-                                                                       style={{height: "40px"}}/></Navbar.Brand>
+                                                                       style={{height: "40px"}} alt={"curious cat creates, edits and shares surveys"}/></Navbar.Brand>
                 <NavDropdown title="Menu" id="nav-dropdown" alignRight style={{lineHeight: "40px"}}>
                     <NavDropdown.Item id={1} title={username}
                                       style={{fontWeight: "Bolder", lineHeight: "25px"}}>{username}</NavDropdown.Item>
