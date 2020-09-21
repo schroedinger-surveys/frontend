@@ -94,7 +94,7 @@ const ChangeUserData = (props) => {
             } else {
                 setShowMessage(true);
                 setMessageType("danger");
-                setMessageText("Something went wrong. Please try again.");
+                setMessageText(apiResponse.backend.data.human_message || "Something went wrong. Please try again.");
                 log.debug(apiResponse.log);
             }
         } else {
