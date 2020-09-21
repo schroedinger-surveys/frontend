@@ -75,10 +75,14 @@ const PrivateSurvey = (props) => {
                 setShowMessage(true);
             } else {
                 // TODO "Survey not found"  TOKEN is MISSING and NO JWT TOKEN, redirect to HOME
-                log.debug("Survey not found");
-                setMessageType("danger");
-                setMessageText("Survey Not found.");
+                setMessageText(apiResponse.backend.data.human_message || "That did not work. Please try again!");
                 setShowMessage(true);
+                setMessageType("danger");
+                setLoading(false);
+                log.debug(apiResponse.log);
+                setTimeout(() => {
+                    history.push("/")
+                }, 3000);
             }
         }
     }
