@@ -65,6 +65,7 @@ const NavbarMenu = () => {
                 <Nav.Link href="/" style={activePage("/")}>Home</Nav.Link>
                 <Nav.Link href="/register" style={activePage("/register")}>Register</Nav.Link>
                 <Nav.Link href="/login" style={activePage("/login")}>Login</Nav.Link>
+                <Nav.Link href="/password/forgot" style={activePage("/password/forgot")}>Forgot Password</Nav.Link>
                 <Nav.Link href="/survey/search" style={activePage("/survey/search")}>Search</Nav.Link>
             </Nav>
         )
@@ -85,9 +86,9 @@ const NavbarMenu = () => {
                     <NavDropdown.Divider/>
                     <Nav.Link href="/settings" style={{paddingLeft: "25px", lineHeight: "25px"}}>Account
                         Settings</Nav.Link>
-                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Terms of
+                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}} disabled>Terms of
                         Service</Nav.Link>
-                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}}>Info</Nav.Link>
+                    <Nav.Link href="/dashboard" style={{paddingLeft: "25px", lineHeight: "25px"}} disabled>Info</Nav.Link>
                     <NavDropdown.Divider/>
                     <Nav.Link href="/" onClick={logoutUser}
                               style={{paddingLeft: "25px", lineHeight: "25px", color: "darkred"}}>Logout</Nav.Link>

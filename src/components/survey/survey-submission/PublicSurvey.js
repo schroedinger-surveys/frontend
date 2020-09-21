@@ -14,7 +14,8 @@ import SubmissionAPIHandler from "../../../calls/submission";
  * @returns {JSX.Element}
  * @constructor
  */
-const PublicSurvey = () => {
+const PublicSurvey = (props) => {
+    const {history} = props;
     const {id} = useParams();
 
     /**
@@ -45,9 +46,13 @@ const PublicSurvey = () => {
                 setLoading(false);
             } else {
                 setMessageType("danger");
-                setMessageText("That did not work. Please try again!");
+                setMessageText(apiResponse.backend.data.human_message || "That did not work. Please try again!");
                 setShowMessage(true);
+                setLoading(false);
                 log.debug(apiResponse.log);
+                setTimeout(() => {
+                    history.push("/")
+                }, 3000);
             }
     }
 
@@ -57,6 +62,7 @@ const PublicSurvey = () => {
 
         const validationCheck = validateSubmission(answers.constrainedAnswers, answers.freestyleAnswers, survey);
         if (validationCheck.valid){
+            log.debug("Check questions", answers.constrainedAnswers, answers.freestyleAnswers);
             const submissionResponse = await SubmissionAPIHandler.submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, null);
             setShowMessage(submissionResponse.status);
             setMessageType(submissionResponse.type);

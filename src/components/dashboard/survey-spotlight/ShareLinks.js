@@ -101,7 +101,7 @@ const ShareLinks = (props) => {
                     <div>
                         <hr/>
                         <Accordion>
-                            {unusedToken.length > 0 &&  displayUnusedToken()}
+                            {unusedToken.length > 0 && displayUnusedToken()}
                             {usedToken.length > 0 && displayUsedToken()}
                         </Accordion>
                     </div>
@@ -125,6 +125,19 @@ const ShareLinks = (props) => {
         return createPaginationMarker(pages, changePage);
     }
 
+    const usedTokenPagination = () => {
+        const changePage = async (index) => {
+            const apiResponse = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, true, index, itemsPerPage);
+            if (apiResponse.status === 200) {
+                setUsedToken(apiResponse.data);
+                setCurrentPageUnusedToken(index);
+            }
+        }
+
+        const pages = Math.ceil(usedTokenCount / itemsPerPage);
+        return createPaginationMarker(pages, changePage);
+    }
+
     const createPaginationMarker = (pages, clickMethod) => {
         let li = [];
         for (let i = 0; i < pages; i++) {
@@ -132,23 +145,13 @@ const ShareLinks = (props) => {
                         onClick={() => clickMethod(i)}>{i + 1}</li>)
         }
 
-        if (pages <= 1) {
-            return (
-                <div style={{width: "100%"}}>
-                    <ul style={{listStyle: "none"}}>
-                        <li style={{color: "transparent"}}>.</li>
-                    </ul>
-                </div>
-            )
-        } else {
-            return (
-                <div style={{width: "100%"}}>
-                    <ul style={{listStyle: "none"}}>
-                        {li}
-                    </ul>
-                </div>
-            )
-        }
+        return (
+            <div style={{width: "100%"}}>
+                <ul style={{listStyle: "none"}}>
+                    {li}
+                </ul>
+            </div>
+        )
     }
 
     const displayUnusedToken = () => {
@@ -210,6 +213,7 @@ const ShareLinks = (props) => {
                 </Card.Header>
                 <Accordion.Collapse eventKey="1">
                     <Card.Body>
+                        {usedTokenCount > itemsPerPage && usedTokenPagination()}
                         <ul>
                             {usedToken.map((token, i) => (
                                 <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
@@ -268,6 +272,7 @@ const ShareLinks = (props) => {
         const apiResponseUnusedTokenCount = await TokenAPIHandler.tokenCount(props.selectedSurvey.id, false);
         if (apiResponseUnusedTokenCount.status === 200) {
             setUnusedTokenCount(apiResponseUnusedTokenCount.data.count);
+            log.debug("Count of usedToken", apiResponseUnusedTokenCount.data.count)
         }
 
         const apiResponseUsedToken = await TokenAPIHandler.getSurveyToken(props.selectedSurvey.id, true);
@@ -277,6 +282,7 @@ const ShareLinks = (props) => {
         const apiResponseUsedTokenCount = await TokenAPIHandler.tokenCount(props.selectedSurvey.id, true);
         if (apiResponseUsedTokenCount.status === 200) {
             setUsedTokenCount(apiResponseUsedTokenCount.data.count);
+            log.debug("Count of usedToken", apiResponseUsedTokenCount.data.count)
         }
         setLoadingToken(false);
     }

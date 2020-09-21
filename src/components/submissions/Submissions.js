@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import SideMenu from "../menu/side-menu/SideMenu";
@@ -33,6 +33,18 @@ const Submissions = () => {
 
     // Loading while surveys are fetched and matched with their specific submissionCount - manages visibility of LoadingScreen
     const [loading, setLoading] = useState(false);
+
+    const [overallSurveyCount, setOverallSurveyCount] = useState(null);
+
+    const getSurveyCounts = async () => {
+        const privateCount = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.privateSurveyCount, "privateSurveyCount");
+        const publicCount = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.publicSurveyCount, "publicSurveyCount");
+        setOverallSurveyCount(privateCount + publicCount);
+    }
+
+    useEffect(() => {
+        getSurveyCounts();
+    })
 
     /**
      * Gets all private surveys and matched the submissionCount to it
@@ -164,6 +176,13 @@ const Submissions = () => {
                     <SideMenu/>
                 </Col>
                 {choseSurvey && redirectToSpotlight(selectedSurvey)}
+
+                {overallSurveyCount === 0 &&
+                <Col xs={11} style={{marginTop: "30px"}}>
+                    <h3>No Submission yet!</h3>
+                </Col>
+                }
+                {overallSurveyCount > 0 &&
                 <Col xs={3} style={{marginTop: "30px"}}>
                     <h3>Choose type of survey</h3>
                     <button style={{
@@ -183,6 +202,8 @@ const Submissions = () => {
                     }} onClick={() => setupPublicSurveys()}>Public
                     </button>
                 </Col>
+                }
+                {overallSurveyCount > 0 &&
                 <Col xs={8} style={{marginTop: "30px"}}>
                     List of survey with chosen type here
                     {(privateSurveys.length > 0 && displayPrivate) && (
@@ -227,6 +248,7 @@ const Submissions = () => {
                         <LoadingScreen/>
                     )}
                 </Col>
+                }
             </Row>
         </Container>
     )

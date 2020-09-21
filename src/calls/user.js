@@ -57,8 +57,10 @@ class UserAPIHandler {
             return apiResponse;
         } catch (e){
             log.error("Error in userRegistration:",e.response);
+            log.debug(e.response);
             return {
-                log: "Failed axios request was caught: userRegistration"
+                log: "Failed axios request was caught: userRegistration",
+                backend: e.response
             };
         }
     }
@@ -79,7 +81,8 @@ class UserAPIHandler {
         } catch (e){
             log.error("Error in userLogin:",e.response);
             return {
-                log: "Failed axios request was caught: userLogin"
+                log: "Failed axios request was caught: userLogin",
+                backend: e.response
             };
         }
     }
@@ -119,7 +122,8 @@ class UserAPIHandler {
         } catch (e){
             log.error("Error in changeUserPassword:",e.response);
             return {
-                log: "Failed axios request was caught: changeUserPassword"
+                log: "Failed axios request was caught: changeUserPassword",
+                backend: e.response
             }
         }
     }
@@ -139,9 +143,11 @@ class UserAPIHandler {
                 }
             });
         } catch (e){
+            log.debug("Fail", e.response);
             log.error("Error in changeUserData:",e.response);
             return {
-                log: "Failed axios request was caught: changeUserData"
+                log: "Failed axios request was caught: changeUserData",
+                backend: e.response
             }
         }
     }
