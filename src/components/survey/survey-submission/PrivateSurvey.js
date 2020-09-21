@@ -16,6 +16,7 @@ import SubmissionAPIHandler from "../../../calls/submission";
  * @constructor
  */
 const PrivateSurvey = (props) => {
+    const {history} = props;
     const {id} = useParams();
 
     /**
@@ -42,7 +43,6 @@ const PrivateSurvey = (props) => {
 
     const getSurvey = async () => {
         const queryParams = props.location.search.split("="); // Looks like ["?token", "4d2d2b71-4947-4efc-8daf-01672cede685"]
-        log.debug(storageManager.getJWTToken());
 
         if (queryParams[0] === "?token") { // Variant 1: Token
             log.debug("WITH TOKEN");
@@ -53,16 +53,15 @@ const PrivateSurvey = (props) => {
                 await setSurvey(apiResponse.data)
                 setLoadedSurvey(true);
                 setLoading(false);
-            } else if (apiResponse.status === 403 || apiResponse.status === 400) {
-                log.debug("User is not allowed to see survey -  token not valid");
-                setMessageType("danger");
-                setMessageText("That did not work. Maybe the token is invalid. Please try again or contact the survey creator!");
-                setShowMessage(true);
             } else {
                 setMessageType("danger");
-                setMessageText("That did not work. Please try again!");
+                setMessageText(apiResponse.backend.data.human_message || "That did not work. Please try again!");
                 setShowMessage(true);
+                setLoading(false);
                 log.debug(apiResponse.log);
+                setTimeout(() => {
+                    history.push("/")
+                }, 3000);
             }
 
         } else if (storageManager.getJWTToken() !== "") { // Variant 2: JWT

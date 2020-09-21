@@ -167,7 +167,7 @@ class SubmissionAPIHandler {
             log.debug("Response of submitting the submission", submitResponse);
             if (submitResponse.status === 201) {
                 log.debug("Survey Submission was submitted", survey.id, constrainedAnswers, freestyleAnswers);
-                return {status: true, type: "success", message: "Your answers were submitted"}
+                return {status: true, type: "success", message: "Your answers were submitted."}
             }else {
                 return {status: true, type: "danger", message: "Something went wrong. Please try again!"}
             }
