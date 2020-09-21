@@ -79,7 +79,8 @@ class UserAPIHandler {
         } catch (e){
             log.error("Error in userLogin:",e.response);
             return {
-                log: "Failed axios request was caught: userLogin"
+                log: "Failed axios request was caught: userLogin",
+                backend: e.response
             };
         }
     }

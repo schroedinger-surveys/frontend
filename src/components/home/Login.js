@@ -45,6 +45,7 @@ const Login = (props) => {
         event.preventDefault();
 
         const apiResponse = await UserAPIHandler.userLogin(username, password);
+        log.debug("Status in FE", apiResponse.status);
         if (apiResponse.status === 200) {
             const userToken = apiResponse.data.jwt; // The jwt token belonging to the user
             const rememberUser = document.getElementById("rememberMe").checked; // Based on this the jwt token will be saved to local or session storage
@@ -54,15 +55,12 @@ const Login = (props) => {
                 storageManager.saveJWTTokenSession(userToken);
             }
             history.push("/dashboard");
-        } else if (apiResponse.status === 404 || apiResponse.status === 403){
-            setShowMessage(true);
-            setMessageText("Wrong credentials!");
-            setMessageType("warning");
         } else {
             setShowMessage(true);
-            setMessageText("Something went wrong. Please try again.");
+            setMessageText(apiResponse.backend.data.human_message || "Something went wrong, please try again.");
             setMessageType("danger");
-            log.debug(apiResponse.log);
+            log.debug("Error Login: ",apiResponse.log);
+            log.error("Error Login: ", apiResponse)
         }
     }
 
