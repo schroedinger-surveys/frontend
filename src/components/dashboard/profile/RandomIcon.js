@@ -24,7 +24,7 @@ const RandomIcon = () => {
 
     return(
         <div>
-            <img src={icons[randomIndex()]} style={{width: "70px"}} alt={"random cat icon"}/>
+            <img src={icons[randomIndex()]} style={{width: "70px"}} alt={"curious cat creates and analyzes surveys"}/>
         </div>
     )
 }
