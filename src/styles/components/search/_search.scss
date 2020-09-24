@@ -1,0 +1,28 @@
+@import "../../base/colors";
+
+.search_input{
+  border: 1px solid lightgrey;
+  border-radius: 2px 0 0 2px;
+  color: $font_color-input;
+}
+.search_input::placeholder{
+  color: $input_placeholder-color;
+}
+.search_input:focus{
+  outline: none;
+}
+
+.search_btn{
+
+  border: 1px solid $secondary_color-orange;
+  background-color: $secondary_color-orange;
+  border-radius: 0 2px 2px 0;
+  padding: 1px 17px;
+}
+.search_btn:hover{
+  background-color: $secondary_color_hover;
+}
+
+.search_icon{
+  height: 20px;
+}

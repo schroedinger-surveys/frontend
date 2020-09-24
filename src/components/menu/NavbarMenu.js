@@ -7,6 +7,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 
 import catIcon from "./icons/cat.png";
 import boxLogo from "./icons/open-box.png";
+import searchIcon from "./icons/search.png";
 import UserAPIHandler from "../../calls/user";
 
 /**
@@ -83,6 +84,7 @@ const NavbarMenu = () => {
     return (
         <Navbar id={"top_nav"}>
             <Navbar.Brand href="/"><img className={"box_logo"} src={boxLogo} alt={"schroedingers survey cat box"}/></Navbar.Brand>
+            <input className={"search_input"} type="text" placeholder={"Search public survey..."}/><button className={"search_btn"}><img className={"search_icon"} src={searchIcon} alt={"search public survey"}/></button>
             {(location.pathname.split("/")[1] !== "s" && location.pathname.split("/")[1] !== "pub") && (
                 storageManager.searchForJWTToken() && (
                     loggedIn()
