@@ -1,7 +1,10 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
 
-import imageWebsite from "./website.png";
+import imageWebsite from "./images/website.png";
+import twitter from "./images/twitter.png";
+import instagram from "./images/instagram.png";
+import github from "./images/github.png";
 import storageManager from "../../storage/StorageManager";
 import NavbarMenu from "../menu/NavbarMenu";
 
@@ -44,7 +47,16 @@ const Home = () => {
                 </div>
             </div>
             <div id={"footer"}>
-                Footer
+                <div className={"footer_socials"}>
+                    <a href="/"><img className={"social_media-icon"} src={twitter} alt="Link to Schroedinger Surveys Twitter page"/></a>
+                    <a href="/"><img className={"social_media-icon"} src={instagram} alt="Link to Schroedinger Surveys Instagram page"/></a>
+                    <a  href="/"><img className={"social_media-icon"} src={github} alt="Link to Schroedinger Surveys GitHub page"/></a>
+                </div>
+                <div className={"footer_links"}>
+                    <a className={"info_links"} href={"/"}>Learn More</a>
+                    <a className={"info_links"} href={"/"}>Contact Us</a>
+                    <a className={"info_links"} href={"/"}>Terms of Use</a>
+                </div>
             </div>
         </div>
     )

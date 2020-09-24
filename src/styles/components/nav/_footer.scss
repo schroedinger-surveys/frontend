@@ -1,0 +1,28 @@
+@import "../../base/colors";
+
+#footer{
+  background-color: $main_color-orange;
+}
+
+.social_media-icon{
+  height: 30px;
+  margin-right: 60px;
+  margin-top: 25px;
+}
+
+.footer_socials{
+  float: left;
+}
+
+.footer_links{
+  float: right;
+  line-height: 80px;
+}
+
+.info_links{
+  margin-left: 30px;
+  color: white;
+}
+.info_links:hover{
+  color: white;
+}
