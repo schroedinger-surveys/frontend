@@ -15,7 +15,8 @@ import Footer from "./Footer";
  * @returns {JSX.Element} home Component
  * @constructor
  */
-const Home = () => {
+const Home = (props) => {
+    const {history} = props;
     /**
      * Redirects to Component dashboard
      * @returns {JSX.Element} Redirect Component
@@ -24,6 +25,10 @@ const Home = () => {
         return (
             <Redirect to="/dashboard"/>
         )
+    }
+
+    const redirectToLogin = () => {
+        history.push("/login");
     }
 
     return (
@@ -38,7 +43,7 @@ const Home = () => {
                     <p className={"home_page-text"}>Create unlimited amounts of private and public surveys. <br/>
                         Share invite only link or open links with the whole world.<br/>
                         Analyze your results and take away important new insights.</p>
-                    <button className={"home_page-btn"}>SIGN UP</button>
+                    <button className={"home_page-btn"} onClick={redirectToLogin}>SIGN UP</button>
                 </div>
                 <div className={"home_page-right"}>
                     <div className={"image_dot_cont"}>

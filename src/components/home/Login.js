@@ -88,7 +88,7 @@ const Login = (props) => {
     const LoginComponent = () => {
         return(
             <div className={"home_form"}>
-                <Form> {/** Component is styled different when it is used as child comp instead of parent comp**/}
+                <Form>
                     <h3>Login to your user account</h3>
                     <Form.Group controlId="username">
                         <Form.Label>Username*</Form.Label>
