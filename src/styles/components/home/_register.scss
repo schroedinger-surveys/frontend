@@ -1,17 +1,17 @@
 @import "../../base/universals";
 
-.login_form{
+.register_form{
   @include home-form;
 }
 
-.login_btn{
+.register_btn{
   width: 100%;
   @include submit-button;
   font-size: 20px;
 }
-.login_btn:hover{
+.register_btn:hover{
   @include submit-button-hover;
 }
-.login_btn:focus{
+.register_btn:focus{
   @include submit-button-focus;
 }

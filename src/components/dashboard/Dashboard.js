@@ -64,7 +64,6 @@ const Dashboard = (props) => {
             if (allSurveys.length >= 1){
                 props.setSurveySpotlight(allSurveys[0]);
             }
-
             setLoading(false);
         } catch (e) {
             log.error(e);

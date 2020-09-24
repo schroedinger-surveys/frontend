@@ -1,16 +1,12 @@
 import React, {useState} from "react";
 import {withRouter} from 'react-router-dom';
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-
 import log from "../../log/Logger";
 import Message from "../utils/Message";
 import storageManager from "../../storage/StorageManager";
 import UserAPIHandler from "../../calls/user";
 import {loginValidator} from "../../validation/user";
 import NavbarMenu from "../menu/NavbarMenu";
-import Home from "./Home";
-import github from "./images/github.png";
 import Footer from "./Footer";
 
 /**
@@ -39,6 +35,8 @@ const Login = (props) => {
     const [messageText, setMessageText] = useState("");
     const [messageType, setMessageType] = useState("");
 
+    const [singin, setSignin] = useState(false);
+
     /**
      * Provides logic to log in user meaning
      * user credentials are sent to backend api
@@ -47,6 +45,7 @@ const Login = (props) => {
      * @param event - click
      */
     const login = async (event) => {
+        setSignin(true);
         event.preventDefault();
         const valid = loginValidator(username, password);
         if (valid.status){
@@ -73,6 +72,7 @@ const Login = (props) => {
             setMessageText(valid.text);
             setMessageType(valid.type);
         }
+        setSignin(false);
     }
 
     /**
@@ -104,7 +104,8 @@ const Login = (props) => {
                         <Form.Check type="checkbox" label="Remember me"/>
                     </Form.Group>
                     <button className={"login_btn"} onClick={login}>
-                        Login
+                        {singin && <i className="fa fa-circle-o-notch fa-spin"/>}
+                        {!singin && "Login"}
                     </button>
                 </Form>
                 {showMessage && (

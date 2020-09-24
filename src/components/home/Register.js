@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 
 import log from "../../log/Logger";
 import Message from "../utils/Message";
 import UserAPIHandler from "../../calls/user";
 import {registrationValidator} from "../../validation/user";
+import NavbarMenu from "../menu/NavbarMenu";
+import Footer from "./Footer";
 
 /**
  * Register provides functionalities for a user to register a new user account
@@ -33,6 +34,8 @@ const Register = (props) => {
     const [messageText, setMessageText] = useState("");
     const [messageType, setMessageType] = useState("");
 
+    const [registering, setRegistering] = useState(false);
+
     /**
      * Provides logic to create a new user account
      * user data is sent to backend api
@@ -42,6 +45,7 @@ const Register = (props) => {
      * @param event - click
      */
     const registerNewUser = async (event) => {
+        setRegistering(true);
         event.preventDefault();
         const valid = registrationValidator(username, email, password)
         if(valid.status){
@@ -63,6 +67,7 @@ const Register = (props) => {
             setMessageText(valid.text);
             setMessageType(valid.type);
         }
+        setRegistering(false);
     }
 
     /**
@@ -75,13 +80,14 @@ const Register = (props) => {
         setValues({...values, [valueName]: event.target.value})
     }
 
-    return (
-        <div>
+    const RegisterComponent = () => {
+        return(
+            <div className={"register_form"}>
             <Form style={{
                 width: single ? "30%" : "100%",
                 margin: "30px auto"
             }}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
-                <h3>Register a new user account</h3>
+                <h3>Register New User Account</h3>
                 <Form.Group controlId="username">
                     <Form.Label>Username*</Form.Label>
                     <Form.Control type="username" placeholder="Enter username" value={username}
@@ -97,15 +103,26 @@ const Register = (props) => {
                     <Form.Control type="password" placeholder="Password" value={password}
                                   onChange={handleUserInput("password")}/>
                 </Form.Group>
-                <Button style={{width: "100%"}} variant="success" type="submit" onClick={registerNewUser}>
-                    Register
-                </Button>
+                <button className={"register_btn"} onClick={registerNewUser}>
+                    {registering && <i className="fa fa-circle-o-notch fa-spin"/>}
+                    {!registering && "Register"}
+                </button>
             </Form>
             {showMessage && (
                 <Message message={messageText} type={messageType}/>
             )}
         </div>
+        )
+    }
 
+    return (
+        <div className={"comp_wrapper"}>
+            <NavbarMenu/>
+            <div id={"page_body"}>
+                {RegisterComponent()}
+            </div>
+            <Footer/>
+        </div>
     )
 }
 export default Register;
