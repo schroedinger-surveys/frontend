@@ -1,0 +1,17 @@
+@import "../../base/colors";
+
+#app_nav {
+  box-shadow: $shadow;
+}
+
+.app_nav{
+  line-height: 60px;
+}
+
+.app_nav-link{
+  line-height: 25px;
+}
+
+.app_nav-menu{
+  margin-right: 10px;
+}

@@ -6,9 +6,11 @@ body{
 @import "base/box";
 @import "base/universals";
 
-@import "layout/wrapper";
+@import "layout/home_wrapper";
+@import "layout/app_wrapper";
 
-@import "components/nav/top-navbar";
+@import "components/nav/home-navbar";
+@import "components/nav/app-navbar";
 @import "components/nav/side-nav";
 @import "components/nav/footer";
 

@@ -83,10 +83,7 @@ const Register = (props) => {
     const RegisterComponent = () => {
         return(
             <div className={"home_form"}>
-            <Form style={{
-                width: single ? "30%" : "100%",
-                margin: "30px auto"
-            }}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
+            <Form>
                 <h3>Register New User Account</h3>
                 <Form.Group controlId="username">
                     <Form.Label>Username*</Form.Label>

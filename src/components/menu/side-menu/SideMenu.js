@@ -1,7 +1,6 @@
 import React from "react";
 import Nav from "react-bootstrap/Nav";
 
-import "./SideMenu.css";
 import storageManager from "../../../storage/StorageManager";
 import {useLocation} from "react-router-dom";
 import UserAPIHandler from "../../../calls/user";
@@ -35,22 +34,13 @@ const SideMenu = () => {
     }
 
     return(
-        <div style={{borderRight: "1px solid lightgrey", height: "100vh", padding: "30px 5px", backgroundColor: "#065535", marginRight: "15px"}}>
+        <div id="side_nav">
             <Nav>
-                <label style={{color: "lightgrey", fontWeight: "bolder"}}>General</label>
                 <Nav.Link className={"side_nav_link"} href="/dashboard" style={activePage("/dashboard")}>Dashboard</Nav.Link>
                 <Nav.Link className={"side_nav_link"}  href="/survey/search" style={activePage("/survey/search")}>Search</Nav.Link>
-            </Nav>
-            <br/>
-            <Nav>
-                <label style={{color: "lightgrey", fontWeight: "bolder"}}>Survey</label>
                 <Nav.Link className={"side_nav_link"} href="/survey/create" style={activePage("/survey/create")}>New Survey</Nav.Link>
                 <Nav.Link className={"side_nav_link"}  href="/survey/overview" style={activePage("/survey/overview")}>Survey Overview</Nav.Link>
                 <Nav.Link className={"side_nav_link"}  href="/survey/submissions" style={activePage("/survey/submissions")}>Submissions</Nav.Link>
-            </Nav>
-            <br/>
-            <Nav>
-                <label style={{color: "lightgrey", fontWeight: "bolder"}}>Account</label>
                 <Nav.Link className={"side_nav_link"}  href="/settings" style={activePage("/settings")}>Settings</Nav.Link>
                 <Nav.Link className={"side_nav_logout_link"}  href="/" style={{color: "white"}} onClick={logoutUser}>Logout</Nav.Link> {/** If clicked, the logoutUser function is called and the nav-link redirects to home **/}
             </Nav>

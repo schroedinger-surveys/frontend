@@ -8,7 +8,6 @@ import Home from "./components/home/Home";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateSurvey from "./components/survey/CreateSurvey";
 import Search from "./components/search/Search";
-import NavbarMenu from "./components/menu/NavbarMenu";
 import Register from "./components/home/Register";
 import Login from "./components/home/Login";
 import storageManager from "./storage/StorageManager";
@@ -24,12 +23,15 @@ import EditSurvey from "./components/survey/EditSurvey";
 import ResetPassword from "./components/home/ResetPassword";
 import UsedTokenSubmission from "./components/submissions/UsedTokenSubmission";
 import ForgotPassword from "./components/home/ForgotPassword";
+import Home_wrapper from "./components/home_wrapper";
 
 function App() {
     return (
         <Provider store={createStore(RootReducer)}>
             <Router>
                 <Switch>
+                    <Route path={"/layout"} component={Home_wrapper}/>
+
                     <Route exact path="/" component={Home}/>
                     <Route path="/register" component={Register}/>
                     <Route path="/login" component={Login}/>
