@@ -49,8 +49,8 @@ const NavbarMenu = () => {
     const loggedOut = () => {
         return (
             <div className="ml-auto">
-                <button className={"home_login-button"} href="/login">Login</button>
-                <button className={"home_register_button"} href="/register">Register</button>
+                <a className={"home_login-button"} href="/login">Login</a>
+                <a className={"home_register_button"} href="/register">Register</a>
             </div>
         )
     }

@@ -8,6 +8,8 @@ import Message from "../utils/Message";
 import storageManager from "../../storage/StorageManager";
 import UserAPIHandler from "../../calls/user";
 import {loginValidator} from "../../validation/user";
+import NavbarMenu from "../menu/NavbarMenu";
+import Home from "./Home";
 
 /**
  * Login provides functionalities for a user to log in to the application
@@ -81,35 +83,48 @@ const Login = (props) => {
         setValues({...values, [valueName]: event.target.value})
     }
 
-    return (
-        <div>
-            <Form style={{
-                width: single ? "30%" : "100%",
-                margin: "30px auto"
-            }}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
-                <h3>Login to your user account</h3>
-                <Form.Group controlId="username">
-                    <Form.Label>Username*</Form.Label>
-                    <Form.Control type="username" placeholder="Enter username" value={username}
-                                  onChange={handleUserInput("username")}/>
-                </Form.Group>
-                <Form.Group controlId="password">
-                    <Form.Label>Password*</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={password}
-                                  onChange={handleUserInput("password")}/>
-                </Form.Group>
-                <Form.Group controlId="rememberMe">
-                    <Form.Check type="checkbox" label="Remember me"/>
-                </Form.Group>
-                <Button style={{width: "100%"}} variant="success" type="submit" onClick={login}>
-                    Login
-                </Button>
-            </Form>
-            {showMessage && (
-                <Message message={messageText} type={messageType}/>
-            )}
-        </div>
+    const LoginComponent = () => {
+        return(
+            <div>
+                <Form style={{
+                    width: single ? "30%" : "100%",
+                    margin: "30px auto"
+                }}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
+                    <h3>Login to your user account</h3>
+                    <Form.Group controlId="username">
+                        <Form.Label>Username*</Form.Label>
+                        <Form.Control type="username" placeholder="Enter username" value={username}
+                                      onChange={handleUserInput("username")}/>
+                    </Form.Group>
+                    <Form.Group controlId="password">
+                        <Form.Label>Password*</Form.Label>
+                        <Form.Control type="password" placeholder="Password" value={password}
+                                      onChange={handleUserInput("password")}/>
+                    </Form.Group>
+                    <Form.Group controlId="rememberMe">
+                        <Form.Check type="checkbox" label="Remember me"/>
+                    </Form.Group>
+                    <Button style={{width: "100%"}} variant="success" type="submit" onClick={login}>
+                        Login
+                    </Button>
+                </Form>
+                {showMessage && (
+                    <Message message={messageText} type={messageType}/>
+                )}
+            </div>
+        )
+    }
 
+    return (
+        <div className={"comp_wrapper"}>
+            <NavbarMenu/>
+            <div id={"page_body"}>
+                {LoginComponent()}
+            </div>
+            <div id={"footer"}>
+                Footer
+            </div>
+        </div>
     )
 }
 export default withRouter(Login);

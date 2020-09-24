@@ -1,13 +1,9 @@
-import React, {useState} from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import React from "react";
 import {Redirect} from "react-router-dom";
 
+import imageWebsite from "./website.png";
 import storageManager from "../../storage/StorageManager";
-import Login from "./Login";
-import Register from "./Register";
-import ForgotPassword from "./ForgotPassword";
+import NavbarMenu from "../menu/NavbarMenu";
 
 /**
  * This Component either redirects to the users dashboard if the users jwt token was found in storage
@@ -16,10 +12,6 @@ import ForgotPassword from "./ForgotPassword";
  * @constructor
  */
 const Home = () => {
-    const [loginVisibility, setLoginVisibility] = useState(true);
-    const [registerVisibility, setRegisterVisibility] = useState(false);
-    const [resetPasswordVisibility, setResetPasswordVisibility] = useState(false);
-
     /**
      * Redirects to Component dashboard
      * @returns {JSX.Element} Redirect Component
@@ -30,54 +22,31 @@ const Home = () => {
         )
     }
 
-    const handleVisibility = (componentName) => {
-        if(componentName === "Register"){
-            setRegisterVisibility(true);
-            setLoginVisibility(false);
-            setResetPasswordVisibility(false);
-        } else if (componentName === "Login"){
-            setLoginVisibility(true);
-            setRegisterVisibility(false);
-            setResetPasswordVisibility(false);
-        } else if (componentName === "Reset"){
-            setResetPasswordVisibility(true);
-            setLoginVisibility(false);
-            setRegisterVisibility(false);
-        }
-    }
-
     return (
-        <Container style={{height: "100vh", width: "100%"}}>
-            {storageManager.searchForJWTToken() && (
-                redirectUser()
-            )}
-            <Row>
-                <Col style={{marginTop: "30px"}}>Welcome to Schroedinger <br/>
-                    <a href="/survey/search">Find public surveys and submit your answer</a>
-                </Col>
-                <Col style={{marginTop: "30px"}}>
-                    {loginVisibility && (
-                        <Login single={false}/>
-                    )}
-                    {registerVisibility && (
-                        <Register single={false}/>
-                    )}
-                    {resetPasswordVisibility && (
-                        <ForgotPassword single={false}/>
-                    )}
-
-                    {!loginVisibility && (
-                        <button style={{cursor: "pointer"}} onClick={() => handleVisibility("Login")}>Login</button>
-                    )}
-                    {!registerVisibility && (
-                        <button style={{cursor: "pointer"}} onClick={() => handleVisibility("Register")}>Register</button>
-                    )}
-                    {!resetPasswordVisibility && (
-                        <button style={{border: "none", backgroundColor: "transparent", color:"darkred"}} onClick={() => handleVisibility("Reset")}>Forgot Password or Username?</button>
-                    )}
-                    </Col>
-            </Row>
-        </Container>
+        <div className={"comp_wrapper"}>
+            <NavbarMenu/>
+            <div className={"home_page-body"}>
+                {storageManager.searchForJWTToken() && (
+                    redirectUser()
+                )}
+                <div className={"home_page-left"}>
+                    <h1>Schrödinger Survey</h1>
+                    <p className={"home_page-text"}>Create unlimited amounts of private and public surveys. <br/>
+                        Share invite only link or open links with the whole world.<br/>
+                        Analyze your results and take away important new insights.</p>
+                    <button className={"home_page-btn"}>SIGN UP</button>
+                </div>
+                <div className={"home_page-right"}>
+                    <div className={"image_dot_cont"}>
+                        <span className="dot"/>
+                        <img className={"home_page-image"} src={imageWebsite} alt={"Schroedinger Survey dashboard view"}/>
+                    </div>
+                </div>
+            </div>
+            <div id={"footer"}>
+                Footer
+            </div>
+        </div>
     )
 }
 

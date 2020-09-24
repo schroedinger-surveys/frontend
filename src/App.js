@@ -32,8 +32,6 @@ function App() {
         <Provider store={createStore(RootReducer)}>
             <Router>
                 <Switch>
-                    <Route path={"/layout"} component={Home_wrapper}/>
-
                     <Route exact path="/" component={Home}/>
                     <Route path="/register"><Register single={true}/></Route>
                     <Route path="/login"><Login single={true}/></Route>

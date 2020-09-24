@@ -1,0 +1,70 @@
+@import "../../base/colors";
+
+.home_page-body{
+  padding: 0 200px;
+}
+
+.home_page-left, .home_page-right{
+  width: 50%;
+}
+
+.home_page-left{
+  float: left;
+  line-height: 2em;
+  margin-top: 20%;
+}
+.home_page-left h1{
+  font-family: 'Yeseva One', cursive;
+}
+
+.home_page-right{
+  float: right;
+}
+
+.home_page-text{
+  width: 450px;
+}
+
+.home_page-btn{
+  height: 35px;
+  line-height: 35px;
+  width: 400px;
+  background: $main_color-orange;
+  background: linear-gradient(90deg, rgba(254,128,13,1) 0%, rgba(233,174,87,1) 100%);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 25px;
+  font-weight: 700;
+  padding-top: 3px;
+}
+.home_page-btn:hover{
+  background: $main_color-orange;
+  background: linear-gradient(90deg, rgba(254,128,13,1) 0%, rgba(254,128,13,1) 70%);
+  transition: 3s;
+}
+.home_page-btn:focus{
+  outline: none;
+}
+
+.home_page-image{
+  position: absolute;
+  margin-top: 100px;
+  padding-right: 100px;
+  width: 45%;
+}
+
+.dot{
+  position: relative;
+  height: 200px;
+  width: 200px;
+  background-color: $secondary_color-orange;
+  border-radius: 50%;
+  display: inline-block;
+  float: right;
+}
+
+.image_dot_cont{
+  margin-top: 15%;
+  width: 100%;
+}
