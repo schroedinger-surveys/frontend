@@ -1,0 +1,21 @@
+@import "../base/colors";
+
+@mixin submit-button {
+  background: $main_color-orange;
+  background: linear-gradient(90deg, rgba(254,128,13,1) 0%, rgba(233,174,87,1) 100%);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  height: 35px;
+  line-height: 35px;
+}
+
+@mixin submit-button-hover {
+  background: $main_color-orange;
+  background: linear-gradient(90deg, rgba(254,128,13,1) 0%, rgba(254,128,13,1) 70%);
+  transition: 3s;
+}
+
+@mixin submit-button-focus {
+  outline: none;
+}

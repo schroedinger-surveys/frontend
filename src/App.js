@@ -31,8 +31,8 @@ function App() {
             <Router>
                 <Switch>
                     <Route exact path="/" component={Home}/>
-                    <Route path="/register"><Register single={true}/></Route>
-                    <Route path="/login"><Login single={true}/></Route>
+                    <Route path="/register" component={Register}/>
+                    <Route path="/login" component={Login}/>
                     <ProtectedRoute path={"/dashboard"} component={Dashboard}/>
                     <ProtectedRoute path={"/survey/create"} component={CreateSurvey}/>
                     <ProtectedRoute path={"/survey/edit/:id"} component={EditSurvey}/>

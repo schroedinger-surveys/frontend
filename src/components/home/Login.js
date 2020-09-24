@@ -10,6 +10,8 @@ import UserAPIHandler from "../../calls/user";
 import {loginValidator} from "../../validation/user";
 import NavbarMenu from "../menu/NavbarMenu";
 import Home from "./Home";
+import github from "./images/github.png";
+import Footer from "./Footer";
 
 /**
  * Login provides functionalities for a user to log in to the application
@@ -20,7 +22,7 @@ import Home from "./Home";
  * @constructor
  */
 const Login = (props) => {
-    const {single, history} = props;
+    const {history} = props;
     const [values, setValues] = useState({
         username: "",
         password: ""
@@ -85,11 +87,8 @@ const Login = (props) => {
 
     const LoginComponent = () => {
         return(
-            <div>
-                <Form style={{
-                    width: single ? "30%" : "100%",
-                    margin: "30px auto"
-                }}> {/** Component is styled different when it is used as child comp instead of parent comp**/}
+            <div className={"login_form"}>
+                <Form> {/** Component is styled different when it is used as child comp instead of parent comp**/}
                     <h3>Login to your user account</h3>
                     <Form.Group controlId="username">
                         <Form.Label>Username*</Form.Label>
@@ -104,9 +103,9 @@ const Login = (props) => {
                     <Form.Group controlId="rememberMe">
                         <Form.Check type="checkbox" label="Remember me"/>
                     </Form.Group>
-                    <Button style={{width: "100%"}} variant="success" type="submit" onClick={login}>
+                    <button className={"login_btn"} onClick={login}>
                         Login
-                    </Button>
+                    </button>
                 </Form>
                 {showMessage && (
                     <Message message={messageText} type={messageType}/>
@@ -121,9 +120,7 @@ const Login = (props) => {
             <div id={"page_body"}>
                 {LoginComponent()}
             </div>
-            <div id={"footer"}>
-                Footer
-            </div>
+            <Footer/>
         </div>
     )
 }
