@@ -48,8 +48,6 @@ const Home = () => {
             </div>
             <div id={"footer"}>
                 <div className={"footer_socials"}>
-                    <a href="/"><img className={"social_media-icon"} src={twitter} alt="Link to Schroedinger Surveys Twitter page"/></a>
-                    <a href="/"><img className={"social_media-icon"} src={instagram} alt="Link to Schroedinger Surveys Instagram page"/></a>
                     <a  href="/"><img className={"social_media-icon"} src={github} alt="Link to Schroedinger Surveys GitHub page"/></a>
                 </div>
                 <div className={"footer_links"}>

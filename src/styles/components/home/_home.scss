@@ -1,7 +1,8 @@
 @import "../../base/colors";
+@import "../../base/box";
 
 .home_page-body{
-  padding: 0 200px;
+  padding: 0 $padding_screen;
 }
 
 .home_page-left, .home_page-right{

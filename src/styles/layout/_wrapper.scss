@@ -1,7 +1,7 @@
 @import "../base/colors";
+@import "../base/box";
 
 .comp_wrapper{display: grid;
-  grid-template-columns: 1fr;
   grid-template-rows: 60px auto 80px;
   grid-template-areas:
                         "top_nav"
@@ -9,39 +9,20 @@
                         "footer";
 
   height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
   width: 100%;
 }
 
 #top_nav{
   grid-area: top_nav;
-  padding: 0 200px;
+  padding: 0 $padding_screen;
 }
 
 #page_body{
   grid-area: page;
-  padding: 0 200px;
+  padding: 0 $padding_screen;
 }
 
 #footer{
   grid-area: footer;
-  padding: 0 200px;
-}
-
-@media only screen and (max-width: 688px){
-  .comp_wrapper{
-    grid-template-rows: 120px auto 120px;
-  }
-
-  #top_nav{
-    padding: 0 50px;
-  }
-
-  #page_body{
-    padding: 0 100px;
-  }
-
-  #footer{
-    padding: 0 50px;
-  }
+  padding: 0 $padding_screen;
 }

@@ -26,21 +26,3 @@
 .info_links:hover{
   color: white;
 }
-
-@media only screen and (max-width: 688px){
-  .social_media-icon{
-    height: 60px;
-    margin-right: 60px;
-    margin-top: 30px;
-  }
-
-  .footer_links{
-    line-height: 120px;
-  }
-
-  .info_links{
-    margin-left: 20px;
-    font-size: 25px;
-  }
-
-}
