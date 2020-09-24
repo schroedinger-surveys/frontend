@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 import {Provider} from 'react-redux';
 
+import "./styles/App.scss";
 import Home from "./components/home/Home";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateSurvey from "./components/survey/CreateSurvey";

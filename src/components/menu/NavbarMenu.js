@@ -98,7 +98,7 @@ const NavbarMenu = () => {
     }
 
     return (
-        <Navbar style={{boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)"}}>
+        <Navbar className="test" style={{boxShadow: "0 2px 4px -1px rgba(0,0,0,0.25)"}}>
             <Navbar.Brand href="/" style={{color: "#065535", fontWeight: "bolder"}}>Schrödinger-Survey</Navbar.Brand>
             {(location.pathname.split("/")[1] !== "s" && location.pathname.split("/")[1] !== "pub") && (
                 storageManager.searchForJWTToken() && (
