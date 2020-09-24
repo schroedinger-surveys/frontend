@@ -1,9 +1,32 @@
-.comp_wrapper{
-  display: grid;
-  grid-template-columns: 1fr;
+.comp_wrapper{display: grid;
+  grid-template-columns: 130px auto;
   grid-template-rows: 60px auto 80px;
+  grid-template-areas:
+                        "top_nav top_nav"
+                        "side_nav page"
+                        "footer footer";
 
   height: 100vh;
   width: 100%;
-  background-color: aquamarine;
+}
+
+#top_nav{
+  grid-area: top_nav;
+  padding: 0 200px;
+}
+
+#side_nav{
+  grid-area: side_nav;
+}
+
+#page_body{
+  grid-area: page;
+  padding-left: 70px;
+  padding-right: 200px;
+}
+
+#footer{
+  grid-area: footer;
+  padding: 0 200px;
+  background-color: #f5c050;
 }

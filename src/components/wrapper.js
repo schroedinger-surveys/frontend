@@ -8,11 +8,14 @@ const Wrapper = () => {
     return (
         <div className={"comp_wrapper"}>
             <NavbarMenu/>
-            <div id={"side_nav"}>
+            <div id={"side_nav"} style={{display: "none"}}>
                 Side Nav
             </div>
             <div id={"page_body"}>
                 page
+            </div>
+            <div id={"footer"}>
+                Footer
             </div>
         </div>
     )
