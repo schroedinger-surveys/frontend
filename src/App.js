@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 import {Provider} from 'react-redux';
@@ -28,6 +28,13 @@ import Home_wrapper from "./components/home_wrapper";
 
 
 function App() {
+    useEffect(() => {
+        // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+        let vh = window.innerHeight * 0.01;
+        // Then we set the value in the --vh custom property to the root of the document
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }, [])
+
     return (
         <Provider store={createStore(RootReducer)}>
             <Router>
