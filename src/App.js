@@ -24,14 +24,16 @@ import EditSurvey from "./components/survey/EditSurvey";
 import ResetPassword from "./components/home/ResetPassword";
 import UsedTokenSubmission from "./components/submissions/UsedTokenSubmission";
 import ForgotPassword from "./components/home/ForgotPassword";
+import Wrapper from "./components/wrapper";
 
 
 function App() {
     return (
         <Provider store={createStore(RootReducer)}>
             <Router>
-                <NavbarMenu/>
                 <Switch>
+                    <Route path={"/layout"} component={Wrapper}/>
+
                     <Route exact path="/" component={Home}/>
                     <Route path="/register"><Register single={true}/></Route>
                     <Route path="/login"><Login single={true}/></Route>
