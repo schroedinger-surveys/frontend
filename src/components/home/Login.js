@@ -87,7 +87,7 @@ const Login = (props) => {
 
     const LoginComponent = () => {
         return(
-            <div className={"login_form"}>
+            <div className={"home_form"}>
                 <Form> {/** Component is styled different when it is used as child comp instead of parent comp**/}
                     <h3>Login to your user account</h3>
                     <Form.Group controlId="username">
@@ -103,11 +103,12 @@ const Login = (props) => {
                     <Form.Group controlId="rememberMe">
                         <Form.Check type="checkbox" label="Remember me"/>
                     </Form.Group>
-                    <button className={"login_btn"} onClick={login}>
+                    <button className={"home_btn"} onClick={login}>
                         {singin && <i className="fa fa-circle-o-notch fa-spin"/>}
                         {!singin && "Login"}
                     </button>
                 </Form>
+                <a className={"forgot_password-link"} href={"/password/forgot"}>Forgot Password or Username?</a>
                 {showMessage && (
                     <Message message={messageText} type={messageType}/>
                 )}

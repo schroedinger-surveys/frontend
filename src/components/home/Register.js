@@ -82,7 +82,7 @@ const Register = (props) => {
 
     const RegisterComponent = () => {
         return(
-            <div className={"register_form"}>
+            <div className={"home_form"}>
             <Form style={{
                 width: single ? "30%" : "100%",
                 margin: "30px auto"
@@ -103,7 +103,7 @@ const Register = (props) => {
                     <Form.Control type="password" placeholder="Password" value={password}
                                   onChange={handleUserInput("password")}/>
                 </Form.Group>
-                <button className={"register_btn"} onClick={registerNewUser}>
+                <button className={"home_btn"} onClick={registerNewUser}>
                     {registering && <i className="fa fa-circle-o-notch fa-spin"/>}
                     {!registering && "Register"}
                 </button>

@@ -62,3 +62,28 @@
   margin-top: 15%;
   width: 100%;
 }
+
+.home_form{
+  @include home-form;
+  margin-bottom: 20px;
+}
+
+.home_btn{
+  width: 100%;
+  @include submit-button;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.home_btn:hover{
+  @include submit-button-hover;
+}
+.home_btn:focus{
+  @include submit-button-focus;
+}
+
+.forgot_password-link{
+  color: darkred;
+}
+.forgot_password-link:hover{
+  color: red;
+}

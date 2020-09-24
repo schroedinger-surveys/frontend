@@ -45,7 +45,7 @@ function App() {
                     <Route path={"/pub/:id"} component={PublicSurvey}/>
                     <Route path={"/s/:id"} component={PrivateSurvey}/>
                     <Route path={"/reset-forgotten-password"} component={ResetPassword}/>
-                    <Route path={"/password/forgot"}><ForgotPassword single={true}/></Route>
+                    <Route path={"/password/forgot"} component={ForgotPassword}></Route>
                 </Switch>
             </Router>
         </Provider>
