@@ -9,7 +9,7 @@ import Profile from "./profile/Profile";
 import SurveyList from "./SurveyList";
 import SurveySpotlight from "./survey-spotlight/SurveySpotlight";
 import UserPrompt from "./UserPrompt";
-import SideMenu from "../menu/side-menu/SideMenu";
+import SideMenu from "../menu/SideMenu";
 import CreateSurveyButton from "./CreateSurveyButton";
 import {setAllSurveyCounts} from "../utils/CountFunctions";
 import SurveyAPIHandler from "../../calls/survey";

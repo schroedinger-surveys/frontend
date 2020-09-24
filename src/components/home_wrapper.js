@@ -1,5 +1,5 @@
 import React from "react";
-import SideMenu from "./menu/side-menu/SideMenu";
+import SideMenu from "./menu/SideMenu";
 import AppNavbar from "./menu/AppNavbar";
 
 const Home_wrapper = () => {

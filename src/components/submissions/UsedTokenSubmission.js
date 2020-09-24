@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import SideMenu from "../menu/side-menu/SideMenu";
+import SideMenu from "../menu/SideMenu";
 import log from "../../log/Logger";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
