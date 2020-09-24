@@ -1,0 +1,39 @@
+@import "../../base/colors";
+
+#top_nav{
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25);
+}
+
+.box_logo{
+  height: 40px;
+}
+.box_logo:hover{
+  height: 42px;
+}
+
+.home_login-button, .home_register_button{
+  font-size: 20px;
+  line-height: 20px;
+  margin: 5px 10px;
+  border-radius: 2px;
+  padding: 7px 30px 3px;
+}
+
+.home_login-button{
+  color: rgba(254,128,13, 0.8);
+  border: 1px solid $main_color-orange;
+}
+.home_login-button:hover{
+  background-color: $main_color_hover;
+  color: white;
+  transition: 0.5s;
+}
+
+.home_register_button{
+  background-color: $main_color-orange;
+  color: white;
+  border: none;
+}
+.home_register_button:hover{
+  background-color: $main_color_hover;
+}

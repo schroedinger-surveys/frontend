@@ -1,9 +1,11 @@
+@import "../base/colors";
+
 .comp_wrapper{display: grid;
-  grid-template-columns: 130px auto;
+  grid-template-columns: 1fr;
   grid-template-rows: 60px auto 80px;
   grid-template-areas:
                         "top_nav top_nav"
-                        "side_nav page"
+                        "page page"
                         "footer footer";
 
   height: 100vh;
@@ -15,18 +17,13 @@
   padding: 0 200px;
 }
 
-#side_nav{
-  grid-area: side_nav;
-}
-
 #page_body{
   grid-area: page;
-  padding-left: 70px;
-  padding-right: 200px;
+  padding: 0 200px;
 }
 
 #footer{
   grid-area: footer;
   padding: 0 200px;
-  background-color: #f5c050;
+  background-color: $main_color-orange;
 }

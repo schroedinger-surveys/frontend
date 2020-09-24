@@ -4,13 +4,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import NavbarMenu from "./menu/NavbarMenu";
 
-const Wrapper = () => {
+const Home_wrapper = () => {
     return (
         <div className={"comp_wrapper"}>
             <NavbarMenu/>
-            <div id={"side_nav"} style={{display: "none"}}>
-                Side Nav
-            </div>
             <div id={"page_body"}>
                 page
             </div>
@@ -21,4 +18,4 @@ const Wrapper = () => {
     )
 }
 
-export default Wrapper;
+export default Home_wrapper;

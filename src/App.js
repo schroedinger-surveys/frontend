@@ -24,7 +24,7 @@ import EditSurvey from "./components/survey/EditSurvey";
 import ResetPassword from "./components/home/ResetPassword";
 import UsedTokenSubmission from "./components/submissions/UsedTokenSubmission";
 import ForgotPassword from "./components/home/ForgotPassword";
-import Wrapper from "./components/wrapper";
+import Home_wrapper from "./components/home_wrapper";
 
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
         <Provider store={createStore(RootReducer)}>
             <Router>
                 <Switch>
-                    <Route path={"/layout"} component={Wrapper}/>
+                    <Route path={"/layout"} component={Home_wrapper}/>
 
                     <Route exact path="/" component={Home}/>
                     <Route path="/register"><Register single={true}/></Route>

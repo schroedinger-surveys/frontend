@@ -1,3 +1,9 @@
+body{
+  font-family: 'Hind Guntur', sans-serif;
+}
+
+@import "base/colors";
+
 @import "layout/wrapper";
 
 @import "components/nav/top-navbar";
