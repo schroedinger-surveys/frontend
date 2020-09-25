@@ -1,0 +1,16 @@
+@import "../../base/box";
+@import "../../base/colors";
+
+.survey_list-header{
+  padding: $padding_dashboard_columns;
+}
+
+.survey_list-title{
+  float: left;
+  color: $font_color-dark;
+}
+
+.survey_list-select{
+  width: 30%;
+  float: right;
+}

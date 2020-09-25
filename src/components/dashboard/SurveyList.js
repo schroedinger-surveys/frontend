@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import {ListGroup} from "react-bootstrap";
+import {Form, ListGroup} from "react-bootstrap";
 import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
 import {getCurrentStatus} from "../utils/SurveyStatus";
@@ -63,33 +63,23 @@ const SurveyList = (props) => {
     }, [])
 
     return (
-        <div style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-            <div>
-                <h5>Private Surveys - {props.counts.privateCount}</h5>
-                {props.counts.privateCount > itemsPerPage && privatePagination()}
-                <ListGroup>
-                    {
-                        props.surveys.privateSurveys.map((survey, i) => (
-                            <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}} onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
-                                status: {getCurrentStatus(survey.start_date, survey.end_date)}
-                            </ListGroup.Item>
-                        ))
-                    }
-                </ListGroup>
+        <div>
+            <div className={"survey_list-header"}>
+                <h1 className={"survey_list-title"}>Overview</h1>
+                <Form className={"survey_list-select"}>
+                    <Form.Group controlId="survey_filter">
+                        <Form.Control as="select">
+                            <option>all</option>
+                            <option>active</option>
+                            <option>pending</option>
+                            <option>closed</option>
+                            <option>private</option>
+                            <option>public</option>
+                        </Form.Control>
+                    </Form.Group>
+                </Form>
             </div>
-            <hr/>
-            <div>
-                <h5>Public Surveys - {props.counts.publicCount}</h5>
-                {props.counts.publicCount > itemsPerPage && publicPagination()}
-                <ListGroup>
-                    {
-                        props.surveys.publicSurveys.map((survey, i) => (
-                            <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}}  onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
-                                status: {getCurrentStatus(survey.start_date, survey.end_date)} </ListGroup.Item>
-                        ))
-                    }
-                </ListGroup>
-            </div>
+
         </div>
     )
 }
@@ -102,3 +92,35 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {setSurveySpotlight, setPrivateSurveys, setPublicSurveys})(SurveyList);
+
+
+/**
+ <div style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+ <div>
+ <h5>Private Surveys - {props.counts.privateCount}</h5>
+ {props.counts.privateCount > itemsPerPage && privatePagination()}
+ <ListGroup>
+ {
+                        props.surveys.privateSurveys.map((survey, i) => (
+                            <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}} onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
+                                status: {getCurrentStatus(survey.start_date, survey.end_date)}
+                            </ListGroup.Item>
+                        ))
+                    }
+ </ListGroup>
+ </div>
+ <hr/>
+ <div>
+ <h5>Public Surveys - {props.counts.publicCount}</h5>
+ {props.counts.publicCount > itemsPerPage && publicPagination()}
+ <ListGroup>
+ {
+                        props.surveys.publicSurveys.map((survey, i) => (
+                            <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}}  onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
+                                status: {getCurrentStatus(survey.start_date, survey.end_date)} </ListGroup.Item>
+                        ))
+                    }
+ </ListGroup>
+ </div>
+ </div>
+ **/
