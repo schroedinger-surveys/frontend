@@ -11,7 +11,7 @@ const RawSurvey = (props) => {
                 <div>
                     <div className={"spotlight_box"}>
                         <label className={"spotlight_box-title"}>Title</label>
-                        <p className={"spotlight_box-info"}>{props.selectedSurvey.title}</p>
+                        <p className={"spotlight_box-info spotlight_info-title"}>{props.selectedSurvey.title}</p>
                     </div>
                     <div className={"spotlight_box"} >
                         <label className={"spotlight_box-title"}>Description</label>
@@ -33,7 +33,7 @@ const RawSurvey = (props) => {
                     </div>
 
 
-                    <div className={"spotlight_box"}>
+                    <div className={"spotlight_box-questions"}>
                         <label className={"spotlight_box-title"}>Questions</label>
                         {sortQuestions(props.selectedSurvey.constrained_questions, props.selectedSurvey.freestyle_questions).map((item, i) => {
                                 if (item.type === "constrained") {
