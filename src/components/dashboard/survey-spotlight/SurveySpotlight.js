@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import {connect} from "react-redux";
 
 import RawSurvey from "./RawSurvey";
 import ShareLinks from "./ShareLinks";
-import storageManager from "../../../storage/StorageManager";
-import log from "../../../log/Logger";
 import Submissions from "./Submissions";
 import NoSubmissions from "./NoSubmissions";
 import {Redirect} from "react-router-dom";
 import {getSurveyStatus} from "../../utils/SurveyStatus";
 import SubmissionAPIHandler from "../../../calls/submission";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
 
 const SurveySpotlight = (props) => {
     const [showSubmissions, setShowSubmissions] = useState(false);
@@ -40,7 +39,7 @@ const SurveySpotlight = (props) => {
 
     const getSubmissionCount = async () => {
         if (props.selectedSurvey) {
-            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() =>SubmissionAPIHandler.submissionCount(props.selectedSurvey.id), "submissions", props.selectedSurvey.id);
+            const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() => SubmissionAPIHandler.submissionCount(props.selectedSurvey.id), "submissions", props.selectedSurvey.id);
             setSubmissionCount(apiResponse);
             setFetchedCount(true);
         }
@@ -63,75 +62,49 @@ const SurveySpotlight = (props) => {
     }, [props.selectedSurvey])
 
     return (
-        <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+        <div className={"survey_spotlight_container"}>
             {redirect && redirectSurveyEdit()}
             {props.selectedSurvey && (
-                <div>
-                    <h3>{props.selectedSurvey.title}</h3>
-                    {fetchedCount && <p>{submissionCount} submissions</p>}
-                </div>
-
+                <h3 className={"survey_spotlight_survey-title"}>{props.selectedSurvey.title}</h3>
             )}
-            <button style={{
-                borderRadius: "5px",
-                border: "none",
-                marginRight: "5px",
-                marginBottom: "10px",
-                color: "white",
-                backgroundColor: showSubmissions ? "darkgreen" : "lightgrey"
-            }} onClick={() => manageVisibility("submissions")}>Submissions
-            </button>
-            <button style={{
-                borderRadius: "5px",
-                border: "none",
-                marginRight: "5px",
-                marginBottom: "10px",
-                color: "white",
-                backgroundColor: showRawSurvey ? "darkgreen" : "lightgrey"
-            }} onClick={() => manageVisibility("raw")}>Raw Survey
-            </button>
-            <button style={{
-                borderRadius: "5px",
-                border: "none",
-                marginRight: "5px",
-                marginBottom: "10px",
-                color: "white",
-                backgroundColor: showLinks ? "darkgreen" : "lightgrey"
-            }} onClick={() => manageVisibility("links")}>Share-Links
-            </button>
+            <Tabs className={"survey_spotlight_tab-list"} defaultActiveKey="info" transition={false}
+                  id="noanim-tab-example">
 
-            {(getSurveyStatus(props.selectedSurvey.start_date, props.selectedSurvey.end_date) === "pending" ||
-                (getSurveyStatus(props.selectedSurvey.start_date, props.selectedSurvey.end_date) === "active" && submissionCount === 0)) &&
-            <button style={{
-                borderRadius: "5px",
-                border: "none",
-                marginRight: "5px",
-                marginBottom: "10px",
-                color: "darkgreen",
-                fontWeight: "bold"
-            }} onClick={() => setRedirect(true)}>
-                <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-pencil-square" fill="currentColor"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                    <path fillRule="evenodd"
-                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                </svg>
-                Edit Survey
-            </button>
-            }
+                <Tab className={"survey_spotlight_tab-item"} eventKey="info" title="Info">
+                    <RawSurvey/>
+                </Tab>
 
-            {showSubmissions && (
-                <div>
+                <Tab className={"survey_spotlight_tab-item"} eventKey="profile"
+                     title={`Submissions ${submissionCount >= 100 ? "99+" : submissionCount}`}>
                     {submissionCount >= 1 ? <Submissions/> : <NoSubmissions/>}
-                </div>
-            )}
-            {showRawSurvey && (
-                <RawSurvey/>
-            )}
-            {showLinks && (
-                <ShareLinks/>
-            )}
+                    {(getSurveyStatus(props.selectedSurvey.start_date, props.selectedSurvey.end_date) === "pending" ||
+                        (getSurveyStatus(props.selectedSurvey.start_date, props.selectedSurvey.end_date) === "active" && submissionCount === 0)) &&
+                    <button style={{
+                        borderRadius: "5px",
+                        border: "none",
+                        marginRight: "5px",
+                        marginBottom: "10px",
+                        color: "darkgreen",
+                        fontWeight: "bold"
+                    }} onClick={() => setRedirect(true)}>
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-pencil-square"
+                             fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fillRule="evenodd"
+                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                        </svg>
+                        Edit Survey
+                    </button>
+                    }
+                </Tab>
+
+                <Tab className={"survey_spotlight_tab-item"} eventKey="links" title="Share-Links">
+                    <ShareLinks/>
+                </Tab>
+
+            </Tabs>
         </div>
     )
 }

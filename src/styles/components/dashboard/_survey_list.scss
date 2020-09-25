@@ -69,6 +69,7 @@ $border: 1px solid lightgrey;
 
 .list_item-title{
   width: calc(100% - 87px);
+  max-width: calc(100% - 87px);;
   border-top: $border;
   border-bottom: $border;
 }

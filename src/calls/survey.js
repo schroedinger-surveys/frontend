@@ -173,8 +173,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static async surveyPrivateGet(page_number = 0, page_size = 3) {
-        log.debug("FETCH PRIVATESURVEYS");
+    static async surveyPrivateGet(page_number = 0, page_size = 2) {
         try {
             const response = await axios({
                 method: "GET",
@@ -204,39 +203,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static async closedSurveysGet(page_number = 0, page_size = 3) {
-        const currentDate = new Date();
-
-        const date = currentDate.getDate();
-        const month = currentDate.getMonth(); //Be careful! January is 0 not 1
-        const year = currentDate.getFullYear();
-
-        const dateString = year + "-" +String((month + 1)).padStart(2, "0") + "-" + date;
-        try {
-            const responsePrivateSurveys = await axios({
-                method: "GET",
-                url: "/api/v1/survey/secured" + "?page_number=" + page_number + "&page_size=" + page_size + "&end_date=" + dateString,
-                headers: {
-                    "Authorization": storageManager.getJWTToken()
-                }
-            });
-            const responsePublicSurveys = await axios({
-                method: "GET",
-                url: "/api/v1/survey/public" + "?page_number=" + page_number + "&page_size=" + page_size + "&end_date=" + dateString,
-                headers: {
-                    "Authorization": storageManager.getJWTToken()
-                }
-            });
-            //SurveyAPIHandler.setStorage("closedSurveys", response.data)
-            return [...responsePrivateSurveys.data, ...responsePublicSurveys.data];
-        } catch (e) {
-            log.error(e.response, "Failed axios request was caught: surveyPrivateGet");
-            log.debug("Hello", e.response);
-        }
-    }
-
-    static async surveyPublicGet(page_number = 0, page_size = 3) {
-        log.debug("FETCH PUBLICSURVEYS");
+    static async surveyPublicGet(page_number = 0, page_size = 2) {
         try {
             const userData = storageManager.getUserData();
             const response = await axios({

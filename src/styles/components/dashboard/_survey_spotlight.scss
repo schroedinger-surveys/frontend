@@ -1,0 +1,10 @@
+@import "../../base/box";
+@import "../../base/colors";
+
+.survey_spotlight_survey-title{
+  padding: $padding_dashboard_columns;
+  width: 50%;
+  color: $font_color-dark;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
