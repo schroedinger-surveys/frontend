@@ -24,9 +24,9 @@
 }
 
 .survey_list-surveys{
+  padding: $padding_dashboard_columns;
   width: 100%;
   height: calc(90% - 40px);
-  background-color: coral;
 }
 
 .survey_list-pagination{
@@ -34,4 +34,39 @@
   height: 40px;
   line-height: 40px;
   text-align: center;
+}
+
+.surveys_list_group{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.surveys_list_items{
+  font-size: 16px;
+  height: 60px;
+  line-height: 60px;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: inline-block;
+}
+
+.list_item-secure{
+  width: 47px;
+  border-left: 1px solid lightgrey;
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+}
+
+.list_item-title{
+  cursor: pointer;
+  width: calc(100% - 87px);
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+}
+
+.list_item-status{
+  width: 40px;
+  border-right: 1px solid lightgrey;
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
 }
