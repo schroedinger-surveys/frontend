@@ -35,15 +35,15 @@ const SurveyList = (props) => {
     const fetchSurveys = async(index) => {
         if (filter === "private"){
             setFilterCount(props.counts.privateSurveys);
-            const privateSurveys = await SurveyAPIHandler.surveyPrivateGet(index);
+            const privateSurveys = await SurveyAPIHandler.cacheMiddleware(() =>SurveyAPIHandler.surveyPrivateGet(index), "privateSurveys");
             setFilterSurveys(privateSurveys);
         }else if (filter === "public"){
             setFilterCount(props.counts.publicSurveys);
-            const publicSurveys = await SurveyAPIHandler.surveyPublicGet(index);
+            const publicSurveys = await SurveyAPIHandler.cacheMiddleware(() =>SurveyAPIHandler.surveyPublicGet(index), "publicSurveys");
             setFilterSurveys(publicSurveys);
         } else if (filter === "all"){
-            const privateSurveys = await SurveyAPIHandler.surveyPrivateGet(index);
-            const publicSurveys = await SurveyAPIHandler.surveyPublicGet(index);
+            const privateSurveys = await SurveyAPIHandler.cacheMiddleware(() =>SurveyAPIHandler.surveyPrivateGet(index), "privateSurveys");
+            const publicSurveys = await SurveyAPIHandler.cacheMiddleware(() =>SurveyAPIHandler.surveyPublicGet(index), "publicSurveys");
             setFilterCount(props.counts.overallSurveys);
             setFilterSurveys([...privateSurveys, ...publicSurveys])
         }
