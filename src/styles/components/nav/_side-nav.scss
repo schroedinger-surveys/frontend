@@ -7,10 +7,19 @@
 .side_nav_link{
   height: 100px;
   text-align: center;
-  line-height: 0.1;
   border-bottom: 1px solid $secondary_color-orange;
+  font-size: 16px;
+  padding-top: 23px;
+  color: white;
 }
 
 .side_nav_link:hover{
-  background-color: #f5c050;
+  background-color: $main_color_hover;
+  color: white;
+}
+
+.active_side_nav_link{
+  background-color: $main_color_hover;
+  color: white;
+  border-left: 4px solid white;
 }

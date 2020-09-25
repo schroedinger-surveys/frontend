@@ -15,21 +15,6 @@ import UserAPIHandler from "../../calls/user";
  * @constructor
  */
 const AppNavbar = () => {
-    const location = useLocation(); // Current url path, e.g. "/login"
-
-    const [username, setUsername] = useState("");
-
-    const getUserName = async () => {
-        if (storageManager.getJWTToken() !== "") {
-            const apiResponse = await UserAPIHandler.cacheMiddleware(UserAPIHandler.getUserInfo, "userData");
-            setUsername(apiResponse.username);
-        }
-    }
-
-    useEffect(() => {
-        getUserName()
-    }, [location.pathname])
-
     /**
      * Calls the storageManager method clearToken()
      * which removes the jwt token from session and local storage
@@ -63,8 +48,6 @@ const AppNavbar = () => {
                     </svg>
                 </Nav.Link>
                 <NavDropdown title="Menu" id="nav-dropdown" alignRight>
-                    <NavDropdown.Item id={1} title={username}>{username}</NavDropdown.Item>
-                    <NavDropdown.Divider/>
                     <Nav.Link className={"app_nav-link"} href="/settings">Account
                         Settings</Nav.Link>
                     <Nav.Link className={"app_nav-link"} href="/dashboard" disabled>Terms of
