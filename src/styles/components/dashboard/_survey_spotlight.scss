@@ -12,12 +12,9 @@
 .survey_spotlight_tab-item{
   padding: $padding_dashboard_columns;
 }
-.nav-tabs, .nav-link {
+div > nav > a, div > nav > a:hover {
   color: $font-color-light;
 }
-.nav-tabs:hover, .nav-link:hover {
-  color: $font-color-light;
-}
-.nav-tabs:focus, .nav-link:focus {
+div > nav > a:focus {
   outline: none;
 }
