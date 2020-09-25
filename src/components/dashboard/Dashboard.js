@@ -23,6 +23,7 @@ import {
 import LoadingScreen from "../utils/LoadingScreen";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
 import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
+import AppNavbar from "../menu/AppNavbar";
 
 /**
  * User Dashboard containing multiple elements to give user an overview of his acocunt
@@ -74,43 +75,41 @@ const Dashboard = (props) => {
         getSurveysAndCounts();
     }, []);
 
+
+
     return (
-        <Container fluid>
+        <div>
             {loading && (
                 <LoadingScreen/>
             )}
             {!loading && (
-                <Row>
-                    <Col xs={1} style={{padding: 0}}>
-                        <SideMenu/>
-                    </Col>
-                    <Col xs={4} style={{marginTop: "30px"}}>
-                        <Row>
-                            <Profile/>
-                        </Row>
-                        <Row>
-                            {props.counts.overallSurveys > 0 && (
-                                <SurveyList/>
-                            )}
-                            {props.counts.overallSurveys === 0 && (
-                                <UserPrompt size={"small"}/>
-                            )}
-                        </Row>
-                        <Row>
-                            <CreateSurveyButton/>
-                        </Row>
-                    </Col>
-                    <Col xs={7} style={{marginTop: "30px"}}>
-                        {props.counts.overallSurveys > 0 && ( // Check submission count, NOT Survey Count
-                            <SurveySpotlight/>
-                        )}
-                        {props.counts.overallSurveys === 0 && (
-                            <UserPrompt size={"large"}/>
-                        )}
-                    </Col>
-                </Row>
+                <div className={"app_wrapper"}>
+                    <AppNavbar/>
+                    <SideMenu/>
+                    <div id={"dashboard_page_body"} >
+                            <div id={"survey_overview-dashboard"}>
+                                <div>
+                                    {props.counts.overallSurveys > 0 && (
+                                        <SurveyList/>
+                                    )}
+                                    {props.counts.overallSurveys === 0 && (
+                                        <UserPrompt size={"small"}/>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div id={"survey_spotlight-dashboard"}>
+                                {props.counts.overallSurveys > 0 && ( // Check submission count, NOT Survey Count
+                                    <SurveySpotlight/>
+                                )}
+                                {props.counts.overallSurveys === 0 && (
+                                    <UserPrompt size={"large"}/>
+                                )}
+                            </div>
+                    </div>
+                </div>
             )}
-        </Container>
+        </div>
     )
 }
 

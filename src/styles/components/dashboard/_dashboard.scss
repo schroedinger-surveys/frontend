@@ -1,0 +1,31 @@
+@import "../../base/universals";
+@import "../../base/box";
+@import "../../base/colors";
+
+@mixin dashboard-column{
+  height: 90%;
+  border-radius: 4px;
+  box-shadow: $shadow;
+}
+
+#dashboard_page_body{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+                        "list spotlight";
+
+  height: 100%;
+  width: 100%;
+}
+
+#survey_overview-dashboard{
+  grid-area: list;
+  margin: 5% 2.5% 5% 5%;
+  @include dashboard-column;
+}
+
+#survey_spotlight-dashboard{
+  grid-area: spotlight;
+  margin: 5% 5% 5% 2.5%;
+  @include dashboard-column;
+}
