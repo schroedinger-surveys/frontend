@@ -84,7 +84,7 @@ const SurveyList = (props) => {
             <div className={"survey_list-surveys"}>
                 {
                     filterSurveys.map((survey, i) => (
-                        <div className={"surveys_list_group"}>
+                        <div key={i} className={"surveys_list_group"} onClick={() => props.setSurveySpotlight(survey)}>
                             <div className={"surveys_list_items list_item-secure"}>
                                 {survey.secured ?
                                     <svg width="1em" height="1em" viewBox="0 0 16 16"
@@ -122,35 +122,3 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {setSurveySpotlight, setPrivateSurveys, setPublicSurveys})(SurveyList);
-
-
-/**
- <div style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
- <div>
- <h5>Private Surveys - {props.counts.privateCount}</h5>
- {props.counts.privateCount > itemsPerPage && privatePagination()}
- <ListGroup>
- {
-                        props.surveys.privateSurveys.map((survey, i) => (
-                            <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}} onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
-                                status: {getCurrentStatus(survey.start_date, survey.end_date)}
-                            </ListGroup.Item>
-                        ))
-                    }
- </ListGroup>
- </div>
- <hr/>
- <div>
- <h5>Public Surveys - {props.counts.publicCount}</h5>
- {props.counts.publicCount > itemsPerPage && publicPagination()}
- <ListGroup>
- {
-                        props.surveys.publicSurveys.map((survey, i) => (
-                            <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}}  onClick={() => props.setSurveySpotlight(survey)} key={i}>{survey.title} -
-                                status: {getCurrentStatus(survey.start_date, survey.end_date)} </ListGroup.Item>
-                        ))
-                    }
- </ListGroup>
- </div>
- </div>
- **/

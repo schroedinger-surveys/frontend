@@ -1,6 +1,8 @@
 @import "../../base/box";
 @import "../../base/colors";
 
+$border: 1px solid lightgrey;
+
 .survey_list{
   height: 100%;
   width: 100%;
@@ -48,25 +50,27 @@
   padding-left: 15px;
   padding-right: 15px;
   display: inline-block;
+  cursor: pointer;
 }
 
 .list_item-secure{
   width: 47px;
-  border-left: 1px solid lightgrey;
-  border-top: 1px solid lightgrey;
-  border-bottom: 1px solid lightgrey;
+  border-left: $border;
+  border-top: $border;
+  border-bottom: $border;
+  border-radius: 4px 0 0 4px;
 }
 
 .list_item-title{
-  cursor: pointer;
   width: calc(100% - 87px);
-  border-top: 1px solid lightgrey;
-  border-bottom: 1px solid lightgrey;
+  border-top: $border;
+  border-bottom: $border;
 }
 
 .list_item-status{
   width: 40px;
-  border-right: 1px solid lightgrey;
-  border-top: 1px solid lightgrey;
-  border-bottom: 1px solid lightgrey;
+  border-right: $border;
+  border-top: $border;
+  border-bottom: $border;
+  border-radius: 0 4px 4px 0;
 }
