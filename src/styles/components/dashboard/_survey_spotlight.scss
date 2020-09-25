@@ -8,3 +8,16 @@
   overflow: auto;
   text-overflow: ellipsis;
 }
+
+.survey_spotlight_tab-item{
+  padding: $padding_dashboard_columns;
+}
+.nav-tabs, .nav-link {
+  color: $font-color-light;
+}
+.nav-tabs:hover, .nav-link:hover {
+  color: $font-color-light;
+}
+.nav-tabs:focus, .nav-link:focus {
+  outline: none;
+}

@@ -103,7 +103,8 @@ const SurveyList = (props) => {
                                     </svg>
                                 }
                             </div>
-                            <div className={"surveys_list_items list_item-title"}>{survey.title}</div>
+                            <div className={"surveys_list_items list_item-title"}>
+                                <p className={"survey_title_text"}>{survey.title}</p></div>
                             <div className={"surveys_list_items list_item-status"}>{getCurrentStatus(survey.start_date, survey.end_date)}</div>
                         </div>
                     ))

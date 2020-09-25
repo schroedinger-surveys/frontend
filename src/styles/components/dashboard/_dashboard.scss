@@ -10,10 +10,9 @@
 
 #dashboard_page_body{
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 50% 50%;
   grid-template-areas:
                         "list spotlight";
-
   height: 100%;
   width: 100%;
 }

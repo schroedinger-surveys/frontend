@@ -64,9 +64,6 @@ const SurveySpotlight = (props) => {
     return (
         <div className={"survey_spotlight_container"}>
             {redirect && redirectSurveyEdit()}
-            {props.selectedSurvey && (
-                <h3 className={"survey_spotlight_survey-title"}>{props.selectedSurvey.title}</h3>
-            )}
             <Tabs className={"survey_spotlight_tab-list"} defaultActiveKey="info" transition={false}
                   id="noanim-tab-example">
 

@@ -57,6 +57,7 @@ $border: 1px solid lightgrey;
   padding-right: 15px;
   display: inline-block;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .list_item-secure{
@@ -69,9 +70,13 @@ $border: 1px solid lightgrey;
 
 .list_item-title{
   width: calc(100% - 87px);
-  max-width: calc(100% - 87px);;
   border-top: $border;
   border-bottom: $border;
+}
+
+.survey_title_text{
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .list_item-status{
