@@ -1,8 +1,16 @@
 @import "../../base/box";
 @import "../../base/colors";
 
+.survey_list{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
 .survey_list-header{
   padding: $padding_dashboard_columns;
+  width: 100%;
+  height: 10%;
 }
 
 .survey_list-title{
@@ -13,4 +21,17 @@
 .survey_list-select{
   width: 30%;
   float: right;
+}
+
+.survey_list-surveys{
+  width: 100%;
+  height: calc(90% - 40px);
+  background-color: coral;
+}
+
+.survey_list-pagination{
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
 }

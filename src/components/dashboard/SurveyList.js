@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import {Form, ListGroup} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
 import {getCurrentStatus} from "../utils/SurveyStatus";
@@ -14,34 +14,32 @@ const SurveyList = (props) => {
     });
     const {pageCountPrivate, pageCountPublic, itemsPerPage} = pagination;
 
-    const privatePagination = () => {
-        const changePage = async (index) => {
-            const surveys = await SurveyAPIHandler.surveyPrivateGet(index)
-            props.setPrivateSurveys(surveys);
-        }
+    const [filter, setFilter] = useState("all");
+    const [filterCount, setFilterCount] = useState(props.counts.overallSurveys);
+    const [filterSurveys, setFilterSurveys] = useState([...props.surveys.privateSurveys, ...props.surveys.publicSurveys]);
 
-        let li = []
-        for (let i = 0; i < pageCountPrivate; i++) {
-            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}} onClick={() => changePage(i)}>{i+1}</li>)
+    useEffect(()=> {
+        const filterSelect = document.getElementById("survey_filter");
+        if(filterSelect !== null){
+            filterSelect.addEventListener("change", () => {setFilter(filterSelect.value)})
         }
+    });
 
-        return (
-            <div style={{ width: "100%"}}>
-                <ul style={{listStyle: "none"}}>
-                    {li}
-                </ul>
-            </div>
-        )
+    useEffect(() => {
+        fetchSurveys()
+    }, [filter]);
+
+    const fetchSurveys = () =>{
+
     }
 
-    const publicPagination = () => {
+    const surveyPagination = () => {
         const changePage = async(index) => {
-            const surveys = await SurveyAPIHandler.surveyPublicGet(index)
-            props.setPublicSurveys(surveys);
+            await fetchSurveys(index);
         }
 
         let li = []
-        for (let i = 0; i < pageCountPublic; i++) {
+        for (let i = 0; i < filterCount; i++) {
             li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}} onClick={() => changePage(i)}>{i+1}</li>)
         }
 
@@ -63,23 +61,28 @@ const SurveyList = (props) => {
     }, [])
 
     return (
-        <div>
+        <div className={"survey_list"}>
             <div className={"survey_list-header"}>
                 <h1 className={"survey_list-title"}>Overview</h1>
                 <Form className={"survey_list-select"}>
                     <Form.Group controlId="survey_filter">
                         <Form.Control as="select">
-                            <option>all</option>
-                            <option>active</option>
-                            <option>pending</option>
-                            <option>closed</option>
-                            <option>private</option>
-                            <option>public</option>
+                            <option value={"all"}>all</option>
+                            <option value={"active"}>active</option>
+                            <option value={"pending"}>pending</option>
+                            <option value={"closed"}>closed</option>
+                            <option value={"private"}>private</option>
+                            <option value={"public"}>public</option>
                         </Form.Control>
                     </Form.Group>
                 </Form>
             </div>
-
+            <div className={"survey_list-surveys"}>
+                list
+            </div>
+            <div className={"survey_list-pagination"}>
+                {surveyPagination()}
+            </div>
         </div>
     )
 }
