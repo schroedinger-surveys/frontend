@@ -8,7 +8,7 @@ const RawSurvey = (props) => {
         <div>
             {props.selectedSurvey && (
                 <div>
-                    <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+                    <div className={"spotlight_box"} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
                         <label style={{fontWeight: "bold"}}>Title:</label>
                         <p>{props.selectedSurvey.title}</p>
                     </div>
