@@ -1,0 +1,20 @@
+@import "../../base/box";
+@import "../../base/colors";
+
+.survey_spotlight_survey-title{
+  padding: $padding_dashboard_columns;
+  width: 50%;
+  color: $font_color-dark;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
+
+.survey_spotlight_tab-item{
+  padding: $padding_dashboard_columns;
+}
+div > nav > a, div > nav > a:hover {
+  color: $font-color-light;
+}
+div > nav > a:focus {
+  outline: none;
+}

@@ -1,0 +1,26 @@
+@import "../base/box";
+@import "../base/colors";
+
+.app_wrapper{display: grid;
+  grid-template-columns: 130px auto;
+  grid-template-rows: 60px auto;
+  grid-template-areas:
+                        "side_nav top_nav"
+                        "side_nav page";
+
+  height: 100vh;
+  width: 100%;
+}
+
+#app_nav{
+  grid-area: top_nav;
+}
+
+#page_body{
+  grid-area: page;
+}
+
+#side_nav{
+  grid-area: side_nav;
+  background-color: $main_color-orange;
+}

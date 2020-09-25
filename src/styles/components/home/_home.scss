@@ -1,0 +1,89 @@
+@import "../../base/colors";
+@import "../../base/box";
+@import "../../base/universals";
+
+.home_page-body{
+  padding: 0 $padding_screen;
+}
+
+.home_page-left, .home_page-right{
+  width: 50%;
+}
+
+.home_page-left{
+  float: left;
+  line-height: 2em;
+  margin-top: 20%;
+}
+.home_page-left h1{
+  font-family: 'Yeseva One', cursive;
+}
+
+.home_page-right{
+  float: right;
+}
+
+.home_page-text{
+  width: 450px;
+}
+
+.home_page-btn{
+  height: 35px;
+  width: 400px;
+  @include submit-button;
+  font-size: 25px;
+  font-weight: 700;
+}
+.home_page-btn:hover{
+  @include submit-button-hover;
+}
+.home_page-btn:focus{
+  @include submit-button-focus;
+}
+
+.home_page-image{
+  position: absolute;
+  margin-top: 100px;
+  padding-right: 100px;
+  width: 45%;
+}
+
+.dot{
+  position: relative;
+  height: 200px;
+  width: 200px;
+  background-color: $secondary_color-orange;
+  border-radius: 50%;
+  display: inline-block;
+  float: right;
+}
+
+.image_dot_cont{
+  margin-top: 15%;
+  width: 100%;
+}
+
+.home_form{
+  @include home-form;
+  margin-bottom: 20px;
+}
+
+.home_btn{
+  width: 100%;
+  @include submit-button;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.home_btn:hover{
+  @include submit-button-hover;
+}
+.home_btn:focus{
+  @include submit-button-focus;
+}
+
+.forgot_password-link{
+  color: darkred;
+}
+.forgot_password-link:hover{
+  color: red;
+}

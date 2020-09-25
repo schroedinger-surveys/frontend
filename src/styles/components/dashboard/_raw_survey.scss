@@ -1,0 +1,48 @@
+@import "../../base/colors";
+
+.spotlight_box {
+  border-bottom: 1px solid lightgrey;
+  padding-top: 15px;
+  line-height: 1;
+}
+
+.spotlight_box-title{
+  color: $font_color-dark;
+  font-weight: 700;
+}
+
+.spotlight_box-info{
+  color: $font_color-light;
+}
+
+.spotlight_box-dates{
+  display: inline-block;
+  width: 50%;
+}
+
+.spotlight_box-questions{
+  padding-top: 15px;
+  line-height: 1;
+  max-height: 400px;
+  overflow-y: auto;
+  color: $font_color-light;
+}
+
+.spotlight_info-title{
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

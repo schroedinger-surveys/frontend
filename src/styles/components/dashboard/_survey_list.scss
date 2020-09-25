@@ -1,0 +1,91 @@
+@import "../../base/box";
+@import "../../base/colors";
+
+$border: 1px solid lightgrey;
+@mixin dot($color){
+  height: 5px;
+  width: 5px;
+  background-color: $color;
+  border-radius: 50%;
+}
+
+.survey_list{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.survey_list-header{
+  padding: $padding_dashboard_columns;
+  width: 100%;
+  height: 10%;
+}
+
+.survey_list-title{
+  float: left;
+  color: $font_color-dark;
+}
+
+.survey_list-select{
+  width: 30%;
+  float: right;
+}
+
+.survey_list-surveys{
+  padding: $padding_dashboard_columns;
+  width: 100%;
+  height: calc(90% - 40px);
+}
+
+.survey_list-pagination{
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+}
+
+.surveys_list_group{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.surveys_list_items{
+  font-size: 16px;
+  height: 60px;
+  line-height: 60px;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: inline-block;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.list_item-secure{
+  width: 47px;
+  border-left: $border;
+  border-top: $border;
+  border-bottom: $border;
+  border-radius: 4px 0 0 4px;
+}
+
+.list_item-title{
+  width: calc(100% - 87px);
+  border-top: $border;
+  border-bottom: $border;
+  color: $font-color-dark;
+}
+
+.survey_title_text{
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list_item-status{
+  width: 40px;
+  border-right: $border;
+  border-top: $border;
+  border-bottom: $border;
+  border-radius: 0 4px 4px 0;
+}
+
+

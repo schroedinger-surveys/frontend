@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Container, ListGroup} from "react-bootstrap";
-import SideMenu from "../menu/side-menu/SideMenu";
+import SideMenu from "../menu/SideMenu";
 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";

@@ -6,7 +6,8 @@ const InitialCache = {
     privateSurveyCount: null,
     publicSurveyCount: null,
     privateSurveys: null,
-    publicSurveys: null
+    publicSurveys: null,
+    closedSurveys: null
 }
 
 /**
@@ -16,9 +17,9 @@ const InitialCache = {
  */
 class SurveyAPIHandler {
 
-    static cacheMiddleware(func, name){
+    static cacheMiddleware(func, name) {
         let Cache = sessionStorage.getItem("SURVEY_CACHE");
-        if(Cache === null || JSON.parse(Cache)[name] === null){
+        if (Cache === null || JSON.parse(Cache)[name] === null) {
             return func();
         } else {
             Cache = JSON.parse(Cache);
@@ -26,9 +27,9 @@ class SurveyAPIHandler {
         }
     }
 
-    static setStorage(name, data){
+    static setStorage(name, data) {
         let Cache = sessionStorage.getItem("SURVEY_CACHE");
-        if(Cache === null){
+        if (Cache === null) {
             InitialCache[name] = data;
             sessionStorage.setItem("SURVEY_CACHE", JSON.stringify(InitialCache));
         } else {
@@ -43,7 +44,7 @@ class SurveyAPIHandler {
      * scenario: Dashboard displays the number of surveys belonging to the user
      * @returns {Promise<*>}
      */
-    static async privateSurveyCount(){
+    static async privateSurveyCount() {
         log.debug("FETCH PRIVATE SURVEY COUNT");
         try {
             const jwt = storageManager.getJWTToken();
@@ -172,8 +173,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static async surveyPrivateGet(page_number = 0, page_size = 3) {
-        log.debug("FETCH PRIVATESURVEYS");
+    static async surveyPrivateGet(page_number = 0, page_size = 2) {
         try {
             const response = await axios({
                 method: "GET",
@@ -203,8 +203,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static async surveyPublicGet(page_number = 0, page_size = 3) {
-        log.debug("FETCH PUBLICSURVEYS");
+    static async surveyPublicGet(page_number = 0, page_size = 2) {
         try {
             const userData = storageManager.getUserData();
             const response = await axios({

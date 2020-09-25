@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
-import SideMenu from "../menu/side-menu/SideMenu";
+import SideMenu from "../menu/SideMenu";
 import Row from "react-bootstrap/Row";
 import {Redirect} from "react-router-dom";
 import LoadingScreen from "../utils/LoadingScreen";

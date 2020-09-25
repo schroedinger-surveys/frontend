@@ -25,7 +25,12 @@ const UnixToHumanTime = (date) => {
     return new Date(Date.UTC(year, month, day));
 }
 
+const EuropeanTime = (date) => {
+    return date.split("-").reverse().join("-");
+}
+
 export {
     TimeConverter,
-    UnixToHumanTime
+    UnixToHumanTime,
+    EuropeanTime
 };

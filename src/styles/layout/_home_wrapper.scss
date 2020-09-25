@@ -1,0 +1,28 @@
+@import "../base/colors";
+@import "../base/box";
+
+.comp_wrapper{display: grid;
+  grid-template-rows: 60px auto 80px;
+  grid-template-areas:
+                        "top_nav"
+                        "page"
+                        "footer";
+
+  height: 100vh;
+  width: 100%;
+}
+
+#top_nav{
+  grid-area: top_nav;
+  padding: 0 $padding_screen;
+}
+
+#page_body{
+  grid-area: page;
+  padding: 0 $padding_screen;
+}
+
+#footer{
+  grid-area: footer;
+  padding: 0 $padding_screen;
+}

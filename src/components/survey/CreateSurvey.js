@@ -9,7 +9,7 @@ import Message from "../utils/Message";
 import SurveyValidator from "./SurveyValidator";
 import {TimeConverter} from "../utils/TimeConverter";
 import {sortQuestions} from "../utils/SortQuestions";
-import SideMenu from "../menu/side-menu/SideMenu";
+import SideMenu from "../menu/SideMenu";
 import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 import SurveyAPIHandler from "../../calls/survey";
 import storageManager from "../../storage/StorageManager";
