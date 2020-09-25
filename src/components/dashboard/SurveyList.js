@@ -11,7 +11,7 @@ const SurveyList = (props) => {
     const [pagination, setPagination] = useState({
         pageCountPrivate: 0,
         pageCountPublic: 0,
-        itemsPerPage: 3
+        itemsPerPage: 4
     });
     const {pageCountPrivate, pageCountPublic, itemsPerPage} = pagination;
 
@@ -55,7 +55,7 @@ const SurveyList = (props) => {
         }
 
         let li = []
-        for (let i = 0; i < filterCount; i++) {
+        for (let i = 0; i < Math.ceil(filterCount / (itemsPerPage/2)); i++) {
             li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
                         onClick={() => changePage(i)}>{i + 1}</li>)
         }

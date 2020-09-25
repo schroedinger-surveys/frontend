@@ -2,6 +2,12 @@
 @import "../../base/colors";
 
 $border: 1px solid lightgrey;
+@mixin dot($color){
+  height: 5px;
+  width: 5px;
+  background-color: $color;
+  border-radius: 50%;
+}
 
 .survey_list{
   height: 100%;
@@ -74,3 +80,5 @@ $border: 1px solid lightgrey;
   border-bottom: $border;
   border-radius: 0 4px 4px 0;
 }
+
+
