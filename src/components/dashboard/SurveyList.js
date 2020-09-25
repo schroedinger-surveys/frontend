@@ -16,7 +16,7 @@ const SurveyList = (props) => {
     const {pageCountPrivate, pageCountPublic, itemsPerPage} = pagination;
 
     const [filter, setFilter] = useState("all");
-    const [filterCount, setFilterCount] = useState(props.counts.overallSurveys);
+    const [filterCount, setFilterCount] = useState(props.counts.overallSurveys || 0);
     const [filterSurveys, setFilterSurveys] = useState([...props.surveys.privateSurveys, ...props.surveys.publicSurveys]);
 
     useEffect(() => {
@@ -32,8 +32,21 @@ const SurveyList = (props) => {
         fetchSurveys()
     }, [filter]);
 
-    const fetchSurveys = () => {
-
+    const fetchSurveys = async(index) => {
+        if (filter === "private"){
+            setFilterCount(props.counts.privateSurveys);
+            const privateSurveys = await SurveyAPIHandler.surveyPrivateGet(index);
+            setFilterSurveys(privateSurveys);
+        }else if (filter === "public"){
+            setFilterCount(props.counts.publicSurveys);
+            const publicSurveys = await SurveyAPIHandler.surveyPublicGet(index);
+            setFilterSurveys(publicSurveys);
+        } else if (filter === "all"){
+            const privateSurveys = await SurveyAPIHandler.surveyPrivateGet(index);
+            const publicSurveys = await SurveyAPIHandler.surveyPublicGet(index);
+            setFilterCount(props.counts.overallSurveys);
+            setFilterSurveys([...privateSurveys, ...publicSurveys])
+        }
     }
 
     const surveyPagination = () => {
