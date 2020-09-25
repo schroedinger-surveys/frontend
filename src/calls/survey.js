@@ -6,7 +6,8 @@ const InitialCache = {
     privateSurveyCount: null,
     publicSurveyCount: null,
     privateSurveys: null,
-    publicSurveys: null
+    publicSurveys: null,
+    closedSurveys: null
 }
 
 /**
@@ -16,9 +17,9 @@ const InitialCache = {
  */
 class SurveyAPIHandler {
 
-    static cacheMiddleware(func, name){
+    static cacheMiddleware(func, name) {
         let Cache = sessionStorage.getItem("SURVEY_CACHE");
-        if(Cache === null || JSON.parse(Cache)[name] === null){
+        if (Cache === null || JSON.parse(Cache)[name] === null) {
             return func();
         } else {
             Cache = JSON.parse(Cache);
@@ -26,9 +27,9 @@ class SurveyAPIHandler {
         }
     }
 
-    static setStorage(name, data){
+    static setStorage(name, data) {
         let Cache = sessionStorage.getItem("SURVEY_CACHE");
-        if(Cache === null){
+        if (Cache === null) {
             InitialCache[name] = data;
             sessionStorage.setItem("SURVEY_CACHE", JSON.stringify(InitialCache));
         } else {
@@ -43,7 +44,7 @@ class SurveyAPIHandler {
      * scenario: Dashboard displays the number of surveys belonging to the user
      * @returns {Promise<*>}
      */
-    static async privateSurveyCount(){
+    static async privateSurveyCount() {
         log.debug("FETCH PRIVATE SURVEY COUNT");
         try {
             const jwt = storageManager.getJWTToken();
@@ -197,6 +198,37 @@ class SurveyAPIHandler {
             } else {
                 return [];
             }
+        } catch (e) {
+            log.error(e.response, "Failed axios request was caught: surveyPrivateGet");
+            log.debug("Hello", e.response);
+        }
+    }
+
+    static async closedSurveysGet(page_number = 0, page_size = 3) {
+        const currentDate = new Date();
+
+        const date = currentDate.getDate();
+        const month = currentDate.getMonth(); //Be careful! January is 0 not 1
+        const year = currentDate.getFullYear();
+
+        const dateString = year + "-" +String((month + 1)).padStart(2, "0") + "-" + date;
+        try {
+            const responsePrivateSurveys = await axios({
+                method: "GET",
+                url: "/api/v1/survey/secured" + "?page_number=" + page_number + "&page_size=" + page_size + "&end_date=" + dateString,
+                headers: {
+                    "Authorization": storageManager.getJWTToken()
+                }
+            });
+            const responsePublicSurveys = await axios({
+                method: "GET",
+                url: "/api/v1/survey/public" + "?page_number=" + page_number + "&page_size=" + page_size + "&end_date=" + dateString,
+                headers: {
+                    "Authorization": storageManager.getJWTToken()
+                }
+            });
+            //SurveyAPIHandler.setStorage("closedSurveys", response.data)
+            return [...responsePrivateSurveys.data, ...responsePublicSurveys.data];
         } catch (e) {
             log.error(e.response, "Failed axios request was caught: surveyPrivateGet");
             log.debug("Hello", e.response);

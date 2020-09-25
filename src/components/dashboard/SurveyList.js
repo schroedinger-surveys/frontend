@@ -5,7 +5,8 @@ import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
 import {getCurrentStatus} from "../utils/SurveyStatus";
 import SurveyAPIHandler from "../../calls/survey";
-import ListGroup from "react-bootstrap/ListGroup";
+import axios from "axios";
+import storageManager from "../../storage/StorageManager";
 
 const SurveyList = (props) => {
     const [pagination, setPagination] = useState({
@@ -85,9 +86,6 @@ const SurveyList = (props) => {
                     <Form.Group controlId="survey_filter">
                         <Form.Control as="select">
                             <option value={"all"}>all</option>
-                            <option value={"active"}>active</option>
-                            <option value={"pending"}>pending</option>
-                            <option value={"closed"}>closed</option>
                             <option value={"private"}>private</option>
                             <option value={"public"}>public</option>
                         </Form.Control>
