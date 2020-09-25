@@ -2,32 +2,39 @@ import React from "react";
 import {connect} from "react-redux";
 import {getCurrentStatus} from "../../utils/SurveyStatus";
 import {sortQuestions} from "../../utils/SortQuestions";
+import {EuropeanTime} from "../../utils/TimeConverter";
 
 const RawSurvey = (props) => {
     return (
         <div>
             {props.selectedSurvey && (
                 <div>
-                    <div className={"spotlight_box"} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-                        <label style={{fontWeight: "bold"}}>Title:</label>
-                        <p>{props.selectedSurvey.title}</p>
+                    <div className={"spotlight_box"}>
+                        <label className={"spotlight_box-title"}>Title</label>
+                        <p className={"spotlight_box-info"}>{props.selectedSurvey.title}</p>
                     </div>
-                    <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-                        <label style={{fontWeight: "bold"}}>Description:</label>
-                        <p>{props.selectedSurvey.description}</p>
+                    <div className={"spotlight_box"} >
+                        <label className={"spotlight_box-title"}>Description</label>
+                        <p className={"spotlight_box-info"}>{props.selectedSurvey.description}</p>
                     </div>
-                    <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-                        <label style={{fontWeight: "bold"}}>Start & End-Date:</label>
-                        <p>{props.selectedSurvey.start_date} - {props.selectedSurvey.end_date} | {getCurrentStatus(props.selectedSurvey.start_date, props.selectedSurvey.end_date)} </p>
+                    <div className={"spotlight_box"}>
+                        <div className={"spotlight_box-dates"}>
+                            <label className={"spotlight_box-title"}>Start-Date</label>
+                            <p className={"spotlight_box-info"}>{EuropeanTime(props.selectedSurvey.start_date)}</p>
+                        </div>
+                        <div className={"spotlight_box-dates"}>
+                            <label className={"spotlight_box-title"}>End-Date</label>
+                            <p className={"spotlight_box-info"}>{EuropeanTime(props.selectedSurvey.end_date)}</p>
+                        </div>
                     </div>
-                    <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-                        <label style={{fontWeight: "bold"}}>Who can submit an answer:</label>
-                        <p>{props.selectedSurvey.secured ? "Invite Only" : "Open to public"}</p>
+                    <div className={"spotlight_box"}>
+                        <label className={"spotlight_box-title"}>Who can submit an answer</label>
+                        <p className={"spotlight_box-info"}>{props.selectedSurvey.secured ? "Invite Only" : "Open to public"}</p>
                     </div>
 
 
-                    <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-                        <label style={{fontWeight: "bold"}}>Questions:</label>
+                    <div className={"spotlight_box"}>
+                        <label className={"spotlight_box-title"}>Questions</label>
                         {sortQuestions(props.selectedSurvey.constrained_questions, props.selectedSurvey.freestyle_questions).map((item, i) => {
                                 if (item.type === "constrained") {
                                     return (

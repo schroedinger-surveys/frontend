@@ -1,0 +1,21 @@
+@import "../../base/colors";
+
+.spotlight_box {
+  border-bottom: 1px solid lightgrey;
+  padding-top: 15px;
+  line-height: 1;
+}
+
+.spotlight_box-title{
+  color: $font_color-dark;
+  font-weight: 700;
+}
+
+.spotlight_box-info{
+  color: $font_color-light;
+}
+
+.spotlight_box-dates{
+  display: inline-block;
+  width: 50%;
+}
