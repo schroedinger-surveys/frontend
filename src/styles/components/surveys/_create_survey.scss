@@ -26,3 +26,36 @@
   @include create-survey-column;
   margin: 5% 5% 5% 2.5%;
 }
+
+.add_question_btn{
+  @include outline-button;
+  height: 35px;
+  border-radius: 4px;
+  line-height: 35px;
+}
+.add_question_btn:hover{
+  @include outline-button-hover;
+}
+
+.add_option_btn{
+  margin-bottom: 10px;
+  border: none;
+  background-color: transparent;
+  color: $font_color-light;
+}
+.add_option_btn:hover{
+  color: $font_color-dark;
+}
+.add_option_btn:focus{
+  outline: none;
+}
+
+.submit_create_survey_button{
+  @include submit-button;
+}
+.submit_create_survey_button:hover{
+  @include submit-button-hover;
+}
+.submit_create_survey_button:focus{
+  @include submit-button-focus;
+}
