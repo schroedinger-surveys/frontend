@@ -1,0 +1,28 @@
+@import "../../base/universals";
+@import "../../base/box";
+@import "../../base/colors";
+
+@mixin create-survey-column{
+  height: 90%;
+}
+
+.create_survey_container{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+          "basic questions";
+  height: 100%;
+  width: 100%;
+}
+
+.create_survey_basic_input{
+  grid-area: basic;
+  @include create-survey-column;
+  margin: 5% 2.5% 5% 5%;
+}
+
+.create_survey_question_input{
+  grid-area: questions;
+  @include create-survey-column;
+  margin: 5% 5% 5% 2.5%;
+}

@@ -13,6 +13,7 @@ import SideMenu from "../menu/SideMenu";
 import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 import SurveyAPIHandler from "../../calls/survey";
 import storageManager from "../../storage/StorageManager";
+import AppNavbar from "../menu/AppNavbar";
 
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
@@ -49,7 +50,7 @@ const CreateSurvey = () => {
         title: "",
         description: "",
         start_date: TimeConverter(new Date()),
-        end_date: TimeConverter(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() +7)),
+        end_date: TimeConverter(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)),
         constrainedQuestionText: "",
         freestyleQuestionText: ""
     });
@@ -84,7 +85,7 @@ const CreateSurvey = () => {
      */
     const constrainedQuestion = () => {
         return (
-            <Form>
+            <div>
                 <Form.Group controlId="constrainedQuestionForm">
                     <Form.Label>Constrained Question</Form.Label>
                     <Form.Control type="text" placeholder="Enter question" value={constrainedQuestionText}
@@ -101,7 +102,7 @@ const CreateSurvey = () => {
                     ))}
                 </Row>
                 <Button variant={"light"} onClick={addConstrainedOption}>Add option</Button>
-            </Form>
+            </div>
         )
     }
 
@@ -147,7 +148,7 @@ const CreateSurvey = () => {
              * Clear the Input fields for the question and the options
              */
             setValues({...values, constrainedQuestionText: ""});
-            for(let i = 0; i < minimumOptionsAmount; i ++){
+            for (let i = 0; i < minimumOptionsAmount; i++) {
                 options[i].value = "";
             }
         } else {
@@ -163,13 +164,13 @@ const CreateSurvey = () => {
      */
     const freestyleQuestion = () => {
         return (
-            <Form>
+            <div>
                 <Form.Group controlId="freestyleQuestionForm">
                     <Form.Label>Freestyle Question</Form.Label>
                     <Form.Control type="text" placeholder="Enter question" value={freestyleQuestionText}
                                   onChange={handleInputChange("freestyleQuestionText")}/>
                 </Form.Group>
-            </Form>
+            </div>
         )
     }
 
@@ -183,7 +184,7 @@ const CreateSurvey = () => {
         currentQuestions.push(question);
         setFreestyleQuestions(currentQuestions);
         setQuestionIndex(questionIndex + 1);
-       setValues({...values, freestyleQuestionText: ""});
+        setValues({...values, freestyleQuestionText: ""});
     }
 
     /**
@@ -202,6 +203,19 @@ const CreateSurvey = () => {
         return (
             <Form>
                 <BasicForm params={params}/>
+
+                <Row>
+                    <Col>
+                        {constrainedQuestion()}
+                        <Button variant="warning" onClick={addConstrainedQuestion}
+                                style={{marginBottom: "15px", color: "white"}}>Add Constrained Question</Button>
+                    </Col>
+                    <Col>
+                        {freestyleQuestion()}
+                        <Button variant="warning" onClick={addFreestyleQuestion}
+                                style={{marginBottom: "15px", color: "white"}}>Add Freestyle Question</Button>
+                    </Col>
+                </Row>
 
                 <Form.Group>
                     <Form.Check id={"securedStatus"} type="checkbox" label="Make Survey Private"/>
@@ -222,7 +236,7 @@ const CreateSurvey = () => {
         const validationResponse = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions); // Validates Survey based on user input
         if (validationResponse.status) { // Indicates if Survey data is valid - true || false
             const apiResponse = await SurveyAPIHandler.surveyCreate(title, description, start_date, end_date, securedInput, constrainedQuestions, freestyleQuestions);
-            if (apiResponse.status === 201){
+            if (apiResponse.status === 201) {
                 setShowMessage(true);
                 setMessageType("success");
                 setMessageText("Survey was successfully created.");
@@ -240,35 +254,90 @@ const CreateSurvey = () => {
         }
     }
 
-    return (
-        <Container fluid>
-            <Row>
-                <Col xs={1} style={{padding: 0}}>
-                    <SideMenu/>
-                </Col>
-                <Col xs={5} style={{marginTop: "30px"}}>
+    const createSurveyComponent = () => {
+        return (
+            <div className={"create_survey_container"}>
+                <div className={"create_survey_basic_input"}>
                     {basicDataFormInput()}
-                </Col>
-                <Col xs={6} style={{marginTop: "30px"}}>
                     {showMessage && (
                         <Message message={messageText} type={messageType}/>
                     )}
-                    <Row>
-                        <Col>
-                            {constrainedQuestion()}
-                            <Button variant="warning" onClick={addConstrainedQuestion} style={{marginBottom: "15px", color: "white"}}>Add Constrained Question</Button>
-                        </Col>
-                        <Col>
-                            {freestyleQuestion()}
-                            <Button variant="warning" onClick={addFreestyleQuestion} style={{marginBottom: "15px", color: "white"}}>Add Freestyle Question</Button>
-                        </Col>
-                    </Row>
-                    <Row>
+                </div>
+
+                <div className={"create_survey_question_input"}>
+                    <div className={"create_survey_preview"}>
+                        {   title === "" &&
+                            <p className={"title_preview"}>Preview:</p>}
+                        <h2>{title}</h2>
+                        { description !== "" &&
+                            <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+                                <label style={{fontWeight: "bold"}}>Description:</label>
+                                <p>{description}</p>
+                            </div>
+                        }
                         {sortQuestions(constrainedQuestions, freestyleQuestions).map((item, i) => {
-                            if (item.question.hasOwnProperty("options")){
-                                return(
-                                    <div key={i} style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px", margin: "0 15px"}}>
-                                        <label>Question {i+1}: <span style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
+                            if (item.type === "constrained") {
+                                return (
+                                    <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+                                        <Form.Group id={`${i}answer`}>
+                                            <Form.Label
+                                                style={{fontWeight: "bold"}}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
+                                            {item.question.options.map((option, j) => (
+                                                <Form.Check
+                                                    key={j}
+                                                    type="radio"
+                                                    label={option.answer}
+                                                    name={`answerOptionToQuestion${i}`}
+                                                />
+                                            ))}
+                                        </Form.Group>
+                                    </div>
+                                )
+                            } else {
+                                return (
+                                    <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+                                        <Form.Group>
+                                            <Form.Label
+                                                style={{fontWeight: "bold"}}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
+                                            <Form.Control id={`${i}answer`} type="text" placeholder="Your Answer..."/>
+                                        </Form.Group>
+                                    </div>
+                                )
+                            }
+                        })}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className={"app_wrapper"}>
+            <AppNavbar/>
+            <SideMenu/>
+            <div id={"app_page_body"}>
+                {createSurveyComponent()}
+            </div>
+        </div>
+    )
+}
+
+export default CreateSurvey;
+
+/**
+ <Row>
+ {sortQuestions(constrainedQuestions, freestyleQuestions).map((item, i) => {
+                            if (item.question.hasOwnProperty("options")) {
+                                return (
+                                    <div key={i} style={{
+                                        width: "100%",
+                                        border: "1px solid lightgrey",
+                                        borderRadius: "8px",
+                                        padding: "10px",
+                                        margin: "0 15px"
+                                    }}>
+                                        <label>Question {i + 1}: <span
+                                            style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
                                         <ul>
                                             {item.question.options.map((option, j) => (
                                                 <li key={j}>{option.answer}</li>
@@ -278,17 +347,18 @@ const CreateSurvey = () => {
                                 )
                             } else {
                                 return (
-                                    <div key={i} style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px", margin: "0 15px"}}>
-                                        <label>Question {i+1}: <span style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
+                                    <div key={i} style={{
+                                        width: "100%",
+                                        border: "1px solid lightgrey",
+                                        borderRadius: "8px",
+                                        padding: "10px",
+                                        margin: "0 15px"
+                                    }}>
+                                        <label>Question {i + 1}: <span
+                                            style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
                                     </div>
                                 )
                             }
                         })}
-                    </Row>
-                </Col>
-            </Row>
-        </Container>
-    )
-}
-
-export default CreateSurvey;
+ </Row>
+ **/
