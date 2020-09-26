@@ -6,9 +6,9 @@ import React from "react";
 export const BasicForm = (props) => {
     const {params} = props;
     return (
-        <div>
+        <div className={"basic_form_container"}>
             <Form.Group controlId="surveyTitle">
-                <Form.Label>Title</Form.Label>
+                <Form.Label className={"create_survey_basic_form_label"}>Title</Form.Label>
                 <Form.Control type="text" placeholder="Enter title" value={params.title}
                               onChange={params.handleInputChange("title")}/>
                 <Form.Text className="text-muted">
@@ -17,7 +17,7 @@ export const BasicForm = (props) => {
             </Form.Group>
 
             <Form.Group controlId="surveyDescription">
-                <Form.Label>Description</Form.Label>
+                <Form.Label className={"create_survey_basic_form_label"}>Description</Form.Label>
                 <Form.Control as="textarea" rows="3" placeholder="Description" value={params.description}
                               onChange={params.handleInputChange("description")}/>
                 <Form.Text className="text-muted">
@@ -28,7 +28,7 @@ export const BasicForm = (props) => {
             <Row>
                 <Col>
                     <Form.Group controlId="surveyStartDate">
-                        <Form.Label>Start Date</Form.Label>
+                        <Form.Label className={"create_survey_basic_form_label"}>Start Date</Form.Label>
                         <Form.Control type="date" value={params.start_date}
                                       onChange={params.handleInputChange("start_date")}/>
                         <Form.Text className="text-muted">
@@ -38,7 +38,7 @@ export const BasicForm = (props) => {
                 </Col>
                 <Col>
                     <Form.Group controlId="surveyEndDate">
-                        <Form.Label>End Date</Form.Label>
+                        <Form.Label className={"create_survey_basic_form_label"}>End Date</Form.Label>
                         <Form.Control type="date" value={params.end_date}
                                       onChange={params.handleInputChange("end_date")}/>
                         <Form.Text className="text-muted">

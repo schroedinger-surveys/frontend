@@ -66,3 +66,15 @@
   @include submit-button-focus;
 }
 
+.basic_form_container{
+  color: $font_color-light;
+}
+.create_survey_basic_form_label{
+  color: $font_color-dark;
+}
+
+.preview_survey_label{
+  font-weight: bold;
+  color: $font_color-dark;
+}
+

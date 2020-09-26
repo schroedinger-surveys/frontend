@@ -275,11 +275,11 @@ const CreateSurvey = () => {
                 <div className={"create_survey_question_input"}>
                     <div className={"create_survey_preview"}>
                         {   title === "" &&
-                            <p className={"title_preview"}>Preview:</p>}
-                        <h2>{title}</h2>
+                            <p className={"title_preview preview_survey_label"}>Preview:</p>}
+                        <h2 className={"preview_survey_label"}>{title}</h2>
                         { description !== "" &&
                             <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
-                                <label style={{fontWeight: "bold"}}>Description:</label>
+                                <label className={"preview_survey_label"}>Description:</label>
                                 <p>{description}</p>
                             </div>
                         }
@@ -289,7 +289,7 @@ const CreateSurvey = () => {
                                     <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
                                         <Form.Group id={`${i}answer`}>
                                             <Form.Label
-                                                style={{fontWeight: "bold"}}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
+                                                className={"preview_survey_label"}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
                                             {item.question.options.map((option, j) => (
                                                 <Form.Check
                                                     key={j}
