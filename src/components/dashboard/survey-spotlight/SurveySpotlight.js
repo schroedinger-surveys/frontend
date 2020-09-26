@@ -71,7 +71,7 @@ const SurveySpotlight = (props) => {
                     <RawSurvey/>
                 </Tab>
 
-                <Tab className={"survey_spotlight_tab-item"} eventKey="profile"
+                <Tab className={"survey_spotlight_tab-item"} eventKey="profile" disabled
                      title={`Submissions ${submissionCount >= 100 ? "99+" : submissionCount}`}>
                     {submissionCount >= 1 ? <Submissions/> : <NoSubmissions/>}
                 </Tab>
