@@ -295,7 +295,7 @@ const ShareLinks = (props) => {
 
     const publicSurvey = () => {
         return (
-            <div>
+            <div className={"share_links_container public_share_link_container"}>
                 <p>Share your Survey trough the following link:</p>
                 <OverlayTrigger
                     placement="right"
@@ -303,13 +303,10 @@ const ShareLinks = (props) => {
                     overlay={renderTooltip}
                 >
                     <button onClick={copyToClipboard}
-                            style={{
-                                cursor: "pointer",
-                                border: "none",
-                                backgroundColor: "transparent"
-                            }}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                            className={"share_links_private_links_copy public_share_link"}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                         /pub/{props.selectedSurvey.id}</button>
                 </OverlayTrigger>
+                <hr/>
                 <p>Since your survey is public, everyone can take part and search for your survey here: <a
                     href={"/survey/search"}>Click to search for survey</a></p>
             </div>

@@ -49,6 +49,7 @@ $amount_input_group: 40px;
     border: none;
     background-color: transparent;
     color: $font_color-light;
+    padding-left: 0;
 }
 
 .send_links_mail{
@@ -69,4 +70,13 @@ $amount_input_group: 40px;
     font-size: 13px;
     list-style: none;
     margin-bottom: 8px;
+}
+
+.public_share_link_container{
+    text-align: left;
+}
+
+.public_share_link{
+    color: $font_color-dark;
+    font-weight: 700;
 }
