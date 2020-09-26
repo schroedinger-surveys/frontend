@@ -36,7 +36,7 @@ export const getCurrentStatus = (start_date, end_date) => {
             delay={{ show: 250, hide: 400 }}
             overlay={renderTooltipClosed}
         >
-            <span style={{color: "darkredgit "}}>c</span>
+            <span style={{color: "darkred"}}>c</span>
         </OverlayTrigger>
     } else if (startDate <= today && endDate >= today) {
         return <OverlayTrigger
