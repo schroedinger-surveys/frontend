@@ -305,8 +305,7 @@ const CreateSurvey = () => {
                                 return (
                                     <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
                                         <Form.Group>
-                                            <Form.Label
-                                                style={{fontWeight: "bold"}}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
+                                            <Form.Label className={"preview_survey_label"}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
                                             <Form.Control id={`${i}answer`} type="text" placeholder="Your Answer..."/>
                                         </Form.Group>
                                     </div>
