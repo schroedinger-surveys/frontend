@@ -9,6 +9,7 @@ export const createPaginationMarker = (pages, clickMethod) => {
                     onClick={() => clickMethod(i)}>{i + 1}</li>)
     }
 
+    /**
     if (pages > 3) {
         const prevLi = <li key={"prevLi"} className={"pagination_list_li"}
                            onClick={() => {
@@ -22,6 +23,7 @@ export const createPaginationMarker = (pages, clickMethod) => {
                            }}>{">>"}</li>
         li = [prevLi, ...li.splice(start, start+3), nextLi];
     }
+     **/
 
     return (
             <ul className={"pagination_list_ul"}>
