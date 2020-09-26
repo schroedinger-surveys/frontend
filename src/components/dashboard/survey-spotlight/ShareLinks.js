@@ -55,19 +55,20 @@ const ShareLinks = (props) => {
     }
     const privateSurvey = () => {
         return (
-            <div>
+            <div className={"share_links_container"}>
                 <p>Create Share-Links so friends, colleagues or even strangers can only submit answers to your survey if
                     you
                     invite them to</p>
                 <p>Attention: The Links will be created and you have to copy and save them at a place for your eyes
                     only. We
                     do not save them for you (yet).</p>
-                <InputGroup className="mb-3" style={{width: "70%"}}>
+                <InputGroup className="mb-3 share_links_amount_group">
                     <InputGroup.Append>
-                        <InputGroup.Text id="basic-addon2" style={{borderRadius: "5px 0 0 5px"}}>Amount of
+                        <InputGroup.Text id="basic-addon2" className={"share_links_amount_label"}>Amount of
                             Links</InputGroup.Text>
                     </InputGroup.Append>
                     <FormControl
+                        className={"share_links_amount_input"}
                         type={"number"}
                         placeholder="30"
                         value={amount}
@@ -76,19 +77,19 @@ const ShareLinks = (props) => {
                         aria-describedby="basic-addon2"
                     />
                     <InputGroup.Append>
-                        <Button variant="outline-success" onClick={getToken}>Create</Button>
+                        <button className={"share_links_btn"} onClick={getToken}>Create</button>
                     </InputGroup.Append>
                 </InputGroup>
-                <ul>
+                <ul className={"share_links_private_ul"}>
                     {links.map((link, i) => (
-                        <li key={i} id={"privateLink" + i} style={{fontSize: "10px"}}>
+                        <li key={i} id={"privateLink" + i} className={"share_links_private_links"}>
                             <OverlayTrigger
                                 placement="right"
                                 delay={{show: 250, hide: 400}}
                                 overlay={renderTooltip}
                             >
                                 <button onClick={copyToClipboard}
-                                        style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>
+                                        className={"share_links_private_links_copy"}>
                                     {window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                     /s/{props.selectedSurvey.id}
                                     ?token={link.id}
@@ -347,8 +348,8 @@ const ShareLinks = (props) => {
                     />
                 </InputGroup>
                 {showMessage && <Message type={messageType} message={messageText}/>}
-                <Button variant={"outline-success"} style={{marginTop: "10px"}} onClick={sendToToken}>Send Token Per
-                    Mail</Button>
+                <button className={"send_links_mail"} onClick={sendToToken}>Send Token Per
+                    Mail</button>
             </div>
         )
     }

@@ -1,4 +1,5 @@
 @import "../../base/colors";
+@import "../../base/universals";
 
 #top_nav {
   box-shadow: $shadow;
@@ -24,16 +25,12 @@
 }
 
 .home_login-button {
-  color: rgba(254, 128, 13, 0.8);
-  border: 1px solid $main_color-orange;
-  background-color: white;
+  @include outline-button;
   height: 33px;
 }
 
 .home_login-button:hover {
-  background-color: $main_color_hover;
-  color: white;
-  transition: 0.5s;
+  @include outline-button-hover;
 }
 
 .home_register_button {
