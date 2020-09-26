@@ -131,7 +131,8 @@ const CreateSurvey = () => {
      * If at least two options are given the question is added and a success message is shown
      * otherwise a warning is displayed
      */
-    const addConstrainedQuestion = () => {
+    const addConstrainedQuestion = (event) => {
+        event.preventDefault();
         const options = document.getElementsByClassName("allOptions"); // Get all Option Elements from the ConstrainedQuestion Form
         const optionValues = [];
         let position = 0; // In case an Input Field was left empty the index representing the position of the Option is incremented separately
@@ -186,7 +187,8 @@ const CreateSurvey = () => {
      * Adds the Freestyle Question to the freestyleQuestions Array
      * Increments the Index, that tracks the creation order of all questions (freestyle and constrained)
      */
-    const addFreestyleQuestion = () => {
+    const addFreestyleQuestion = (event) => {
+        event.preventDefault();
         const question = {question_text: freestyleQuestionText, position: questionIndex};
         const currentQuestions = freestyleQuestions;
         currentQuestions.push(question);

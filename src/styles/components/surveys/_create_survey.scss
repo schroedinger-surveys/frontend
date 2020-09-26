@@ -19,12 +19,18 @@
   grid-area: basic;
   @include create-survey-column;
   margin: 5% 2.5% 5% 5%;
+  max-height: 800px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .create_survey_question_input{
   grid-area: questions;
   @include create-survey-column;
   margin: 5% 5% 5% 2.5%;
+  max-height: 750px;
+  overflow-y: auto;
+
 }
 
 .add_question_btn{
@@ -59,3 +65,4 @@
 .submit_create_survey_button:focus{
   @include submit-button-focus;
 }
+
