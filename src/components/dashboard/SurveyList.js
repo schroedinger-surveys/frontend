@@ -5,6 +5,7 @@ import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
 import {getCurrentStatus} from "../utils/SurveyStatus";
 import SurveyAPIHandler from "../../calls/survey";
+import {createPaginationMarker} from "../utils/PageMarker";
 
 const SurveyList = (props) => {
     const itemsPerPage = 2;
@@ -48,19 +49,8 @@ const SurveyList = (props) => {
             await fetchSurveys(index, true);
         }
 
-        let li = []
-        for (let i = 0; i < Math.ceil(filterCount / (itemsPerPage*2)); i++) {
-            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
-                        onClick={() => changePage(i)}>{i + 1}</li>)
-        }
-
-        return (
-            <div style={{width: "100%"}}>
-                <ul style={{listStyle: "none"}}>
-                    {li}
-                </ul>
-            </div>
-        )
+        const pages = filterCount / (itemsPerPage*2);
+        return createPaginationMarker(pages, changePage);
     }
 
     return (
