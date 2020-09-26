@@ -148,7 +148,7 @@ const ShareLinks = (props) => {
 
         return (
             <div style={{width: "100%"}}>
-                <ul style={{listStyle: "none"}}>
+                <ul className={"pagination_list_ul"}>
                     {li}
                 </ul>
             </div>
@@ -176,9 +176,9 @@ const ShareLinks = (props) => {
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
                         {unusedTokenCount > itemsPerPage && unusedTokenPagination()}
-                        <ul>
+                        <ul className={"token_list_ul"}>
                             {unusedToken.map((token, i) => (
-                                <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                <li className={"token_list_items"} key={i}>created: {token.created.substr(0, 10)}<br/>
                                     <span
                                         style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                         /s/{props.selectedSurvey.id}
@@ -215,9 +215,9 @@ const ShareLinks = (props) => {
                 <Accordion.Collapse eventKey="1">
                     <Card.Body>
                         {usedTokenCount > itemsPerPage && usedTokenPagination()}
-                        <ul>
+                        <ul className={"token_list_ul"} >
                             {usedToken.map((token, i) => (
-                                <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                <li className={"token_list_items"} style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
                                     <span
                                         style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                         /s/{props.selectedSurvey.id}

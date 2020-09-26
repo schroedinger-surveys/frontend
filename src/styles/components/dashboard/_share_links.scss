@@ -44,16 +44,11 @@ $amount_input_group: 40px;
     color: $font_color-light;
     list-style: none;
 }
-.share_links_private_links:hover{
-    font-weight: bold;
-}
-.share_links_private_links:focus{
-    outline: none;
-}
 .share_links_private_links_copy{
     cursor: pointer;
     border: none;
     background-color: transparent;
+    color: $font_color-light;
 }
 
 .send_links_mail{
@@ -65,4 +60,13 @@ $amount_input_group: 40px;
 }
 .send_links_mail:hover{
     @include outline-button-hover;
+}
+
+.token_list_ul{
+    padding-left: 0;
+}
+.token_list_items{
+    font-size: 13px;
+    list-style: none;
+    margin-bottom: 8px;
 }
