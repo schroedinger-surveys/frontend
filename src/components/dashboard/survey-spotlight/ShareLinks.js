@@ -12,6 +12,7 @@ import Message from "../../utils/Message";
 import TokenAPIHandler from "../../../calls/token";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
+import {createPaginationMarker} from "../../utils/PageMarker";
 
 const ShareLinks = (props) => {
     const itemsPerPage = 5;
@@ -137,22 +138,6 @@ const ShareLinks = (props) => {
 
         const pages = Math.ceil(usedTokenCount / itemsPerPage);
         return createPaginationMarker(pages, changePage);
-    }
-
-    const createPaginationMarker = (pages, clickMethod) => {
-        let li = [];
-        for (let i = 0; i < pages; i++) {
-            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
-                        onClick={() => clickMethod(i)}>{i + 1}</li>)
-        }
-
-        return (
-            <div style={{width: "100%"}}>
-                <ul className={"pagination_list_ul"}>
-                    {li}
-                </ul>
-            </div>
-        )
     }
 
     const displayUnusedToken = () => {

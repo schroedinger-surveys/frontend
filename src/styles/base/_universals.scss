@@ -1,11 +1,5 @@
 @import "../base/colors";
 
-.pagination_list_ul{
-  list-style: none;
-  padding-left: 0;
-  margin-bottom: 8px;
-}
-
 @mixin submit-button {
   background: $main_color-orange;
   background: linear-gradient(90deg, rgba(254,128,13,1) 0%, rgba(233,174,87,1) 100%);
