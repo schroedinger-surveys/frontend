@@ -1,0 +1,82 @@
+@import "../../base/colors";
+@import "../../base/universals";
+
+$amount_input_group: 40px;
+
+.share_links_container{
+    color: $font_color-light;
+}
+
+.share_links_btn{
+    @include submit-button;
+    height: $amount_input_group;
+    border-radius: 0 4px 4px 0;
+}
+.share_links_btn:hover{
+    @include submit-button-hover;
+}
+.share_links_btn:focus{
+    @include submit-button-focus;
+}
+
+.share_links_amount_label{
+    height: $amount_input_group;
+    border-radius: 4px 0 0 4px !important;
+    color: $font_color-light;
+    background-color: $secondary_color-orange;
+    border-color: $secondary_color-orange;
+}
+.share_links_amount_input{
+    height: $amount_input_group;
+}
+.share_links_amount_group{
+    width: 70%;
+    height: $amount_input_group;
+}
+
+.share_links_private_ul{
+    padding-left: 0;
+}
+
+.share_links_private_links{
+    line-height: 2;
+    font-size: 14px;
+    color: $font_color-light;
+    list-style: none;
+}
+.share_links_private_links_copy{
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    color: $font_color-light;
+    padding-left: 0;
+}
+
+.send_links_mail{
+    margin-top: 10px;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 4px;
+    @include outline-button;
+}
+.send_links_mail:hover{
+    @include outline-button-hover;
+}
+
+.token_list_ul{
+    padding-left: 0;margin-top: 15px;
+}
+.token_list_items{
+    font-size: 13px;
+    list-style: none;
+    margin-bottom: 8px;
+}
+
+.public_share_link_container{
+    text-align: left;
+}
+
+.public_share_link{
+    color: $font_color-dark;
+    font-weight: 700;
+}

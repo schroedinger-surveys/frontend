@@ -12,6 +12,7 @@ import Message from "../../utils/Message";
 import TokenAPIHandler from "../../../calls/token";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
+import {createPaginationMarker} from "../../utils/PageMarker";
 
 const ShareLinks = (props) => {
     const itemsPerPage = 5;
@@ -55,19 +56,20 @@ const ShareLinks = (props) => {
     }
     const privateSurvey = () => {
         return (
-            <div>
+            <div className={"share_links_container"}>
                 <p>Create Share-Links so friends, colleagues or even strangers can only submit answers to your survey if
                     you
                     invite them to</p>
                 <p>Attention: The Links will be created and you have to copy and save them at a place for your eyes
                     only. We
                     do not save them for you (yet).</p>
-                <InputGroup className="mb-3" style={{width: "70%"}}>
+                <InputGroup className="mb-3 share_links_amount_group">
                     <InputGroup.Append>
-                        <InputGroup.Text id="basic-addon2" style={{borderRadius: "5px 0 0 5px"}}>Amount of
+                        <InputGroup.Text id="basic-addon2" className={"share_links_amount_label"}>Amount of
                             Links</InputGroup.Text>
                     </InputGroup.Append>
                     <FormControl
+                        className={"share_links_amount_input"}
                         type={"number"}
                         placeholder="30"
                         value={amount}
@@ -76,19 +78,19 @@ const ShareLinks = (props) => {
                         aria-describedby="basic-addon2"
                     />
                     <InputGroup.Append>
-                        <Button variant="outline-success" onClick={getToken}>Create</Button>
+                        <button className={"share_links_btn"} onClick={getToken}>Create</button>
                     </InputGroup.Append>
                 </InputGroup>
-                <ul>
+                <ul className={"share_links_private_ul"}>
                     {links.map((link, i) => (
-                        <li key={i} id={"privateLink" + i} style={{fontSize: "10px"}}>
+                        <li key={i} id={"privateLink" + i} className={"share_links_private_links"}>
                             <OverlayTrigger
                                 placement="right"
                                 delay={{show: 250, hide: 400}}
                                 overlay={renderTooltip}
                             >
                                 <button onClick={copyToClipboard}
-                                        style={{cursor: "pointer", border: "none", backgroundColor: "transparent"}}>
+                                        className={"share_links_private_links_copy"}>
                                     {window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                     /s/{props.selectedSurvey.id}
                                     ?token={link.id}
@@ -138,22 +140,6 @@ const ShareLinks = (props) => {
         return createPaginationMarker(pages, changePage);
     }
 
-    const createPaginationMarker = (pages, clickMethod) => {
-        let li = [];
-        for (let i = 0; i < pages; i++) {
-            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
-                        onClick={() => clickMethod(i)}>{i + 1}</li>)
-        }
-
-        return (
-            <div style={{width: "100%"}}>
-                <ul style={{listStyle: "none"}}>
-                    {li}
-                </ul>
-            </div>
-        )
-    }
-
     const displayUnusedToken = () => {
         const deleteToken = async (token) => {
             const apiResponse = await TokenAPIHandler.tokenDelete(token.id);
@@ -175,9 +161,9 @@ const ShareLinks = (props) => {
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
                         {unusedTokenCount > itemsPerPage && unusedTokenPagination()}
-                        <ul>
+                        <ul className={"token_list_ul"}>
                             {unusedToken.map((token, i) => (
-                                <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                <li className={"token_list_items"} key={i}>created: {token.created.substr(0, 10)}<br/>
                                     <span
                                         style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                         /s/{props.selectedSurvey.id}
@@ -214,9 +200,9 @@ const ShareLinks = (props) => {
                 <Accordion.Collapse eventKey="1">
                     <Card.Body>
                         {usedTokenCount > itemsPerPage && usedTokenPagination()}
-                        <ul>
+                        <ul className={"token_list_ul"} >
                             {usedToken.map((token, i) => (
-                                <li style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                <li className={"token_list_items"} style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
                                     <span
                                         style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                         /s/{props.selectedSurvey.id}
@@ -309,7 +295,7 @@ const ShareLinks = (props) => {
 
     const publicSurvey = () => {
         return (
-            <div>
+            <div className={"share_links_container public_share_link_container"}>
                 <p>Share your Survey trough the following link:</p>
                 <OverlayTrigger
                     placement="right"
@@ -317,13 +303,10 @@ const ShareLinks = (props) => {
                     overlay={renderTooltip}
                 >
                     <button onClick={copyToClipboard}
-                            style={{
-                                cursor: "pointer",
-                                border: "none",
-                                backgroundColor: "transparent"
-                            }}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
+                            className={"share_links_private_links_copy public_share_link"}>{window.location.protocol}//{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                         /pub/{props.selectedSurvey.id}</button>
                 </OverlayTrigger>
+                <hr/>
                 <p>Since your survey is public, everyone can take part and search for your survey here: <a
                     href={"/survey/search"}>Click to search for survey</a></p>
             </div>
@@ -347,8 +330,8 @@ const ShareLinks = (props) => {
                     />
                 </InputGroup>
                 {showMessage && <Message type={messageType} message={messageText}/>}
-                <Button variant={"outline-success"} style={{marginTop: "10px"}} onClick={sendToToken}>Send Token Per
-                    Mail</Button>
+                <button className={"send_links_mail"} onClick={sendToToken}>Send Token Per
+                    Mail</button>
             </div>
         )
     }

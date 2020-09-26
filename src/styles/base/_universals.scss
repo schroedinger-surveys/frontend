@@ -20,6 +20,18 @@
   outline: none;
 }
 
+@mixin outline-button {
+  color: rgba(254, 128, 13, 0.8);
+  border: 1px solid $main_color-orange;
+  background-color: white;
+}
+
+@mixin outline-button-hover {
+  background-color: $main_color_hover;
+  color: white;
+  transition: 0.5s;
+}
+
 @mixin home-form{
   width: 40%;
   margin: 30px auto;

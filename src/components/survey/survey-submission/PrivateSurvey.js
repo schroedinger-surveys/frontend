@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import log from "../../../log/Logger";
 import storageManager from "../../../storage/StorageManager";
 import LoadingScreen from "../../utils/LoadingScreen";
-import {checkSurveyStatus, collectAnswers, submitAnsweredSurvey, validateSubmission} from "./Utils";
+import {checkSurveyStatus, collectAnswers,validateSubmission} from "./Utils";
 import Message from "../../utils/Message";
 import SurveyAPIHandler from "../../../calls/survey";
 import SubmissionAPIHandler from "../../../calls/submission";

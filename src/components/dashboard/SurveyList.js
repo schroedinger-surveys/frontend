@@ -5,8 +5,7 @@ import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
 import {getCurrentStatus} from "../utils/SurveyStatus";
 import SurveyAPIHandler from "../../calls/survey";
-import axios from "axios";
-import storageManager from "../../storage/StorageManager";
+import {createPaginationMarker} from "../utils/PageMarker";
 
 const SurveyList = (props) => {
     const itemsPerPage = 2;
@@ -16,8 +15,6 @@ const SurveyList = (props) => {
     const [filterSurveys, setFilterSurveys] = useState([]);
 
     useEffect(() => {
-        console.log(filterSurveys);
-
         const filterSelect = document.getElementById("survey_filter");
         if (filterSelect !== null) {
             filterSelect.addEventListener("change", () => {
@@ -27,23 +24,21 @@ const SurveyList = (props) => {
     });
 
     useEffect(() => {
-        console.log(filter);
-        fetchSurveys()
+        fetchSurveys(0, false)
     }, [filter]);
 
-    const fetchSurveys = async(index) => {
-        console.log("HAHHAHJKHDKH")
+    const fetchSurveys = async(index, pagination = false) => {
         if (filter === "private"){
             setFilterCount(props.counts.privateSurveys);
-            const privateSurveys = await SurveyAPIHandler.surveyPrivateGet(index, itemsPerPage);
+            const privateSurveys = pagination ? await SurveyAPIHandler.surveyPrivateGet(index, itemsPerPage) : await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPrivateGet(index, itemsPerPage), "privateSurveys");
             setFilterSurveys(privateSurveys);
         }else if (filter === "public"){
             setFilterCount(props.counts.publicSurveys);
-            const publicSurveys = await SurveyAPIHandler.surveyPublicGet(index, itemsPerPage);
+            const publicSurveys = pagination ? await SurveyAPIHandler.surveyPublicGet(index, itemsPerPage) : await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPublicGet(index, itemsPerPage), "publicSurveys");
             setFilterSurveys(publicSurveys);
         } else if (filter === "all"){
-            const privateSurveys = await SurveyAPIHandler.surveyPrivateGet(index, 2);
-            const publicSurveys = await SurveyAPIHandler.surveyPublicGet(index, 2);
+            const privateSurveys = pagination ? await SurveyAPIHandler.surveyPrivateGet(index, 2) : await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPrivateGet(index, 2), "privateSurveys");;
+            const publicSurveys = pagination ? await SurveyAPIHandler.surveyPublicGet(index, 2) : await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPublicGet(index, 2), "publicSurveys");
             setFilterCount(props.counts.overallSurveys);
             setFilterSurveys([...privateSurveys, ...publicSurveys])
         }
@@ -51,22 +46,11 @@ const SurveyList = (props) => {
 
     const surveyPagination = () => {
         const changePage = async (index) => {
-            await fetchSurveys(index);
+            await fetchSurveys(index, true);
         }
 
-        let li = []
-        for (let i = 0; i < Math.ceil(filterCount / (itemsPerPage*2)); i++) {
-            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
-                        onClick={() => changePage(i)}>{i + 1}</li>)
-        }
-
-        return (
-            <div style={{width: "100%"}}>
-                <ul style={{listStyle: "none"}}>
-                    {li}
-                </ul>
-            </div>
-        )
+        const pages = filterCount / (itemsPerPage*2);
+        return createPaginationMarker(pages, changePage);
     }
 
     return (

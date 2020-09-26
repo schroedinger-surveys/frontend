@@ -13,6 +13,7 @@ import SideMenu from "../menu/SideMenu";
 import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 import SurveyAPIHandler from "../../calls/survey";
 import storageManager from "../../storage/StorageManager";
+import AppNavbar from "../menu/AppNavbar";
 
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
@@ -49,7 +50,7 @@ const CreateSurvey = () => {
         title: "",
         description: "",
         start_date: TimeConverter(new Date()),
-        end_date: TimeConverter(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() +7)),
+        end_date: TimeConverter(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7)),
         constrainedQuestionText: "",
         freestyleQuestionText: ""
     });
@@ -84,7 +85,7 @@ const CreateSurvey = () => {
      */
     const constrainedQuestion = () => {
         return (
-            <Form>
+            <div>
                 <Form.Group controlId="constrainedQuestionForm">
                     <Form.Label>Constrained Question</Form.Label>
                     <Form.Control type="text" placeholder="Enter question" value={constrainedQuestionText}
@@ -100,8 +101,15 @@ const CreateSurvey = () => {
                         </Col>
                     ))}
                 </Row>
-                <Button variant={"light"} onClick={addConstrainedOption}>Add option</Button>
-            </Form>
+                <button className={"add_option_btn"} onClick={addConstrainedOption}>
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-plus-square" fill="currentColor"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd"
+                              d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                        <path fillRule="evenodd"
+                              d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg></button>
+            </div>
         )
     }
 
@@ -110,7 +118,8 @@ const CreateSurvey = () => {
      * by adding an object to the constrainedOptions array
      * and incrementing the optionsIndex
      */
-    const addConstrainedOption = () => {
+    const addConstrainedOption = (event) => {
+        event.preventDefault();
         const currentOptions = constrainedOptions;
         currentOptions.push({number: optionsIndex});
         setConstrainedOptions(currentOptions);
@@ -122,7 +131,8 @@ const CreateSurvey = () => {
      * If at least two options are given the question is added and a success message is shown
      * otherwise a warning is displayed
      */
-    const addConstrainedQuestion = () => {
+    const addConstrainedQuestion = (event) => {
+        event.preventDefault();
         const options = document.getElementsByClassName("allOptions"); // Get all Option Elements from the ConstrainedQuestion Form
         const optionValues = [];
         let position = 0; // In case an Input Field was left empty the index representing the position of the Option is incremented separately
@@ -147,7 +157,7 @@ const CreateSurvey = () => {
              * Clear the Input fields for the question and the options
              */
             setValues({...values, constrainedQuestionText: ""});
-            for(let i = 0; i < minimumOptionsAmount; i ++){
+            for (let i = 0; i < minimumOptionsAmount; i++) {
                 options[i].value = "";
             }
         } else {
@@ -163,13 +173,13 @@ const CreateSurvey = () => {
      */
     const freestyleQuestion = () => {
         return (
-            <Form>
+            <div>
                 <Form.Group controlId="freestyleQuestionForm">
                     <Form.Label>Freestyle Question</Form.Label>
                     <Form.Control type="text" placeholder="Enter question" value={freestyleQuestionText}
                                   onChange={handleInputChange("freestyleQuestionText")}/>
                 </Form.Group>
-            </Form>
+            </div>
         )
     }
 
@@ -177,13 +187,14 @@ const CreateSurvey = () => {
      * Adds the Freestyle Question to the freestyleQuestions Array
      * Increments the Index, that tracks the creation order of all questions (freestyle and constrained)
      */
-    const addFreestyleQuestion = () => {
+    const addFreestyleQuestion = (event) => {
+        event.preventDefault();
         const question = {question_text: freestyleQuestionText, position: questionIndex};
         const currentQuestions = freestyleQuestions;
         currentQuestions.push(question);
         setFreestyleQuestions(currentQuestions);
         setQuestionIndex(questionIndex + 1);
-       setValues({...values, freestyleQuestionText: ""});
+        setValues({...values, freestyleQuestionText: ""});
     }
 
     /**
@@ -202,14 +213,25 @@ const CreateSurvey = () => {
         return (
             <Form>
                 <BasicForm params={params}/>
-
+                <hr/>
+                <Row>
+                    <Col>
+                        {constrainedQuestion()}
+                        <button className={"add_question_btn"} onClick={addConstrainedQuestion}>Add Constrained Question</button>
+                    </Col>
+                    <Col>
+                        {freestyleQuestion()}
+                        <button className={"add_question_btn"} onClick={addFreestyleQuestion}>Add Freestyle Question</button>
+                    </Col>
+                </Row>
+                <hr/>
                 <Form.Group>
                     <Form.Check id={"securedStatus"} type="checkbox" label="Make Survey Private"/>
                 </Form.Group>
 
-                <Button variant="success" type="submit" onClick={createNewSurvey}>
+                <button className={"submit_create_survey_button"} type="submit" onClick={createNewSurvey}>
                     Create Survey
-                </Button>
+                </button>
             </Form>
         )
     }
@@ -222,7 +244,7 @@ const CreateSurvey = () => {
         const validationResponse = SurveyValidator(title, description, start_date, end_date, constrainedQuestions, freestyleQuestions); // Validates Survey based on user input
         if (validationResponse.status) { // Indicates if Survey data is valid - true || false
             const apiResponse = await SurveyAPIHandler.surveyCreate(title, description, start_date, end_date, securedInput, constrainedQuestions, freestyleQuestions);
-            if (apiResponse.status === 201){
+            if (apiResponse.status === 201) {
                 setShowMessage(true);
                 setMessageType("success");
                 setMessageText("Survey was successfully created.");
@@ -240,35 +262,89 @@ const CreateSurvey = () => {
         }
     }
 
-    return (
-        <Container fluid>
-            <Row>
-                <Col xs={1} style={{padding: 0}}>
-                    <SideMenu/>
-                </Col>
-                <Col xs={5} style={{marginTop: "30px"}}>
+    const createSurveyComponent = () => {
+        return (
+            <div className={"create_survey_container"}>
+                <div className={"create_survey_basic_input"}>
                     {basicDataFormInput()}
-                </Col>
-                <Col xs={6} style={{marginTop: "30px"}}>
                     {showMessage && (
                         <Message message={messageText} type={messageType}/>
                     )}
-                    <Row>
-                        <Col>
-                            {constrainedQuestion()}
-                            <Button variant="warning" onClick={addConstrainedQuestion} style={{marginBottom: "15px", color: "white"}}>Add Constrained Question</Button>
-                        </Col>
-                        <Col>
-                            {freestyleQuestion()}
-                            <Button variant="warning" onClick={addFreestyleQuestion} style={{marginBottom: "15px", color: "white"}}>Add Freestyle Question</Button>
-                        </Col>
-                    </Row>
-                    <Row>
+                </div>
+
+                <div className={"create_survey_question_input"}>
+                    <div className={"create_survey_preview"}>
+                        {   title === "" &&
+                            <p className={"title_preview preview_survey_label"}>Preview:</p>}
+                        <h2 className={"preview_survey_label"}>{title}</h2>
+                        { description !== "" &&
+                            <div style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+                                <label className={"preview_survey_label"}>Description:</label>
+                                <p>{description}</p>
+                            </div>
+                        }
                         {sortQuestions(constrainedQuestions, freestyleQuestions).map((item, i) => {
-                            if (item.question.hasOwnProperty("options")){
-                                return(
-                                    <div key={i} style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px", margin: "0 15px"}}>
-                                        <label>Question {i+1}: <span style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
+                            if (item.type === "constrained") {
+                                return (
+                                    <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+                                        <Form.Group id={`${i}answer`}>
+                                            <Form.Label
+                                                className={"preview_survey_label"}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
+                                            {item.question.options.map((option, j) => (
+                                                <Form.Check
+                                                    key={j}
+                                                    type="radio"
+                                                    label={option.answer}
+                                                    name={`answerOptionToQuestion${i}`}
+                                                />
+                                            ))}
+                                        </Form.Group>
+                                    </div>
+                                )
+                            } else {
+                                return (
+                                    <div key={i} style={{border: "1px solid lightgrey", borderRadius: "8px", padding: "10px"}}>
+                                        <Form.Group>
+                                            <Form.Label className={"preview_survey_label"}>{item.question.position + 1}. {item.question.question_text}</Form.Label>
+                                            <Form.Control id={`${i}answer`} type="text" placeholder="Your Answer..."/>
+                                        </Form.Group>
+                                    </div>
+                                )
+                            }
+                        })}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className={"app_wrapper"}>
+            <AppNavbar/>
+            <SideMenu/>
+            <div id={"app_page_body"}>
+                {createSurveyComponent()}
+            </div>
+        </div>
+    )
+}
+
+export default CreateSurvey;
+
+/**
+ <Row>
+ {sortQuestions(constrainedQuestions, freestyleQuestions).map((item, i) => {
+                            if (item.question.hasOwnProperty("options")) {
+                                return (
+                                    <div key={i} style={{
+                                        width: "100%",
+                                        border: "1px solid lightgrey",
+                                        borderRadius: "8px",
+                                        padding: "10px",
+                                        margin: "0 15px"
+                                    }}>
+                                        <label>Question {i + 1}: <span
+                                            style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
                                         <ul>
                                             {item.question.options.map((option, j) => (
                                                 <li key={j}>{option.answer}</li>
@@ -278,17 +354,18 @@ const CreateSurvey = () => {
                                 )
                             } else {
                                 return (
-                                    <div key={i} style={{width: "100%", border: "1px solid lightgrey", borderRadius: "8px", padding: "10px", margin: "0 15px"}}>
-                                        <label>Question {i+1}: <span style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
+                                    <div key={i} style={{
+                                        width: "100%",
+                                        border: "1px solid lightgrey",
+                                        borderRadius: "8px",
+                                        padding: "10px",
+                                        margin: "0 15px"
+                                    }}>
+                                        <label>Question {i + 1}: <span
+                                            style={{fontWeight: "bold"}}>{item.question.question_text}</span></label>
                                     </div>
                                 )
                             }
                         })}
-                    </Row>
-                </Col>
-            </Row>
-        </Container>
-    )
-}
-
-export default CreateSurvey;
+ </Row>
+ **/

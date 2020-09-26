@@ -16,11 +16,23 @@
   grid-area: top_nav;
 }
 
-#page_body{
+#app_page_body{
   grid-area: page;
 }
 
 #side_nav{
   grid-area: side_nav;
   background-color: $main_color-orange;
+}
+
+.title_preview{
+  margin-bottom: 0;
+  padding: 10px;
+}
+
+.create_survey_preview{
+  box-shadow: $shadow;
+  border-radius: 4px;
+  height: 100%;
+  padding: 10px;
 }
