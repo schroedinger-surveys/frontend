@@ -15,6 +15,7 @@ import {Redirect} from "react-router-dom";
 import {DeleteModal} from "./delete-survey-utils";
 import SubmissionAPIHandler from "../../calls/submission";
 import storageManager from "../../storage/StorageManager";
+import AppNavbar from "../menu/AppNavbar";
 
 const SurveyOverview = () => {
     const [matching, setMatching] = useState(true);
@@ -143,7 +144,8 @@ const SurveyOverview = () => {
 
     const redirectSurveyEdit = () => {
         return (
-            <Redirect to={{pathname: "/survey/edit/" +surveyToEdit.id,
+            <Redirect to={{
+                pathname: "/survey/edit/" + surveyToEdit.id,
                 state: {
                     survey: surveyToEdit
                 }
@@ -282,58 +284,59 @@ const SurveyOverview = () => {
     }, []);
 
     return (
-        <Container fluid>
-            {redirect && redirectSurveyEdit()}
-            <Row>
-                <Col xs={1} style={{padding: 0}}>
-                    <SideMenu/>
-                </Col>
-                {deleteSurveyModal()}
+        <div className={"app_wrapper"}>
+            <AppNavbar/>
+            <SideMenu/>
+            <div id={"app_page_body"}>
                 {matching && (
-                    <Col xs={11}>
-                        <LoadingScreen/>
-                    </Col>
+                    <LoadingScreen/>
+                )}
+                <div className={"survey_overview_container"}>
+                    {redirect && redirectSurveyEdit()}
+                    {deleteSurveyModal()}
+                    {!matching && (
+                        <div className={"survey_overview_private"}
+                             style={{margin: "30px 30px 0 0", border: "1px solid lightgrey", borderRadius: "8px"}}>
 
-                )}
-                {!matching && (
-                    <Col xs={5} style={{margin: "30px 30px 0 0", border: "1px solid lightgrey", borderRadius: "8px"}}>
-                        {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
-                        <h3>Private Surveys - {privateCount}</h3>
-                        {privateSurveys.length > 0 && (
-                            <div>
-                                {privatePagination()}
-                                {SurveyList(privateSurveys)}
-                            </div>
-                        )}
-                        {privateSurveys.length === 0 && (
-                            <div>
-                                <p>No Private Surveys yet.</p>
-                                <a href={"/survey/create"}>Create a Private Survey now</a>
-                            </div>
+                            {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
+                            <h3>Private Surveys - {privateCount}</h3>
+                            {privateSurveys.length > 0 && (
+                                <div>
+                                    {privatePagination()}
+                                    {SurveyList(privateSurveys)}
+                                </div>
+                            )}
+                            {privateSurveys.length === 0 && (
+                                <div>
+                                    <p>No Private Surveys yet.</p>
+                                    <a href={"/survey/create"}>Create a Private Survey now</a>
+                                </div>
 
-                        )}
-                    </Col>
-                )}
-                {!matching && (
-                    <Col xs={5} style={{marginTop: "30px", border: "1px solid lightgrey", borderRadius: "8px"}}>
-                        {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
-                        <h3>Public Surveys - {publicCount}</h3>
-                        {publicSurveys.length > 0 && (
-                            <div>
-                                {publicPagination()}
-                                {SurveyList(publicSurveys)}
-                            </div>
-                        )}
-                        {publicSurveys.length === 0 && (
-                            <div>
-                                <p>No Public Surveys yet.</p>
-                                <a href={"/survey/create"}>Create a Public Survey now</a>
-                            </div>
-                        )}
-                    </Col>
-                )}
-            </Row>
-        </Container>
+                            )}
+                        </div>
+                    )}
+                    {!matching && (
+                        <div className={"survey_overview_public"}
+                            style={{marginTop: "30px", border: "1px solid lightgrey", borderRadius: "8px"}}>
+                            {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
+                            <h3>Public Surveys - {publicCount}</h3>
+                            {publicSurveys.length > 0 && (
+                                <div>
+                                    {publicPagination()}
+                                    {SurveyList(publicSurveys)}
+                                </div>
+                            )}
+                            {publicSurveys.length === 0 && (
+                                <div>
+                                    <p>No Public Surveys yet.</p>
+                                    <a href={"/survey/create"}>Create a Public Survey now</a>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
     )
 }
 
