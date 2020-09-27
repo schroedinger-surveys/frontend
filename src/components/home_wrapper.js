@@ -7,7 +7,7 @@ const Home_wrapper = () => {
         <div className={"app_wrapper"}>
             <AppNavbar/>
             <SideMenu/>
-            <div id={"page_body"}>
+            <div id={"app_page_body"}>
                 Page
             </div>
         </div>
