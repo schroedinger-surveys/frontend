@@ -86,10 +86,10 @@ const SurveyOverview = () => {
 
     const SurveyList = (surveys) => {
         return (
-            <ListGroup>
+            <ListGroup className={"survey_overview_list_group"}>
                 {surveys.map((item, i) => (
                     <ListGroup.Item className={"survey_overview_item"} key={i}>
-                        <span className={"survey_overview_title"}>{item.survey.title}</span><br/>
+                        <div className={"survey_overview_title"}>{item.survey.title}</div>
                         <span className={"survey_overview_details_title_first"}>status:</span>
                         <i>{getCurrentStatus(item.survey.start_date, item.survey.end_date)}</i>
                         <span className={"survey_overview_details_title"}>start:</span>
@@ -110,12 +110,11 @@ const SurveyOverview = () => {
                                 </Card.Header>
                                 <Accordion.Collapse eventKey="0">
                                     <Card.Body>
-                                        <ul>
+                                        <ul className={"survey_overview_ul"}>
                                             {sortQuestions(item.survey.constrained_questions, item.survey.freestyle_questions).map((item, i) => {
-                                                console.log(item)
                                                 if (item.type === "constrained") {
-                                                    return (<div key={i}>
-                                                        <p>{item.question.question_text}</p>
+                                                    return (<div key={i} className={"survey_overview_question_container"}>
+                                                        <p className={"survey_overview_const_question"}>Question {i+1}: {item.question.question_text}</p>
                                                         <ul>
                                                             {item.question.options.map((option, j) => (
                                                                 <li key={j}>{option.answer}</li>
@@ -123,7 +122,7 @@ const SurveyOverview = () => {
                                                         </ul>
                                                     </div>)
                                                 } else {
-                                                    return <div key={i}>{item.question.question_text}</div>
+                                                    return <div className={"survey_overview_question_container"} key={i}>Question {i+1}: {item.question.question_text}</div>
                                                 }
                                             })}
                                         </ul>
@@ -133,7 +132,7 @@ const SurveyOverview = () => {
                         </Accordion>
                         {(getSurveyStatus(item.survey.start_date, item.survey.end_date) === "pending" ||
                             (getSurveyStatus(item.survey.start_date, item.survey.end_date) === "active" && item.submissionCount === 0)) &&
-                        <button style={{border: "none", backgroundColor: "transparent", float: "left"}}
+                        <button className={"survey_overview_btn"} style={{border: "none", backgroundColor: "transparent", float: "left"}}
                                 onClick={() => redirectToSurvey(item.survey)}
                         >
                             <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-pencil-square"
@@ -146,7 +145,7 @@ const SurveyOverview = () => {
                             </svg>
                         </button>
                         }
-                        <button style={{border: "none", backgroundColor: "transparent", float: "right"}}
+                        <button className={"survey_overview_btn"} style={{border: "none", backgroundColor: "transparent", float: "right"}}
                                 onClick={() => {
                                     setShowDeleteModal(true);
                                     setSurveyToDelete(item.survey)

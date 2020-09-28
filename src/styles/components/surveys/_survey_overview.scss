@@ -30,11 +30,16 @@ $survey-overview-columns: 90%;
 .survey_overview_item{
   cursor: pointer;
   color: $font_color-light;
+  margin-bottom: 20px;
+  border-top-width: 1px !important;
+  border-radius: 4px;
 }
 
 .survey_overview_title{
   font-weight: bold;
   color: $font_color-dark;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .survey_overview_details_title{
@@ -43,4 +48,24 @@ $survey-overview-columns: 90%;
 }
 .survey_overview_details_title_first{
   color: $font_color-dark;
+}
+
+.survey_overview_list_group{
+  margin-top: 20px;
+}
+
+.survey_overview_question_container{
+  margin-bottom: 10px;
+}
+
+.survey_overview_const_question{
+  margin-bottom: 0;
+}
+
+.survey_overview_ul{
+  padding-left: 0;
+}
+
+.survey_overview_btn:focus{
+  outline: none;
 }
