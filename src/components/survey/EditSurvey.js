@@ -136,9 +136,9 @@ const EditSurvey = (props) => {
                     </Form.Text>
                 </Form.Group>
 
-                <Button variant="success" onClick={updateSurvey}>
+                <button className={"update_edited_survey_btn"} onClick={updateSurvey}>
                     Update Survey
-                </Button>
+                </button>
                 <Button variant="outline-danger" onClick={() => setShowDeleteModal(true)}>Delete Survey</Button>
             </Form>
         )
@@ -184,7 +184,7 @@ const EditSurvey = (props) => {
                         padding: "5px",
                         marginBottom: "5px"
                     }}>
-                        <button style={{border: "none", backgroundColor: "transparent"}}
+                        <button className={"edit_survey_remove_question"}
                                 onClick={() => deleteQuestion(i, item)}
                         >
                             <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash"
@@ -212,7 +212,7 @@ const EditSurvey = (props) => {
     const deleteQuestion = (index, item) => {
         const question = document.getElementById(`question${index}`);
         if (question) {
-            question.style.backgroundColor = "#DA2D2D";
+            question.style.backgroundColor = "rgba(254,13,19, 0.6)";
             question.style.color = "white";
             if (item.type === "constrained") {
                 setChangedValues({
@@ -261,7 +261,7 @@ const EditSurvey = (props) => {
                     </svg>
                 </button>
                 <br/>
-                <Button variant={"outline-success"} onClick={addConstrainedQuestion}>Add Question</Button>
+                <button className={"edit_survey_add_question_btn"} onClick={addConstrainedQuestion}>Add Question</button>
                 <Button variant={"outline-danger"} onClick={() => setShowConstrainedQuestionForm(false)}>Cancel</Button>
             </Form>
         )
@@ -272,7 +272,8 @@ const EditSurvey = (props) => {
      * by adding an object to the constrainedOptions array
      * and incrementing the optionsIndex
      */
-    const addConstrainedOption = () => {
+    const addConstrainedOption = (event) => {
+        event.preventDefault();
         const currentOptions = constrainedOptions;
         currentOptions.push({number: optionsIndex});
         setConstrainedOptions(currentOptions);
@@ -330,7 +331,7 @@ const EditSurvey = (props) => {
                     <Form.Control type="text" placeholder="Enter question" value={freestyleQuestionText}
                                   onChange={handleInputChange("freestyleQuestionText")}/>
                 </Form.Group>
-                <Button variant={"outline-success"} onClick={addFreestyleQuestion}>Add Question</Button>
+                <button className={"edit_survey_add_question_btn"} onClick={addFreestyleQuestion}>Add Question</button>
                 <Button variant={"outline-danger"} onClick={() => setShowFreestyleQuestionForm(false)}>Cancel</Button>
             </Form>
         )
@@ -361,10 +362,10 @@ const EditSurvey = (props) => {
                         borderRadius: "5px",
                         padding: "5px",
                         marginBottom: "5px",
-                        backgroundColor: "#24AE24",
+                        backgroundColor: "rgba(36,174,36,0.6)",
                         color: "white"
                     }}>
-                        <button style={{border: "none", backgroundColor: "transparent"}}
+                        <button className={"edit_survey_remove_question"}
                                 onClick={() => removeAddedQuestion(i, item)}
                         >
                             <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash"
@@ -402,7 +403,7 @@ const EditSurvey = (props) => {
         }
         const question = document.getElementById(`addedQuestion${index}`);
         if (question) {
-            question.style.backgroundColor = "#DA2D2D";
+            question.style.backgroundColor = "rgba(254,13,19, 0.6)";
             question.style.color = "white";
         }
     }
@@ -452,16 +453,16 @@ const EditSurvey = (props) => {
                             {AddedQuestions()}
                         </Row>
                         <Row>
-                            <Button variant={"warning"} style={{color: "white", marginRight: "10px"}} onClick={() => {
+                            <button className={"edit_survey_add_question_btn"} onClick={() => {
                                 setShowConstrainedQuestionForm(true);
                                 setShowFreestyleQuestionForm(false);
                             }}>Add Constrained
-                                Question</Button>
-                            <Button variant={"warning"} style={{color: "white", marginRight: "10px"}} onClick={() => {
+                                Question</button>
+                            <button className={"edit_survey_add_question_btn"} onClick={() => {
                                 setShowConstrainedQuestionForm(false);
                                 setShowFreestyleQuestionForm(true);
                             }}>Add Freestyle
-                                Question</Button>
+                                Question</button>
                             <div style={{width: "90%"}}>
                                 {showConstrainedQuestionForm && constrainedQuestion()}
                                 {showFreestyleQuestionForm && freestyleQuestion()}
