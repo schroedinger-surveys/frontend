@@ -408,13 +408,14 @@ const EditSurvey = (props) => {
         }
     }
 
-    const updateSurvey = async () => {
+    const updateSurvey = async (event) => {
+        event.preventDefault();
         const secured = document.getElementById("securedStatusPrivate").checked;
         const apiResponse = await SurveyAPIHandler.surveyUpdate(survey.id, title, description, start_date, end_date, secured, addedConstrainedQuestions, addedFreestyleQuestions, deletedConstrainedQuestions, deletedFreestyleQuestions)
         if (apiResponse.status === 204) {
             setShowMessageUpdate(true);
             setMessageTypeUpdate("success");
-            setMessageTextUpdate("Survey was updated");
+            setMessageTextUpdate("Survey was updated. You will be redirected.");
             storageManager.clearSurveyCache();
             setTimeout(() => {
                 history.push("/dashboard");
