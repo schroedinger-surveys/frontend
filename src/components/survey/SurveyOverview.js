@@ -16,6 +16,8 @@ import {DeleteModal} from "./delete-survey-utils";
 import SubmissionAPIHandler from "../../calls/submission";
 import storageManager from "../../storage/StorageManager";
 import AppNavbar from "../menu/AppNavbar";
+import {EuropeanTime} from "../utils/TimeConverter";
+import {sortQuestions} from "../utils/SortQuestions";
 
 const SurveyOverview = () => {
     const [matching, setMatching] = useState(true);
@@ -88,18 +90,40 @@ const SurveyOverview = () => {
                     <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}} key={i}>
                         <span style={{fontWeight: "bold"}}>{item.survey.title}</span><br/>
                         status: <i>{getCurrentStatus(item.survey.start_date, item.survey.end_date)}</i> -
-                        start: <i>{item.survey.start_date.substr(0, 10)}</i> -
-                        end: <i>{item.survey.end_date.substr(0, 10)}</i> -
+                        start: <i>{EuropeanTime(item.survey.start_date)}</i> -
+                        end: <i>{EuropeanTime(item.survey.end_date)}</i> -
                         submissions: <i>{item.submissionCount}</i> -
                         questions: <i>{item.survey.constrained_questions.length + item.survey.freestyle_questions.length}</i> -
                         seen: <i>0 times</i><br/>
                         <Accordion>
-                            {item.survey.constrained_questions.length > 0 && (
-                                constrainedQuestionsList(item.survey)
-                            )}
-                            {item.survey.freestyle_questions.length > 0 && (
-                                freestyleQuestionList(item.survey)
-                            )}
+                            <Card>
+                                <Card.Header>
+                                    <Accordion.Toggle as={Button} variant="link" eventKey="0" style={{color: "grey"}}>
+                                        Click to see Questions
+                                    </Accordion.Toggle>
+                                </Card.Header>
+                                <Accordion.Collapse eventKey="0">
+                                    <Card.Body>
+                                        <ul>
+                                            {sortQuestions(item.survey.constrained_questions, item.survey.freestyle_questions).map((item, i) => {
+                                                console.log(item)
+                                                if (item.type === "constrained") {
+                                                    return (<div key={i}>
+                                                        <p>{item.question.question_text}</p>
+                                                        <ul>
+                                                            {item.question.options.map((option, j) => (
+                                                                <li key={j}>{option.answer}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>)
+                                                } else {
+                                            return <div key={i}>{item.question.question_text}</div>
+                                        }
+                                            })}
+                                        </ul>
+                                    </Card.Body>
+                                </Accordion.Collapse>
+                            </Card>
                         </Accordion>
                         {(getSurveyStatus(item.survey.start_date, item.survey.end_date) === "pending" ||
                             (getSurveyStatus(item.survey.start_date, item.survey.end_date) === "active" && item.submissionCount === 0)) &&
@@ -183,55 +207,6 @@ const SurveyOverview = () => {
         }
     }
 
-    const constrainedQuestionsList = (survey) => {
-        const constrainedQuestions = survey.constrained_questions;
-        return (
-            <Card>
-                <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="1" style={{color: "grey"}}>
-                        Click to see: Constrained Questions
-                    </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="1">
-                    <Card.Body>
-                        {constrainedQuestions.map((question, i) => (
-                            <div key={i}>
-                                <p>{question.question_text}</p>
-                                <ul>
-                                    {question.options.map((option, j) => (
-                                        <li key={j}>{option.answer}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </Card.Body>
-                </Accordion.Collapse>
-            </Card>
-        )
-    }
-
-    const freestyleQuestionList = (survey) => {
-        const freestyleQuestions = survey.freestyle_questions;
-        return (
-            <Card>
-                <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="0" style={{color: "grey"}}>
-                        Click to see: Freestyle Questions
-                    </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="0">
-                    <Card.Body>
-                        <ul>
-                            {freestyleQuestions.map((question, i) => (
-                                <li key={i}>{question.question_text}</li>
-                            ))}
-                        </ul>
-                    </Card.Body>
-                </Accordion.Collapse>
-            </Card>
-        )
-    }
-
     const privatePagination = () => {
         const changePage = async (index) => {
             const listPrivateSurveys = await SurveyAPIHandler.surveyPrivateGet(index, itemsPerPage);
@@ -299,7 +274,7 @@ const SurveyOverview = () => {
                              style={{margin: "30px 30px 0 0", border: "1px solid lightgrey", borderRadius: "8px"}}>
 
                             {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
-                            <h3>Private Surveys - {privateCount}</h3>
+                            <h3 className={"overview_section_title"}>Private Surveys</h3>
                             {privateSurveys.length > 0 && (
                                 <div>
                                     {privatePagination()}
@@ -317,9 +292,9 @@ const SurveyOverview = () => {
                     )}
                     {!matching && (
                         <div className={"survey_overview_public"}
-                            style={{marginTop: "30px", border: "1px solid lightgrey", borderRadius: "8px"}}>
+                             style={{marginTop: "30px", border: "1px solid lightgrey", borderRadius: "8px"}}>
                             {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
-                            <h3>Public Surveys - {publicCount}</h3>
+                            <h3 className={"overview_section_title"}>Public Surveys</h3>
                             {publicSurveys.length > 0 && (
                                 <div>
                                     {publicPagination()}

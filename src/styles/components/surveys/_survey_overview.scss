@@ -1,3 +1,4 @@
+@import "../../base/colors";
 
 $survey-overview-columns: 90%;
 
@@ -13,9 +14,15 @@ $survey-overview-columns: 90%;
 .survey_overview_private{
   grid-area: private;
   height: $survey-overview-columns;
+  padding: 3%;
 }
 
 .survey_overview_public{
   grid-area: public;
   height: $survey-overview-columns;
+  padding: 3%;
+}
+
+.overview_section_title{
+  color: $font_color-dark;
 }
