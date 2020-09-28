@@ -8,7 +8,7 @@ export const DeleteModal = (props) => {
     return(
         <Modal show={parameter.showDeleteModal} onHide={parameter.closeFunction}>
             <Modal.Header closeButton>
-                <Modal.Title>Deleting your user account</Modal.Title>
+                <Modal.Title>Deleting this survey</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 Are you sure that you want to delete this survey. All data will be lost forever!

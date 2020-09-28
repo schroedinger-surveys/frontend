@@ -1,0 +1,56 @@
+@import "../../base/colors";
+@import "../../base/universals";
+
+.edit_survey_component{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+          "basic questions";
+  height: 100%;
+  width: 100%;
+  color: $font_color-light;
+}
+
+.edit_survey_basic_form{
+  grid-area: basic;
+  margin: 5% 2.5% 5% 5%;
+  height: 90%;
+}
+
+.edit_survey_questions{
+  grid-area: questions;
+  margin: 5% 5% 5% 2.5%;
+  height: 90%;
+}
+
+.update_edited_survey_btn{
+  @include submit-button;
+  margin-right: 20px;
+  height: 35px;
+}
+.update_edited_survey_btn:hover{
+  @include submit-button-hover;
+}
+.update_edited_survey_btn:focus{
+  @include submit-button-focus;
+}
+
+.edit_survey_add_question_btn{
+  border-radius: 4px;
+  margin-right: 20px;
+  margin-top: 10px;
+  height: 35px;
+  line-height: 35px;
+  @include outline-button;
+}
+.edit_survey_add_question_btn:hover{
+  @include outline-button-hover;
+}
+
+.edit_survey_remove_question{
+  border: none;
+  background-color: transparent;
+}
+.edit_survey_remove_question:focus{
+  outline: none;
+}
