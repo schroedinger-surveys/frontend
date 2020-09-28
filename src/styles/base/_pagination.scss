@@ -18,3 +18,11 @@
 .pagination_list_li:hover{
   background-color: #FAD8A6;
 }
+
+.pagination_list_li_transparent{
+  display: inline;
+  cursor: pointer;
+  padding: 0 11px;
+  color: transparent;
+  font-weight: bold;
+}

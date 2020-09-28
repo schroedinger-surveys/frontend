@@ -26,3 +26,21 @@ $survey-overview-columns: 90%;
 .overview_section_title{
   color: $font_color-dark;
 }
+
+.survey_overview_item{
+  cursor: pointer;
+  color: $font_color-light;
+}
+
+.survey_overview_title{
+  font-weight: bold;
+  color: $font_color-dark;
+}
+
+.survey_overview_details_title{
+  color: $font_color-dark;
+  margin-left: 20px;
+}
+.survey_overview_details_title_first{
+  color: $font_color-dark;
+}

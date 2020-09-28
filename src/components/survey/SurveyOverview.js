@@ -18,6 +18,7 @@ import storageManager from "../../storage/StorageManager";
 import AppNavbar from "../menu/AppNavbar";
 import {EuropeanTime} from "../utils/TimeConverter";
 import {sortQuestions} from "../utils/SortQuestions";
+import {createPaginationMarker} from "../utils/PageMarker";
 
 const SurveyOverview = () => {
     const [matching, setMatching] = useState(true);
@@ -87,14 +88,19 @@ const SurveyOverview = () => {
         return (
             <ListGroup>
                 {surveys.map((item, i) => (
-                    <ListGroup.Item style={{cursor: "pointer", borderColor: "#065535"}} key={i}>
-                        <span style={{fontWeight: "bold"}}>{item.survey.title}</span><br/>
-                        status: <i>{getCurrentStatus(item.survey.start_date, item.survey.end_date)}</i> -
-                        start: <i>{EuropeanTime(item.survey.start_date)}</i> -
-                        end: <i>{EuropeanTime(item.survey.end_date)}</i> -
-                        submissions: <i>{item.submissionCount}</i> -
-                        questions: <i>{item.survey.constrained_questions.length + item.survey.freestyle_questions.length}</i> -
-                        seen: <i>0 times</i><br/>
+                    <ListGroup.Item className={"survey_overview_item"} key={i}>
+                        <span className={"survey_overview_title"}>{item.survey.title}</span><br/>
+                        <span className={"survey_overview_details_title_first"}>status:</span>
+                        <i>{getCurrentStatus(item.survey.start_date, item.survey.end_date)}</i>
+                        <span className={"survey_overview_details_title"}>start:</span>
+                        <i>{EuropeanTime(item.survey.start_date)}</i>
+                        <span className={"survey_overview_details_title"}>end:</span>
+                        <i>{EuropeanTime(item.survey.end_date)}</i>
+                        <span className={"survey_overview_details_title"}>submissions:</span>
+                        <i>{item.submissionCount}</i>
+                        <span className={"survey_overview_details_title"}>questions:</span>
+                        <i>{item.survey.constrained_questions.length + item.survey.freestyle_questions.length}</i>
+                        <span className={"survey_overview_details_title"}>seen:</span> <i>0 times</i><br/>
                         <Accordion>
                             <Card>
                                 <Card.Header>
@@ -117,8 +123,8 @@ const SurveyOverview = () => {
                                                         </ul>
                                                     </div>)
                                                 } else {
-                                            return <div key={i}>{item.question.question_text}</div>
-                                        }
+                                                    return <div key={i}>{item.question.question_text}</div>
+                                                }
                                             })}
                                         </ul>
                                     </Card.Body>
@@ -214,7 +220,14 @@ const SurveyOverview = () => {
         }
 
         const pages = Math.ceil(privateCount / itemsPerPage);
-        return createPaginationMarker(pages, changePage);
+        if (pages > 1) {
+            return createPaginationMarker(pages, changePage);
+        } else {
+            return (
+                <ul className={"pagination_list_ul"}>
+                    <li className={"pagination_list_li_transparent"}>.</li>
+                </ul>)
+        }
     }
 
     const publicPagination = () => {
@@ -224,32 +237,12 @@ const SurveyOverview = () => {
         }
 
         const pages = Math.ceil(publicCount / itemsPerPage);
-        return createPaginationMarker(pages, changePage);
-    }
-
-    const createPaginationMarker = (pages, clickMethod) => {
-        let li = [];
-        for (let i = 0; i < pages; i++) {
-            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
-                        onClick={() => clickMethod(i)}>{i + 1}</li>)
-        }
-
-        if (pages <= 1) {
-            return (
-                <div style={{width: "100%"}}>
-                    <ul style={{listStyle: "none"}}>
-                        <li style={{color: "transparent"}}>.</li>
-                    </ul>
-                </div>
-            )
+        if (pages > 1) {
+            return createPaginationMarker(pages, changePage);
         } else {
-            return (
-                <div style={{width: "100%"}}>
-                    <ul style={{listStyle: "none"}}>
-                        {li}
-                    </ul>
-                </div>
-            )
+            return (<ul className={"pagination_list_ul"}>
+                <li className={"pagination_list_li_transparent"}>.</li>
+            </ul>)
         }
     }
 
