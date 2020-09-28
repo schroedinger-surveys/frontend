@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import SideMenu from "../menu/SideMenu";
-import {Container} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {TimeConverter} from "../utils/TimeConverter";
@@ -13,10 +12,18 @@ import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 import SurveyAPIHandler from "../../calls/survey";
 import log from "../../log/Logger";
 import storageManager from "../../storage/StorageManager";
+import AppNavbar from "../menu/AppNavbar";
+import {useParams} from "react-router-dom";
+import LoadingScreen from "../utils/LoadingScreen";
 
 const EditSurvey = (props) => {
     const {history} = props;
-    const survey = props.location.state.survey;
+    const {id} = useParams();
+
+    const [survey, setSurvey] = useState({});
+
+    const [loading, setLoading] = useState(true);
+    const [loaded, setLoaded] = useState(false);
 
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question
     /**
@@ -64,18 +71,29 @@ const EditSurvey = (props) => {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const setupSurveyForm = () => {
-        setValues({
-            ...values,
-            title: survey.title,
-            description: survey.description,
-            start_date: TimeConverter(new Date(survey.start_date)),
-            end_date: TimeConverter(new Date(survey.end_date)),
-            constrainedQuestions: survey.constrained_questions,
-            freestyleQuestions: survey.freestyle_questions
-        });
-        const sortedQuestions = sortQuestions(survey.constrained_questions, survey.freestyle_questions);
-        setLastPosition(sortedQuestions[sortedQuestions.length-1].question.position+2);
+    const setupSurveyForm = async () => {
+        setLoading(true);
+        const publicSurvey = await SurveyAPIHandler.getSinglePublicSurvey(id);
+        const privateSurvey = await SurveyAPIHandler.getSinglePrivateSurveyJWT(id);
+        const survey = privateSurvey.data || publicSurvey.data;
+        await setSurvey(survey);
+        setLoaded(true);
+        if (survey !== undefined){
+            setValues({
+                ...values,
+                title: survey.title,
+                description: survey.description,
+                start_date: TimeConverter(new Date(survey.start_date)),
+                end_date: TimeConverter(new Date(survey.end_date)),
+                constrainedQuestions: survey.constrained_questions,
+                freestyleQuestions: survey.freestyle_questions
+            });
+            const sortedQuestions = sortQuestions(survey.constrained_questions, survey.freestyle_questions);
+            setLastPosition(sortedQuestions[sortedQuestions.length - 1].question.position + 2);
+            setLoading(false);
+        } else {
+            history.push("/");
+        }
     }
 
     const [showMessageDelete, setShowMessageDelete] = useState(false);
@@ -140,9 +158,9 @@ const EditSurvey = (props) => {
         )
     }
 
-    const deleteSurvey = async() => {
+    const deleteSurvey = async () => {
         const apiResponse = await SurveyAPIHandler.surveyDelete(survey.id);
-        if(apiResponse.status === 204){
+        if (apiResponse.status === 204) {
             storageManager.clearSurveyCache();
             history.push("/dashboard");
         } else {
@@ -159,7 +177,7 @@ const EditSurvey = (props) => {
             <div style={{width: "90%"}}>
                 <label>Questions</label>
                 {sortedQuestions.map((item, i) => (
-                    <div key={i} id={"question"+i} style={{
+                    <div key={i} id={"question" + i} style={{
                         width: "100%",
                         border: "1px solid lightgrey",
                         borderRadius: "5px",
@@ -180,11 +198,11 @@ const EditSurvey = (props) => {
                         </button>
                         Question {i + 1}: {item.question.question_text}
                         {item.type === "constrained" &&
-                            <ul>
-                                {item.question.options.map((option, j) =>(
-                                  <li key={j}>{option.answer}</li>
-                                ))}
-                            </ul>}
+                        <ul>
+                            {item.question.options.map((option, j) => (
+                                <li key={j}>{option.answer}</li>
+                            ))}
+                        </ul>}
                     </div>
                 ))}
             </div>
@@ -193,13 +211,19 @@ const EditSurvey = (props) => {
 
     const deleteQuestion = (index, item) => {
         const question = document.getElementById(`question${index}`);
-        if(question){
+        if (question) {
             question.style.backgroundColor = "#DA2D2D";
             question.style.color = "white";
-            if(item.type === "constrained"){
-                setChangedValues({...changedValues, deletedConstrainedQuestions: [...deletedConstrainedQuestions, {question_id: item.question.id}]});
+            if (item.type === "constrained") {
+                setChangedValues({
+                    ...changedValues,
+                    deletedConstrainedQuestions: [...deletedConstrainedQuestions, {question_id: item.question.id}]
+                });
             } else {
-                setChangedValues({...changedValues, deletedFreestyleQuestions: [...deletedFreestyleQuestions, {question_id: item.question.id}]});
+                setChangedValues({
+                    ...changedValues,
+                    deletedFreestyleQuestions: [...deletedFreestyleQuestions, {question_id: item.question.id}]
+                });
             }
         }
     }
@@ -227,7 +251,16 @@ const EditSurvey = (props) => {
                         </Col>
                     ))}
                 </Row>
-                <Button variant={"light"} onClick={addConstrainedOption}>Add option</Button> <br/>
+                <button className={"add_option_btn"} onClick={addConstrainedOption}>
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-plus-square" fill="currentColor"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd"
+                              d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                        <path fillRule="evenodd"
+                              d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                </button>
+                <br/>
                 <Button variant={"outline-success"} onClick={addConstrainedQuestion}>Add Question</Button>
                 <Button variant={"outline-danger"} onClick={() => setShowConstrainedQuestionForm(false)}>Cancel</Button>
             </Form>
@@ -268,7 +301,7 @@ const EditSurvey = (props) => {
             setConstrainedQuestions([...constrainedQuestions, question]);
             setAddedQuestions([...addedQuestions, question]);
 
-            setLastPosition(lastPosition+1)
+            setLastPosition(lastPosition + 1)
             setOptionsIndex(minimumOptionsAmount); // Set Options Index back to 2, which is default
 
             setValues({...values, constrainedQuestionText: ""});
@@ -280,7 +313,7 @@ const EditSurvey = (props) => {
              * Clear the Input fields for the question and the options
              */
             setValues({...values, constrainedQuestionText: ""});
-            for(let i = 0; i < minimumOptionsAmount; i ++){
+            for (let i = 0; i < minimumOptionsAmount; i++) {
                 options[i].value = "";
             }
         }
@@ -310,7 +343,7 @@ const EditSurvey = (props) => {
     const addFreestyleQuestion = (event) => {
         event.preventDefault();
         const question = {question_text: freestyleQuestionText, position: lastPosition};
-        setLastPosition(lastPosition+1)
+        setLastPosition(lastPosition + 1)
         setFreestyleQuestions([...freestyleQuestions, question]);
         setAddedQuestions([...addedQuestions, question]);
         setValues({...values, freestyleQuestionText: ""});
@@ -322,7 +355,7 @@ const EditSurvey = (props) => {
         return (
             <div style={{width: "90%"}}>
                 {sortedQuestions.map((item, i) => (
-                    <div key={i} id={"addedQuestion"+i} style={{
+                    <div key={i} id={"addedQuestion" + i} style={{
                         width: "100%",
                         border: "1px solid lightgrey",
                         borderRadius: "5px",
@@ -346,7 +379,7 @@ const EditSurvey = (props) => {
                         Question {item.question.position}: {item.question.question_text}
                         {item.type === "constrained" &&
                         <ul>
-                            {item.question.options.map((option, j) =>(
+                            {item.question.options.map((option, j) => (
                                 <li key={j}>{option.answer}</li>
                             ))}
                         </ul>}
@@ -357,7 +390,7 @@ const EditSurvey = (props) => {
     }
 
     const removeAddedQuestion = (index, item) => {
-        if(item.type === "constrained"){
+        if (item.type === "constrained") {
             const currentIndex = addedConstrainedQuestions.findIndex(obj => obj === item.question);
             const temp = addedConstrainedQuestions;
             temp.splice(currentIndex, 1);
@@ -368,21 +401,21 @@ const EditSurvey = (props) => {
             // setChangedValues({...changedValues, addedFreestyleQuestions: temp}) This would remove the added question from display, but the position number would look awful
         }
         const question = document.getElementById(`addedQuestion${index}`);
-        if(question) {
+        if (question) {
             question.style.backgroundColor = "#DA2D2D";
             question.style.color = "white";
         }
     }
 
-    const updateSurvey = async() => {
+    const updateSurvey = async () => {
         const secured = document.getElementById("securedStatusPrivate").checked;
         const apiResponse = await SurveyAPIHandler.surveyUpdate(survey.id, title, description, start_date, end_date, secured, addedConstrainedQuestions, addedFreestyleQuestions, deletedConstrainedQuestions, deletedFreestyleQuestions)
-        if (apiResponse.status === 204){
+        if (apiResponse.status === 204) {
             setShowMessageUpdate(true);
             setMessageTypeUpdate("success");
             setMessageTextUpdate("Survey was updated");
             storageManager.clearSurveyCache();
-            setTimeout(()=> {
+            setTimeout(() => {
                 history.push("/dashboard");
             }, 3000);
         } else {
@@ -398,42 +431,57 @@ const EditSurvey = (props) => {
         setConstrainedOptions(fillDefaultOptionsArray(minimumOptionsAmount));
     }, [])
 
-    return (
-        <Container fluid>
-            <Row>
-                <Col xs={1} style={{padding: 0}}>
-                    <SideMenu/>
-                </Col>
+    const editSurveyComponent = () => {
+        return (
+            <div className={"edit_survey_component"}>
                 {deleteSurveyModal()}
-                <Col xs={5} style={{marginTop: "30px"}}>
-                    {basicDataFormInput()}
-                    {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
-                    {showMessageUpdate && <Message type={messageTypeUpdate} message={messageTextUpdate}/>}
-                </Col>
-                <Col xs={6} style={{marginTop: "30px"}}>
-                    <Row>
-                        {QuestionsForm()}
-                        {AddedQuestions()}
-                    </Row>
-                    <Row>
-                        <Button variant={"warning"} style={{color: "white", marginRight: "10px"}} onClick={() => {
-                            setShowConstrainedQuestionForm(true);
-                            setShowFreestyleQuestionForm(false);
-                        }}>Add Constrained
-                            Question</Button>
-                        <Button variant={"warning"} style={{color: "white", marginRight: "10px"}} onClick={() => {
-                            setShowConstrainedQuestionForm(false);
-                            setShowFreestyleQuestionForm(true);
-                        }}>Add Freestyle
-                            Question</Button>
-                        <div style={{width: "90%"}}>
-                            {showConstrainedQuestionForm && constrainedQuestion()}
-                            {showFreestyleQuestionForm && freestyleQuestion()}
-                        </div>
-                    </Row>
-                </Col>
-            </Row>
-        </Container>
+                {loading && (
+                    <LoadingScreen/>
+                )}
+                {!loading && (
+                    <div className={"edit_survey_basic_form"} style={{marginTop: "30px"}}>
+                        {basicDataFormInput()}
+                        {showMessageDelete && <Message type={messageTypeDelete} message={messageTextDelete}/>}
+                        {showMessageUpdate && <Message type={messageTypeUpdate} message={messageTextUpdate}/>}
+                    </div>
+                )}
+                {!loading && (
+                    <div className={"edit_survey_questions"} style={{marginTop: "30px"}}>
+                        <Row>
+                            {loaded && QuestionsForm()}
+                            {AddedQuestions()}
+                        </Row>
+                        <Row>
+                            <Button variant={"warning"} style={{color: "white", marginRight: "10px"}} onClick={() => {
+                                setShowConstrainedQuestionForm(true);
+                                setShowFreestyleQuestionForm(false);
+                            }}>Add Constrained
+                                Question</Button>
+                            <Button variant={"warning"} style={{color: "white", marginRight: "10px"}} onClick={() => {
+                                setShowConstrainedQuestionForm(false);
+                                setShowFreestyleQuestionForm(true);
+                            }}>Add Freestyle
+                                Question</Button>
+                            <div style={{width: "90%"}}>
+                                {showConstrainedQuestionForm && constrainedQuestion()}
+                                {showFreestyleQuestionForm && freestyleQuestion()}
+                            </div>
+                        </Row>
+                    </div>
+                )}
+
+            </div>
+        )
+    }
+
+    return (
+        <div className={"app_wrapper"}>
+            <AppNavbar/>
+            <SideMenu/>
+            <div id={"app_page_body"}>
+                {editSurveyComponent()}
+            </div>
+        </div>
     )
 }
 

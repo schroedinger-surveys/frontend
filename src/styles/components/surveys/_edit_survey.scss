@@ -1,0 +1,23 @@
+@import "../../base/colors";
+
+.edit_survey_component{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+          "basic questions";
+  height: 100%;
+  width: 100%;
+  color: $font_color-light;
+}
+
+.edit_survey_basic_form{
+  grid-area: basic;
+  margin: 5% 2.5% 5% 5%;
+  height: 90%;
+}
+
+.edit_survey_questions{
+  grid-area: questions;
+  margin: 5% 5% 5% 2.5%;
+  height: 90%;
+}
