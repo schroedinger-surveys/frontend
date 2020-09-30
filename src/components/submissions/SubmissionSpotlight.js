@@ -96,11 +96,16 @@ const SubmissionSpotlight = (props) => {
      **/
     const showOptions = (key) => {
         const options = constrainedOptions.get(key);
-        let optionValues = [];
-        for (let i = 0; i < options.length; i++) {
-            optionValues.push(options[i].answer);
+        if(options !== undefined){
+            let optionValues = [];
+            for (let i = 0; i < options.length; i++) {
+                optionValues.push(options[i].answer);
+            }
+            return "(" + optionValues.join(", ") + ")";
+        } else {
+            return "";
         }
-        return "(" + optionValues.join(", ") + ")";
+
     }
 
     /**
