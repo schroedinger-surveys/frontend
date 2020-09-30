@@ -32,14 +32,14 @@ const AppNavbar = () => {
     const loggedIn = () => {
         return (
             <Nav className="ml-auto app_nav">
-                <Nav.Link className={"app_nav-menu"} href="/">
+                <Nav.Link className={"app_nav-menu"} href="/" disabled>
                     <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-moon" fill="currentColor"
                          xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd"
                               d="M14.53 10.53a7 7 0 0 1-9.058-9.058A7.003 7.003 0 0 0 8 15a7.002 7.002 0 0 0 6.53-4.47z"/>
                     </svg>
                 </Nav.Link>
-                <Nav.Link className={"app_nav-menu"} href="/">
+                <Nav.Link className={"app_nav-menu"} href="/" disabled>
                     <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-bell" fill="currentColor"
                          xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2z"/>
