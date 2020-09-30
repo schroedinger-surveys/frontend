@@ -130,52 +130,47 @@ const SubmissionSpotlight = (props) => {
     }
 
     return (
-        <Container fluid>
-            <Row>
-                {/* eslint-disable-next-line no-undefined */}
-                {survey === undefined && (
-                    <Redirect to={"/survey/submissions"}/>
-                )}
-                <Col xs={1} style={{padding: 0}}>
-                    <SideMenu/>
-                </Col>
-                <Col xs={3} style={{marginTop: "30px"}}>
-                    List of Submissions (newest first)
-                    {submissionCount > itemsPerPage && submissionPagination()}
-                    <ul>
-                        {submissions.map((submission, i) => (
-                            <li key={i} style={{cursor: "pointer"}} onClick={() => {
-                                changeSubmission(submission)
-                            }}>{submission.created.substr(0, 10)}</li>
-                        ))}
-                    </ul>
-                </Col>
-                <Col xs={8} style={{marginTop: "30px"}}>
-                    Spotlight of selected submission here <br/>
-                    {renamed &&
-                    sortQuestions(
-                        spotlight.constrained_answers,
-                        spotlight.freestyle_answers,
-                        "position",
-                        "constrained_questions_option_id").map((item, i) => (
-                        <div key={i} style={{
-                            border: "1px solid lightgrey",
-                            borderRadius: "8px",
-                            padding: "5px",
-                            marginBottom: "5px"
-                        }}>
-                            <p><span
-                                style={{fontWeight: "bold"}}>Question {item.question.position + 1}:</span> {item.question.question_text}
-                            </p>
-                            <p style={{fontSize: "12px"}}>
-                                <span style={{fontWeight: "bold", fontSize: "16px"}}>Answer:</span> <span
-                                style={{fontSize: "16px"}}>{item.question.answer}</span> {item.type === "constrained" ? showOptions(item.question.position) : ""}
-                            </p>
-                        </div>
+        <div>
+            {/* eslint-disable-next-line no-undefined */}
+            {survey === undefined && (
+                <Redirect to={"/survey/submissions"}/>
+            )}
+            <div className={"submission_spotlight_sub_list"}>
+                Submissions (newest first)
+                {submissionCount > itemsPerPage && submissionPagination()}
+                <ul>
+                    {submissions.map((submission, i) => (
+                        <li key={i} style={{cursor: "pointer"}} onClick={() => {
+                            changeSubmission(submission)
+                        }}>{submission.created.substr(0, 10)}</li>
                     ))}
-                </Col>
-            </Row>
-        </Container>
+                </ul>
+            </div>
+            <div className={"submission_spotlight_selected_sub"}>
+                Spotlight of selected submission here <br/>
+                {renamed &&
+                sortQuestions(
+                    spotlight.constrained_answers,
+                    spotlight.freestyle_answers,
+                    "position",
+                    "constrained_questions_option_id").map((item, i) => (
+                    <div key={i} style={{
+                        border: "1px solid lightgrey",
+                        borderRadius: "8px",
+                        padding: "5px",
+                        marginBottom: "5px"
+                    }}>
+                        <p><span
+                            style={{fontWeight: "bold"}}>Question {item.question.position + 1}:</span> {item.question.question_text}
+                        </p>
+                        <p style={{fontSize: "12px"}}>
+                            <span style={{fontWeight: "bold", fontSize: "16px"}}>Answer:</span> <span
+                            style={{fontSize: "16px"}}>{item.question.answer}</span> {item.type === "constrained" ? showOptions(item.question.position) : ""}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </div>
     )
 }
 
