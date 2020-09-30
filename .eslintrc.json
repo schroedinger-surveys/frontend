@@ -50,9 +50,9 @@
         "no-self-compare": "error",
         "no-warning-comments": "error",
         "require-await": "error",
-        "no-shadow": "error",
+        "no-shadow": "off",
         "no-undef": "error",
-        "no-undefined": "error",
+        "no-undefined": "off",
         "no-unused-vars": "error",
         "comma-dangle": ["error", "never"],
         "curly": "error",
@@ -67,6 +67,7 @@
         "object-shorthand": [2, "always"],
         "react/prop-types": "off",
         "no-useless-concat": "off",
-        "no-prototype-builtins": "off"
+        "no-prototype-builtins": "off",
+        "react/jsx-no-comment-textnodes": "off"
     }
 }

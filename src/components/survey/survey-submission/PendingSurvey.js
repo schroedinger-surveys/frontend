@@ -1,7 +1,5 @@
 import React from "react";
 
-import sleepingCat from "../icons/kitty.png"
-import boxLogo from "../../menu/icons/open-box.png";
 import {EuropeanTime} from "../../utils/TimeConverter";
 
 export const PendingSurvey = (survey) => {

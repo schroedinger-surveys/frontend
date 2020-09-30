@@ -2,9 +2,6 @@ import React from "react";
 import {Redirect} from "react-router-dom";
 
 import imageWebsite from "./images/website.png";
-import twitter from "./images/twitter.png";
-import instagram from "./images/instagram.png";
-import github from "./images/github.png";
 import storageManager from "../../storage/StorageManager";
 import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";

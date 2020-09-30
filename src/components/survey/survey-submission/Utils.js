@@ -1,7 +1,5 @@
 import log from "../../../log/Logger";
-import axios from "axios";
 import {SurveyForm} from "./Survey";
-import {Button} from "react-bootstrap";
 import React from "react";
 import {sortQuestions} from "../../utils/SortQuestions";
 import {PendingSurvey} from "./PendingSurvey";

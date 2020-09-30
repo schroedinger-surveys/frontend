@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Container, Form} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import SideMenu from "../menu/SideMenu";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";

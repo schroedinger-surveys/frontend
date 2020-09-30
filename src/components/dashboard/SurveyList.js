@@ -37,7 +37,7 @@ const SurveyList = (props) => {
             const publicSurveys = pagination ? await SurveyAPIHandler.surveyPublicGet(index, itemsPerPage) : await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPublicGet(index, itemsPerPage), "publicSurveys");
             setFilterSurveys(publicSurveys);
         } else if (filter === "all"){
-            const privateSurveys = pagination ? await SurveyAPIHandler.surveyPrivateGet(index, 2) : await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPrivateGet(index, 2), "privateSurveys");;
+            const privateSurveys = pagination ? await SurveyAPIHandler.surveyPrivateGet(index, 2) : await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPrivateGet(index, 2), "privateSurveys");
             const publicSurveys = pagination ? await SurveyAPIHandler.surveyPublicGet(index, 2) : await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPublicGet(index, 2), "publicSurveys");
             setFilterCount(props.counts.overallSurveys);
             setFilterSurveys([...privateSurveys, ...publicSurveys])

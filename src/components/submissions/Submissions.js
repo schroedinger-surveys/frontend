@@ -1,9 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Container from "react-bootstrap/Container";
-import Col from "react-bootstrap/Col";
 import SideMenu from "../menu/SideMenu";
-import Row from "react-bootstrap/Row";
-import {Redirect} from "react-router-dom";
 import LoadingScreen from "../utils/LoadingScreen";
 import SurveyAPIHandler from "../../calls/survey";
 import SubmissionAPIHandler from "../../calls/submission";
@@ -60,7 +56,6 @@ const Submissions = () => {
             setLoading(true);
 
             const privateSurveyList = await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPrivateGet(page_number, itemsPerPage), "privateSurveys");
-            console.log(privateSurveyList);
             if (!pagination) {
                 const privateSurveyCounts = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.privateSurveyCount, "privateSurveyCount");
                 setPrivateSurveysCount(privateSurveyCounts);

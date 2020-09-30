@@ -1,10 +1,7 @@
 import React, {useEffect} from "react";
 import Nav from "react-bootstrap/Nav";
 
-import storageManager from "../../storage/StorageManager";
 import {useLocation} from "react-router-dom";
-import UserAPIHandler from "../../calls/user";
-import {Navbar} from "react-bootstrap";
 
 const SideMenu = () => {
     const location = useLocation(); // Current url path, e.g. "/login"
@@ -16,7 +13,6 @@ const SideMenu = () => {
      * @param path is url path name from this nav-link - href
      */
     const activePage = () => {
-        console.log(location.pathname)
         const element = document.getElementById(location.pathname);
         if(element !== undefined && element !== null){
             element.classList.add("active_side_nav_link");

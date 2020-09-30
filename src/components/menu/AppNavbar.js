@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
+import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import storageManager from "../../storage/StorageManager";

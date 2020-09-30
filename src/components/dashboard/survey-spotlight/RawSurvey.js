@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {getCurrentStatus} from "../../utils/SurveyStatus";
 import {sortQuestions} from "../../utils/SortQuestions";
 import {EuropeanTime} from "../../utils/TimeConverter";
 

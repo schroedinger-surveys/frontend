@@ -18,13 +18,8 @@ const Submissions = (props) => {
         }
     }
 
-    const getSubmissions = async(page_number, page_size) => {
-        // TODO - Fetch the statistics from backend api as soon as they are added
-    }
-
     useEffect(() => {
         setAllQuestions(sortQuestions(props.selectedSurvey.constrained_questions, props.selectedSurvey.freestyle_questions));
-        getSubmissions();
     }, [props.selectedSurvey]);
 
     return (

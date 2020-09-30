@@ -10,13 +10,10 @@ import Footer from "./Footer";
 
 /**
  * Register provides functionalities for a user to register a new user account
- * @param props:
- * (prop) single - if component is used as parent or child component - true || false
  * @returns {JSX.Element} Form and Message Component
  * @constructor
  */
-const Register = (props) => {
-    const {single} = props;
+const Register = () => {
     const [values, setValues] = useState({
         username: "",
         email: "",

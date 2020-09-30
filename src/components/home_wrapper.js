@@ -1,8 +1,5 @@
 import React from "react";
-import SideMenu from "./menu/SideMenu";
-import AppNavbar from "./menu/AppNavbar";
 import boxLogo from "./menu/icons/open-box.png";
-import Navbar from "react-bootstrap/Navbar";
 
 const Home_wrapper = () => {
     return (
