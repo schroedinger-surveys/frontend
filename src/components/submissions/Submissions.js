@@ -55,7 +55,7 @@ const Submissions = () => {
         if (privateSurveys.length === 0 || pagination) {
             setLoading(true);
 
-            const privateSurveyList = await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPrivateGet(page_number, itemsPerPage), "privateSurveys");
+            const privateSurveyList = await SurveyAPIHandler.surveyPrivateGet(page_number, itemsPerPage);
             if (!pagination) {
                 const privateSurveyCounts = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.privateSurveyCount, "privateSurveyCount");
                 setPrivateSurveysCount(privateSurveyCounts);
@@ -80,7 +80,7 @@ const Submissions = () => {
         if (publicSurveys.length === 0 || pagination) {
             setLoading(true);
 
-            const publicSurveyList = await SurveyAPIHandler.cacheMiddleware(() => SurveyAPIHandler.surveyPublicGet(page_number, itemsPerPage), "publicSurveys");
+            const publicSurveyList = await SurveyAPIHandler.surveyPublicGet(page_number, itemsPerPage);
 
             if (!pagination) {
                 const publicSurveysCounts = await SurveyAPIHandler.cacheMiddleware(SurveyAPIHandler.publicSurveyCount, "publicSurveyCount");
