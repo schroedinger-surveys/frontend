@@ -1,0 +1,81 @@
+@import "../../base/colors";
+@import "../../base/universals";
+
+.submission_overview_container{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+          "type spotlight";
+  height: 100%;
+  width: 100%;
+}
+
+.submission_overview_chose_type{
+  margin: 5% 2.5% 5% 5%;
+  padding: 20px;
+  grid-area: type;
+  height: 90%;
+  color: $font_color-light;
+  box-shadow: $shadow;
+}
+
+.submission_overview_survey_list{
+  grid-area: surveys;
+  margin: 5% 5% 5% 2.5%;
+  height: 90%;
+}
+
+.chose_type_section_title{
+  color: $font_color-dark;
+}
+
+.submission_overview_chose_type_button{
+  @include outline-button;
+  border-radius: 4px;
+  width: 30%;
+  margin: 1% 10%;
+  padding: 10px 0;
+  font-size: 20px;
+}
+.submission_overview_chose_type_button:hover{
+  @include outline-button-hover;
+}
+.submission_overview_chose_type_button:focus{
+  outline: none;
+}
+
+.submission_overview_survey_ul{
+  list-style: none;
+  padding-left: 0;
+}
+
+.submission_overview_survey_active{
+  width: 100%;
+  cursor: pointer;
+}
+.submission_overview_survey_active:hover{
+  color: $font_color-dark;
+  font-weight: 700;
+}
+
+.sub_overview_survey_title{
+  width: 80%;
+  margin-right: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.sub_overview_survey_title, .sub_overview_survey_sub_count{
+  display: inline-flex;
+}
+
+.submission_overview_survey_disabled{
+  color: $font_color-input;
+}
+
+.submission_overview_sub_spotlight{
+  grid-area: spotlight;
+  box-shadow: $shadow;
+  height: 90%;
+  margin: 5% 5% 5% 2.5%;
+  padding: 20px;
+}

@@ -1,0 +1,27 @@
+@import "../../base/colors";
+
+.used_token_submission_container{
+  width: 40%;
+  margin: 0 auto;
+  color: $font_color-light;
+}
+
+.used_token_sub_label{
+  font-size: 21px;
+  font-weight: 700;
+  color: $font_color-dark;
+}
+.used_token_question, .used_token_answer{
+  display: inline-flex;
+  margin-bottom: 5px;
+}
+.used_token_question{
+  width: 15%;
+  font-size: 16px;
+  font-weight: 700;
+}
+.used_token_answer{
+  font-size: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}

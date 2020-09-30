@@ -1,0 +1,25 @@
+@import "../../base/colors";
+
+.submissions_list_ul{
+  margin-top: 10px;
+  list-style: none;
+  padding-left: 0;
+}
+
+.submission_spotlight_list_items{
+  cursor: pointer;
+  color: $font_color-light;
+}
+
+.submission_spotlight_list_items:hover{
+  color: $font_color-dark;
+  font-weight: 700;
+}
+.sub_spotlight_section_title{
+  color: $font_color-dark;
+}
+
+.submission_spotlight_selected_sub{
+  max-height: 500px;
+  overflow-x: auto;
+}

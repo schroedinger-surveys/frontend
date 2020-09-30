@@ -13,6 +13,7 @@ import TokenAPIHandler from "../../../calls/token";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import {createPaginationMarker} from "../../utils/PageMarker";
+import {EuropeanTime} from "../../utils/TimeConverter";
 
 const ShareLinks = (props) => {
     const itemsPerPage = 5;
@@ -163,7 +164,7 @@ const ShareLinks = (props) => {
                         {unusedTokenCount > itemsPerPage && unusedTokenPagination()}
                         <ul className={"token_list_ul"}>
                             {unusedToken.map((token, i) => (
-                                <li className={"token_list_items"} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                <li className={"token_list_items"} key={i}>created: {EuropeanTime(token.created.substr(0, 10))}<br/>
                                     <span
                                         style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                         /s/{props.selectedSurvey.id}
@@ -202,7 +203,7 @@ const ShareLinks = (props) => {
                         {usedTokenCount > itemsPerPage && usedTokenPagination()}
                         <ul className={"token_list_ul"} >
                             {usedToken.map((token, i) => (
-                                <li className={"token_list_items"} style={{fontSize: "13px"}} key={i}>created: {token.created.substr(0, 10)}<br/>
+                                <li className={"token_list_items"} style={{fontSize: "13px"}} key={i}>created: {EuropeanTime(token.created.substr(0, 10))}<br/>
                                     <span
                                         style={{fontSize: "11px"}}>{window.location.protocol}://{window.location.hostname}{window.location.hostname === "localhost" ? ":3000" : ""}
                                         /s/{props.selectedSurvey.id}

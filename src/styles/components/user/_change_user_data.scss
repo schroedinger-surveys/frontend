@@ -1,0 +1,33 @@
+@import "../../base/colors";
+@import "../../base/universals";
+
+.change_user_data_container{
+  width: 40%;
+  margin: 20px auto;
+  color: $font_color-light;
+}
+
+.change_user_data_label{
+  font-weight: 700;
+  font-size: 21px;
+  color: $font_color-dark;
+}
+
+.current_data_p{
+  display: inline-flex;
+  margin-bottom: 0;
+}
+
+.current_data_left{
+  width: 30%;
+}
+
+.submit_changes_user_data{
+  @include submit-button;
+}
+.submit_changes_user_data:hover{
+  @include submit-button-hover;
+}
+.submit_changes_user_data:focus{
+  @include submit-button-focus;
+}

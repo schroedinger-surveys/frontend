@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from "react";
-import Container from "react-bootstrap/Container";
-import Col from "react-bootstrap/Col";
-import SideMenu from "../menu/SideMenu";
-import Row from "react-bootstrap/Row";
-import {Redirect} from "react-router-dom";
+import log from "../../log/Logger";
 import {sortQuestions} from "../utils/SortQuestions";
 import SubmissionAPIHandler from "../../calls/submission";
+import {createPaginationMarker} from "../utils/PageMarker";
+import {EuropeanTime} from "../utils/TimeConverter";
 
 /**
  * Shows all submissions belonging to a survey
@@ -15,9 +13,9 @@ import SubmissionAPIHandler from "../../calls/submission";
  * @constructor
  */
 const SubmissionSpotlight = (props) => {
-    const survey = props.location.state.survey;
-    const submissionCount = props.location.state.selectedSurveySubmissionCount;
-    const itemsPerPage = 10;
+    const {survey} = props;
+    const {submissionCount} = props;
+    const itemsPerPage = 5;
 
     const [submissions, setSubmissions] = useState([]);
     const [spotlight, setSpotlight] = useState({});
@@ -26,9 +24,11 @@ const SubmissionSpotlight = (props) => {
     const [constrainedOptions, setConstrainedOptions] = useState(new Map());
 
     useEffect(() => {
-        getSubmissions();
-        setupConstrainedQuestionOptions()
-    }, [])
+        if(survey !== undefined){
+            getSubmissions();
+            setupConstrainedQuestionOptions()
+        }
+    }, [props])
 
     /**
      *  Fetch the submissions from api - DO NOT CACHE it needs to be fetched for each survey individually
@@ -48,12 +48,18 @@ const SubmissionSpotlight = (props) => {
      * scenario: shown behind chosen answer of user
      **/
     const setupConstrainedQuestionOptions = () => {
-        let sortedConstrainedQuestions = new Map();
-        for (let i = 0; i < survey.constrained_questions.length; i++) {
-            sortedConstrainedQuestions.set(survey.constrained_questions[i].position, survey.constrained_questions[i].options)
+        if(survey !== undefined){
+            let sortedConstrainedQuestions = new Map();
+            try{
+                for (let i = 0; i < survey.constrained_questions.length; i++) {
+                    sortedConstrainedQuestions.set(survey.constrained_questions[i].position, survey.constrained_questions[i].options)
+                }
+            } catch (e) {
+                log.error(e);
+            }
+
+            setConstrainedOptions(sortedConstrainedQuestions);
         }
-        setConstrainedOptions(sortedConstrainedQuestions);
-        console.log(sortedConstrainedQuestions);
     }
 
     /**
@@ -112,45 +118,26 @@ const SubmissionSpotlight = (props) => {
         const pages = Math.ceil(submissionCount / itemsPerPage);
         return createPaginationMarker(pages, changePage);
     }
-    const createPaginationMarker = (pages, clickMethod) => {
-        let li = [];
-        for (let i = 0; i < pages; i++) {
-            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
-                        onClick={() => clickMethod(i)}>{i + 1}</li>)
-        }
-
-        return (
-            <div style={{width: "100%"}}>
-                <ul style={{listStyle: "none"}}>
-                    {li}
-                </ul>
-            </div>
-        )
-    }
 
     return (
-        <Container fluid>
-            <Row>
-                {/* eslint-disable-next-line no-undefined */}
-                {survey === undefined && (
-                    <Redirect to={"/survey/submissions"}/>
-                )}
-                <Col xs={1} style={{padding: 0}}>
-                    <SideMenu/>
-                </Col>
-                <Col xs={3} style={{marginTop: "30px"}}>
-                    List of Submissions (newest first)
+        <div>
+            {/* eslint-disable-next-line no-undefined */}
+            {survey !== undefined && (
+                <div className={"submission_spotlight_sub_list"}>
+                    <h3 className={"sub_spotlight_section_title"}>Submissions (newest first)</h3>
                     {submissionCount > itemsPerPage && submissionPagination()}
-                    <ul>
+                    <ul className={"submissions_list_ul"}>
                         {submissions.map((submission, i) => (
-                            <li key={i} style={{cursor: "pointer"}} onClick={() => {
+                            <li key={i} className={"submission_spotlight_list_items"} onClick={() => {
                                 changeSubmission(submission)
-                            }}>{submission.created.substr(0, 10)}</li>
+                            }}>{EuropeanTime(submission.created.substr(0, 10))}</li>
                         ))}
                     </ul>
-                </Col>
-                <Col xs={8} style={{marginTop: "30px"}}>
-                    Spotlight of selected submission here <br/>
+                </div>
+            )}
+            <hr/>
+            {survey !== undefined && (
+                <div className={"submission_spotlight_selected_sub"}>
                     {renamed &&
                     sortQuestions(
                         spotlight.constrained_answers,
@@ -172,9 +159,9 @@ const SubmissionSpotlight = (props) => {
                             </p>
                         </div>
                     ))}
-                </Col>
-            </Row>
-        </Container>
+                </div>
+            )}
+        </div>
     )
 }
 

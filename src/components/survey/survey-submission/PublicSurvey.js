@@ -7,6 +7,7 @@ import Message from "../../utils/Message";
 import {checkSurveyStatus, collectAnswers, validateSubmission} from "./Utils";
 import SurveyAPIHandler from "../../../calls/survey";
 import SubmissionAPIHandler from "../../../calls/submission";
+import boxLogo from "../../menu/icons/open-box.png";
 
 /**
  * If a user opens a public survey trough the provided link
@@ -81,14 +82,22 @@ const PublicSurvey = (props) => {
     }, []);
 
     return (
-        <div>
-            {loading && (
-                <LoadingScreen/>
-            )}
-            {loadedSurvey && checkSurveyStatus(survey, submitPublicSurvey)}
-            {showMessage && (
-                <Message message={messageText} type={messageType}/>
-            )}
+        <div className={"survey_wrapper"}>
+            <div className={"survey_wrapper_logo"}>
+                <a href={"https://schroedinger-survey.de"}>
+                    <img className={"box_logo survey_logo"} src={boxLogo} alt={"schroedingers survey cat box"}/>
+                </a>
+                Schrödinger Survey
+            </div>
+            <div id={"app_page_body"}>
+                {loading && (
+                    <LoadingScreen/>
+                )}
+                {loadedSurvey && checkSurveyStatus(survey, submitPublicSurvey)}
+                {showMessage && (
+                    <Message message={messageText} type={messageType}/>
+                )}
+            </div>
         </div>
     )
 }

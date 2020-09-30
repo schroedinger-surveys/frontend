@@ -18,3 +18,15 @@ div > nav > a, div > nav > a:hover {
 div > nav > a:focus {
   outline: none;
 }
+
+.edit_survey_button_tab{
+  border: none;
+  background-color: transparent;
+  color: $font_color-light;
+}
+.edit_survey_button_tab:hover{
+  color: $font_color-dark;
+}
+.edit_survey_button_tab:focus{
+  outline: none;
+}

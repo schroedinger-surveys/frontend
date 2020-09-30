@@ -1,8 +1,6 @@
 import React from "react";
 
 export const createPaginationMarker = (pages, clickMethod) => {
-    let start = 0;
-
     let li = [];
     for (let i = 0; i < pages; i++) {
         li.push(<li key={i} className={"pagination_list_li"}

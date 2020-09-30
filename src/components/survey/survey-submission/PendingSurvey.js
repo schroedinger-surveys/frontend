@@ -1,14 +1,13 @@
 import React from "react";
 
-import sleepingCat from "../icons/kitty.png"
+import {EuropeanTime} from "../../utils/TimeConverter";
 
 export const PendingSurvey = (survey) => {
-    return(
+    return (
         <div style={{textAlign: "center"}}>
-            <h2 style={{color: "orange", fontSize: "50px"}}>Inactive Survey</h2>
-            <img src={sleepingCat} alt={"sleeping cat"}/>
+            <h2 style={{color: "orange", fontSize: "50px", marginTop: "20px"}}>Inactive Survey</h2>
             <p>This survey is not active yet, you can therefore not see the survey or submit your answers.</p>
-            <p>Come back at <span style={{fontWeight: "bolder"}}>{survey.start_date}!</span></p>
+            <p>Come back <span style={{fontWeight: "bolder"}}>{EuropeanTime(survey.start_date)}!</span></p>
         </div>
     )
 }

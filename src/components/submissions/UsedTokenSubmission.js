@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from "react";
 import SideMenu from "../menu/SideMenu";
 import log from "../../log/Logger";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 import {useParams} from "react-router-dom";
 import SubmissionAPIHandler from "../../calls/submission";
 import ListGroup from "react-bootstrap/ListGroup";
 import LoadingScreen from "../utils/LoadingScreen";
 import {sortQuestions} from "../utils/SortQuestions";
+import AppNavbar from "../menu/AppNavbar";
 
 /**
  * scenario: User clicks on used token in ShareLinks and is directed to the submission belonging to it
@@ -37,17 +35,14 @@ const UsedTokenSubmission = (props) => {
         fetchSubmission()
     }, []);
 
-    return (
-        <Container fluid>
-            <Row>
-                <Col xs={1} style={{padding: 0}}>
-                    <SideMenu/>
-                </Col>
+    const TokenSubmissionComponent = () => {
+        return (
+            <div className={"used_token_submission_container"}>
                 {loading && <LoadingScreen/>}
                 {!loading && (
-                    <Col xs={{span: 5, offset: 3}} style={{marginTop: "30px"}}>
+                    <div style={{marginTop: "20px"}}>
                         <div>
-                            <label style={{fontWeight: "bold", fontSize: "21px"}}>Submission Details</label>
+                            <label className={"used_token_sub_label"}>Submission Details</label>
                             <ListGroup style={{marginBottom: "15px"}}>
                                 <ListGroup.Item>Used Token: <span
                                     style={{fontWeight: "bold"}}>{token}</span></ListGroup.Item>
@@ -59,27 +54,36 @@ const UsedTokenSubmission = (props) => {
                                 submission.freestyle_answers,
                                 "position",
                                 "constrained_questions_option_id").map((item, i) => (
-                                    <div key={i} style={{
-                                        border: "1px solid lightgrey",
-                                        borderRadius: "8px",
-                                        padding: "5px"
-                                    }}>
-                                        <p><span
-                                            style={{fontWeight: "bold"}}>Question {i + 1}:</span> {item.type === "freestyle" ? item.question.freestyle_question_question_text : item.question.constrained_question_question_text}
-                                        </p>
-                                        <p style={{fontSize: "12px"}}>
-                                            <span style={{fontWeight: "bold", fontSize: "16px"}}>Answer:</span> <span
-                                            style={{fontSize: "16px"}}>
-                                            {item.type === "freestyle" ? item.question.freestyle_question_answer : item.question.constrained_question_chose_option}</span>
-                                        </p>
+                                <div key={i} style={{
+                                    border: "1px solid lightgrey",
+                                    borderRadius: "8px",
+                                    padding: "5px"
+                                }}>
+                                    <div>
+                                         <p className={"used_token_question"}>Question {i + 1}:</p>
+                                         <p className={"used_token_answer"}>{item.type === "freestyle" ? item.question.freestyle_question_question_text : item.question.constrained_question_question_text}</p>
                                     </div>
+                                    <div style={{fontSize: "12px"}}>
+                                        <p className={"used_token_question"}>Answer:</p>
+                                        <p className={"used_token_answer"}>{item.type === "freestyle" ? item.question.freestyle_question_answer : item.question.constrained_question_chose_option}</p>
+                                    </div>
+                                </div>
                             ))}
                         </div>
-                    </Col>
+                    </div>
                 )}
-            </Row>
+            </div>
+        )
+    }
 
-        </Container>
+    return (
+        <div className={"app_wrapper"}>
+            <AppNavbar/>
+            <SideMenu/>
+            <div id={"app_page_body"}>
+                {TokenSubmissionComponent()}
+            </div>
+        </div>
     )
 }
 

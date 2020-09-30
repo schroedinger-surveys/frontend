@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {Container, ListGroup} from "react-bootstrap";
+import {ListGroup} from "react-bootstrap";
 import SideMenu from "../menu/SideMenu";
 
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import LoadingScreen from "../utils/LoadingScreen";
 import {getCurrentStatus, getSurveyStatus} from "../utils/SurveyStatus";
@@ -57,7 +55,6 @@ const SurveyOverview = () => {
     }
 
     const matchPrivateSurveys = async (privateList) => {
-        // TODO match Seen-Count when backend api is ready
         const tempListPrivateSurveys = [];
         for (let i = 0; i < privateList.length; i++) {
             const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() => SubmissionAPIHandler.submissionCount(privateList[i].id), "submissions", privateList[i].id);
@@ -71,7 +68,6 @@ const SurveyOverview = () => {
     }
 
     const matchPublicSurveys = async (publicList) => {
-        // TODO match Seen-Count when backend api is ready
         const tempListPublicSurveys = [];
         for (let i = 0; i < publicList.length; i++) {
             const apiResponse = await SubmissionAPIHandler.cacheMiddleware(() => SubmissionAPIHandler.submissionCount(publicList[i].id), "submissions", publicList[i].id);
@@ -199,7 +195,6 @@ const SurveyOverview = () => {
 
     const deleteSurvey = async () => {
         const apiResponse = await SurveyAPIHandler.surveyDelete(surveyToDelete.id);
-        console.log(apiResponse);
         if (apiResponse.status === 204) {
             storageManager.clearSurveyCache();
             await getSurveyLists();

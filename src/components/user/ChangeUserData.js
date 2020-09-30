@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Container, Form} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import SideMenu from "../menu/SideMenu";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -11,6 +10,8 @@ import Modal from "react-bootstrap/Modal";
 import log from "../../log/Logger";
 import {confirmDoubleInput} from "../utils/ConfirmInput";
 import UserAPIHandler from "../../calls/user";
+import AppNavbar from "../menu/AppNavbar";
+import {EuropeanTime} from "../utils/TimeConverter";
 
 const ChangeUserData = (props) => {
     const {history} = props;
@@ -71,7 +72,8 @@ const ChangeUserData = (props) => {
         return {valid: true, message: "Input valid", type: "success"}
     }
 
-    const sendNewUserData = async () => {
+    const sendNewUserData = async (event) => {
+        event.preventDefault();
         const validInput = validateInput();
         if (validInput.valid) {
             let apiResponse;
@@ -162,31 +164,31 @@ const ChangeUserData = (props) => {
         advancedUserInformation()
     }, [])
 
-    return (
-        <Container fluid>
-            <Row>
-                <Col xs={1} style={{padding: 0}}>
-                    <SideMenu/>
-                </Col>
-                <Col xs={{span: 5, offset: 3}} style={{marginTop: "10px"}}>
+    const ChangeDataComponent = () => {
+        return (
+            <div className={"change_user_data_container"}>
+                <div style={{marginTop: "10px"}}>
                     {deleteUserModal()}
                     <Row>
                         <div style={{width: "95%", margin: "0 auto"}}>
-                            <label style={{fontWeight: "bold", fontSize: "21px"}}>Current Profile</label>
+                            <label className={"change_user_data_label"} style={{fontWeight: "bold", fontSize: "21px"}}>Current Profile</label>
                             <ListGroup>
-                                <ListGroup.Item>Username: <span
-                                    style={{fontWeight: "bold"}}>{userData.username}</span></ListGroup.Item>
-                                <ListGroup.Item>Email: <span
-                                    style={{fontWeight: "bold"}}>{userData.email}</span></ListGroup.Item>
-                                <ListGroup.Item>Account created at: <span
-                                    style={{fontWeight: "bold"}}>{userData.created ? userData.created.substr(0, 10) : ""}</span></ListGroup.Item>
+                                <ListGroup.Item>
+                                    <p className={"current_data_p current_data_left"}>Username:</p>
+                                    <p className={"current_data_p"} style={{fontWeight: "bold"}}>{userData.username}</p></ListGroup.Item>
+                                <ListGroup.Item>
+                                    <p className={"current_data_p current_data_left"}>Email:</p>
+                                    <p className={"current_data_p"} style={{fontWeight: "bold"}}>{userData.email}</p></ListGroup.Item>
+                                <ListGroup.Item>
+                                    <p className={"current_data_p current_data_left"}>Account created at:</p>
+                                    <p className={"current_data_p"} style={{fontWeight: "bold"}}>{userData.created ? EuropeanTime(userData.created.substr(0, 10)) : ""}</p></ListGroup.Item>
                             </ListGroup>
                         </div>
                     </Row>
-                    <hr style={{backgroundColor: "#065535"}}/>
+                    <hr/>
                     <Row>
                         <Form style={{width: "95%", margin: "0 auto"}}>
-                            <label style={{fontWeight: "bold", fontSize: "21px"}}>Change User Data</label>
+                            <label className={"change_user_data_label"}>Change User Data</label>
                             <Form.Group controlId="newUsername">
                                 <Form.Label style={{fontWeight: "bold"}}>Username</Form.Label>
                                 <Form.Control type="text" placeholder={userData.username} value={username}
@@ -232,9 +234,9 @@ const ChangeUserData = (props) => {
                             {showMessage && (
                                 <Message type={messageType} message={messageText}/>
                             )}
-                            <Button variant="success" onClick={sendNewUserData}>
+                            <button className={"submit_changes_user_data"} onClick={sendNewUserData}>
                                 Submit Changes
-                            </Button>
+                            </button>
                         </Form>
                     </Row>
                     <hr style={{backgroundColor: "lightgrey"}}/>
@@ -244,9 +246,19 @@ const ChangeUserData = (props) => {
                                 account</Button>
                         </div>
                     </Row>
-                </Col>
-            </Row>
-        </Container>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className={"app_wrapper"}>
+            <AppNavbar/>
+            <SideMenu/>
+            <div id={"app_page_body"}>
+                {ChangeDataComponent()}
+            </div>
+        </div>
     )
 }
 

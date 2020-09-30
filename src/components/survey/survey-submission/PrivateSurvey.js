@@ -7,6 +7,7 @@ import {checkSurveyStatus, collectAnswers,validateSubmission} from "./Utils";
 import Message from "../../utils/Message";
 import SurveyAPIHandler from "../../../calls/survey";
 import SubmissionAPIHandler from "../../../calls/submission";
+import boxLogo from "../../menu/icons/open-box.png";
 
 /**
  * If a User opens a private survey over the provided link, this component is shown
@@ -74,7 +75,6 @@ const PrivateSurvey = (props) => {
                 setMessageText("That did not work. Please try again!");
                 setShowMessage(true);
             } else {
-                // TODO "Survey not found"  TOKEN is MISSING and NO JWT TOKEN, redirect to HOME
                 setMessageText(apiResponse.backend.data.human_message || "That did not work. Please try again!");
                 setShowMessage(true);
                 setMessageType("danger");
@@ -94,7 +94,6 @@ const PrivateSurvey = (props) => {
         const validationCheck = validateSubmission(answers.constrainedAnswers, answers.freestyleAnswers, survey);
         if (validationCheck.valid) {
             const submissionResponse = await SubmissionAPIHandler.submitAnsweredSurvey(answers.constrainedAnswers, answers.freestyleAnswers, survey, token);
-            console.log("SubmissionResponse", submissionResponse);
             setShowMessage(submissionResponse.status);
             setMessageType(submissionResponse.type);
             setMessageText(submissionResponse.message);
@@ -112,13 +111,23 @@ const PrivateSurvey = (props) => {
 
     return (
         <div>
-            {loading && (
-                <LoadingScreen/>
-            )}
-            {loadedSurvey && checkSurveyStatus(survey, submitAnswers)}
-            {showMessage && (
-                <Message message={messageText} type={messageType}/>
-            )}
+            <div className={"survey_wrapper"}>
+                <div className={"survey_wrapper_logo"}>
+                    <a href={"https://schroedinger-survey.de"}>
+                        <img className={"box_logo survey_logo"} src={boxLogo} alt={"schroedingers survey cat box"}/>
+                    </a>
+                    Schrödinger Survey
+                </div>
+                <div id={"survey_page_body"}>
+                    {loading && (
+                        <LoadingScreen/>
+                    )}
+                    {loadedSurvey && checkSurveyStatus(survey, submitAnswers)}
+                    {showMessage && (
+                        <Message message={messageText} type={messageType}/>
+                    )}
+                </div>
+            </div>
         </div>
     )
 }
