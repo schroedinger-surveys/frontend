@@ -223,10 +223,10 @@ const Submissions = () => {
                                                     setSelectedSurvey(item.survey);
                                                     setSelectedSurveySubmissionCount(item.submissionCount);
                                                     setChoseSurvey(true);
-                                                }}>{item.survey.title} - {item.submissionCount} submissions</li>)
+                                                }}><p className={"sub_overview_survey_title"}>{item.survey.title}</p><p className={"sub_overview_survey_sub_count"}>{item.submissionCount} submission(s)</p></li>)
                                         } else {
                                             return (<li key={i} className={"submission_overview_survey_disabled"}>
-                                                {item.survey.title} - {item.submissionCount} submissions</li>)
+                                                <p className={"sub_overview_survey_title"}>{item.survey.title}</p><p className={"sub_overview_survey_sub_count"}>{item.submissionCount} submission(s)</p></li>)
                                         }
                                     })}
                                 </ul>
@@ -243,10 +243,10 @@ const Submissions = () => {
                                                     setSelectedSurvey(item.survey);
                                                     setSelectedSurveySubmissionCount(item.submissionCount);
                                                     setChoseSurvey(true);
-                                                }}>{item.survey.title} - {item.submissionCount} submissions</li>)
+                                                }}><p className={"sub_overview_survey_title"}>{item.survey.title}</p><p className={"sub_overview_survey_sub_count"}>{item.submissionCount > 99 ? "99+" : item.submissionCount} submission(s)</p></li>)
                                         } else {
                                             return (<li key={i} className={"submission_overview_survey_disabled"}>
-                                                {item.survey.title} - {item.submissionCount} submissions</li>)
+                                                <p className={"sub_overview_survey_title"}>{item.survey.title}</p><p className={"sub_overview_survey_sub_count"}>{item.submissionCount} submission(s)</p></li>)
                                         }
                                     })}
                                 </ul>

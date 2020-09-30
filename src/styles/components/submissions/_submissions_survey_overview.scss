@@ -43,3 +43,27 @@
 .submission_overview_chose_type_button:focus{
   outline: none;
 }
+
+.submission_overview_survey_ul{
+  list-style: none;
+  padding-left: 0;
+}
+
+.submission_overview_survey_active{
+  width: 100%;
+  cursor: pointer;
+}
+
+.sub_overview_survey_title{
+  width: 80%;
+  margin-right: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.sub_overview_survey_title, .sub_overview_survey_sub_count{
+  display: inline-flex;
+}
+
+.submission_overview_survey_disabled{
+  color: lightgray;
+}
