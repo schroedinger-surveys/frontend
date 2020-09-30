@@ -18,3 +18,8 @@
 .sub_spotlight_section_title{
   color: $font_color-dark;
 }
+
+.submission_spotlight_selected_sub{
+  max-height: 500px;
+  overflow-x: auto;
+}
