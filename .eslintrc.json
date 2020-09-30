@@ -45,7 +45,7 @@
         "no-lone-blocks": "error",
         "radix": "error",
         "yoda": "error",
-        "no-param-reassign": "error",
+        "no-param-reassign": "off",
         "no-self-assign": "error",
         "no-self-compare": "error",
         "no-warning-comments": "error",

@@ -13,7 +13,7 @@ const TimeConverter = (date) => {
 
 const EuropeanTime = (date) => {
     if(typeof date === "string"){
-        if(date.length !== 10) date = date.substr(0, 10);
+        if(date.length !== 10) {date = date.substr(0, 10);}
         return date.split("-").reverse().join("-");
     } else {
         return ""
