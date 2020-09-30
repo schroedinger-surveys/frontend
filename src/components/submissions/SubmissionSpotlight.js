@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from "react";
-import Container from "react-bootstrap/Container";
-import Col from "react-bootstrap/Col";
-import SideMenu from "../menu/SideMenu";
-import Row from "react-bootstrap/Row";
-import {Redirect} from "react-router-dom";
+import log from "../../log/Logger";
 import {sortQuestions} from "../utils/SortQuestions";
 import SubmissionAPIHandler from "../../calls/submission";
 import {createPaginationMarker} from "../utils/PageMarker";
+import {EuropeanTime} from "../utils/TimeConverter";
 
 /**
  * Shows all submissions belonging to a survey
@@ -53,9 +50,14 @@ const SubmissionSpotlight = (props) => {
     const setupConstrainedQuestionOptions = () => {
         if(survey !== undefined){
             let sortedConstrainedQuestions = new Map();
-            for (let i = 0; i < survey.constrained_questions.length; i++) {
-                sortedConstrainedQuestions.set(survey.constrained_questions[i].position, survey.constrained_questions[i].options)
+            try{
+                for (let i = 0; i < survey.constrained_questions.length; i++) {
+                    sortedConstrainedQuestions.set(survey.constrained_questions[i].position, survey.constrained_questions[i].options)
+                }
+            } catch (e) {
+                log.error(e);
             }
+
             setConstrainedOptions(sortedConstrainedQuestions);
         }
     }
@@ -128,7 +130,7 @@ const SubmissionSpotlight = (props) => {
                         {submissions.map((submission, i) => (
                             <li key={i} className={"submission_spotlight_list_items"} onClick={() => {
                                 changeSubmission(submission)
-                            }}>{submission.created.substr(0, 10)}</li>
+                            }}>{EuropeanTime(submission.created.substr(0, 10))}</li>
                         ))}
                     </ul>
                 </div>
@@ -136,7 +138,6 @@ const SubmissionSpotlight = (props) => {
             <hr/>
             {survey !== undefined && (
                 <div className={"submission_spotlight_selected_sub"}>
-                    Spotlight of selected submission here <br/>
                     {renamed &&
                     sortQuestions(
                         spotlight.constrained_answers,
