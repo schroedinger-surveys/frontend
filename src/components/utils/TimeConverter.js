@@ -26,6 +26,7 @@ const UnixToHumanTime = (date) => {
 }
 
 const EuropeanTime = (date) => {
+    if(date.length !== 10) date = date.substr(0, 10);
     return date.split("-").reverse().join("-");
 }
 
