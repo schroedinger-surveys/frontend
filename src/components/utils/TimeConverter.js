@@ -26,8 +26,14 @@ const UnixToHumanTime = (date) => {
 }
 
 const EuropeanTime = (date) => {
-    if(date.length !== 10) date = date.substr(0, 10);
-    return date.split("-").reverse().join("-");
+    if(typeof date === "string"){
+        if(date.length !== 10) date = date.substr(0, 10);
+        console.log(date.split("-").reverse().join("-"));
+        return date.split("-").reverse().join("-");
+    } else {
+        return ""
+    }
+
 }
 
 export {
