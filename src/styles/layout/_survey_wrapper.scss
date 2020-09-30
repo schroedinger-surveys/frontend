@@ -1,0 +1,55 @@
+@import "../base/colors";
+@import "../base/universals";
+
+.survey_wrapper_logo{
+ box-shadow: $shadow;
+ height: 50px;
+ line-height: 30px;
+ width: 50%;
+ margin: 0 auto;
+ padding: 5px 0 0 5px;
+ font-size: 30px;
+ color: $main_color-orange;
+ font-family: 'Yeseva One', cursive;
+}
+
+.survey_logo{
+ margin-right: 10px;
+}
+
+.survey_submission_container{
+ width: 50%;
+ margin: 0 auto;
+ box-shadow: $shadow;
+ border-radius: 0 0 4px 4px;
+}
+
+.survey_submission_form{
+ padding: 20px;
+ color: $font_color-light;
+}
+
+.survey_submission_title{
+ font-size: 21px;
+ font-weight: 700;
+ overflow-wrap: break-word;
+ color: $font_color-dark;
+}
+
+.submit_submission_btn{
+ width: calc(100% - 40px);
+ margin: 10px 20px;
+ @include submit-button;
+ font-size: 21px;
+}
+.submit_submission_btn:hover{
+ @include submit-button-hover;
+}
+.submit_submission_btn:focus{
+ @include submit-button-focus;
+}
+
+.survey_submission_label{
+ font-weight: 700;
+ color: $font_color-dark;
+}

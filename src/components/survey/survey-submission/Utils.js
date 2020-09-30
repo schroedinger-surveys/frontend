@@ -70,10 +70,9 @@ export const checkSurveyStatus = (survey, collect) => {
         )
     } else {
         return (
-            <div style={{width: "60%", margin: "0 auto"}}>
+            <div className={"survey_submission_container"}>
                 {SurveyForm(survey)}
-                <Button style={{width: "100%", margin: "15px 0 30px 0"}} onClick={collect}
-                        variant={"success"}>Submit</Button>
+                <button className={"submit_submission_btn"} onClick={collect}>Submit</button>
             </div>
         )
     }
