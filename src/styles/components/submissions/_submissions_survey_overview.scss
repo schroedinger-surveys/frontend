@@ -28,3 +28,18 @@
 .chose_type_section_title{
   color: $font_color-dark;
 }
+
+.submission_overview_chose_type_button{
+  @include outline-button;
+  border-radius: 4px;
+  width: 30%;
+  margin: 1% 10%;
+  padding: 10px 0;
+  font-size: 20px;
+}
+.submission_overview_chose_type_button:hover{
+  @include outline-button-hover;
+}
+.submission_overview_chose_type_button:focus{
+  outline: none;
+}
