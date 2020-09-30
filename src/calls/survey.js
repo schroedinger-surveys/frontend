@@ -102,6 +102,8 @@ class SurveyAPIHandler {
      * @returns {Promise<{log: string}|AxiosResponse<any>>}
      */
     static async surveyCreate(title, description, start_date, end_date, securedInput, constrainedQuestions, freestyleQuestions) {
+        start_date = new Date(start_date).getUTCMilliseconds();
+        end_date = new Date(end_date).getUTCMilliseconds();
         try {
             return await axios({
                 method: "POST",
@@ -146,6 +148,8 @@ class SurveyAPIHandler {
     }
 
     static async surveyUpdate(id, title, description, start_date, end_date, secured, addedConstrainedQuestions, addedFreestyleQuestions, deletedConstrainedQuestions, deletedFreestyleQuestions) {
+        start_date = new Date(start_date).getUTCMilliseconds();
+        end_date = new Date(end_date).getUTCMilliseconds();
         try {
             return await axios({
                 method: "PUT",
