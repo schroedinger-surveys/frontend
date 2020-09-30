@@ -27,9 +27,11 @@ const SubmissionSpotlight = (props) => {
 
     useEffect(() => {
         console.log(survey, submissionCount);
-        getSubmissions();
-        setupConstrainedQuestionOptions()
-    }, [])
+        if(survey !== undefined){
+            getSubmissions();
+            setupConstrainedQuestionOptions()
+        }
+    }, [props])
 
     /**
      *  Fetch the submissions from api - DO NOT CACHE it needs to be fetched for each survey individually
@@ -49,12 +51,13 @@ const SubmissionSpotlight = (props) => {
      * scenario: shown behind chosen answer of user
      **/
     const setupConstrainedQuestionOptions = () => {
-        let sortedConstrainedQuestions = new Map();
-        for (let i = 0; i < survey.constrained_questions.length; i++) {
-            sortedConstrainedQuestions.set(survey.constrained_questions[i].position, survey.constrained_questions[i].options)
+        if(survey !== undefined){
+            let sortedConstrainedQuestions = new Map();
+            for (let i = 0; i < survey.constrained_questions.length; i++) {
+                sortedConstrainedQuestions.set(survey.constrained_questions[i].position, survey.constrained_questions[i].options)
+            }
+            setConstrainedOptions(sortedConstrainedQuestions);
         }
-        setConstrainedOptions(sortedConstrainedQuestions);
-        console.log(sortedConstrainedQuestions);
     }
 
     /**
@@ -132,44 +135,45 @@ const SubmissionSpotlight = (props) => {
     return (
         <div>
             {/* eslint-disable-next-line no-undefined */}
-            {survey === undefined && (
-                <Redirect to={"/survey/submissions"}/>
+            {survey !== undefined && (
+                <div className={"submission_spotlight_sub_list"}>
+                    Submissions (newest first)
+                    {submissionCount > itemsPerPage && submissionPagination()}
+                    <ul>
+                        {submissions.map((submission, i) => (
+                            <li key={i} style={{cursor: "pointer"}} onClick={() => {
+                                changeSubmission(submission)
+                            }}>{submission.created.substr(0, 10)}</li>
+                        ))}
+                    </ul>
+                </div>
             )}
-            <div className={"submission_spotlight_sub_list"}>
-                Submissions (newest first)
-                {submissionCount > itemsPerPage && submissionPagination()}
-                <ul>
-                    {submissions.map((submission, i) => (
-                        <li key={i} style={{cursor: "pointer"}} onClick={() => {
-                            changeSubmission(submission)
-                        }}>{submission.created.substr(0, 10)}</li>
+            {survey !== undefined && (
+                <div className={"submission_spotlight_selected_sub"}>
+                    Spotlight of selected submission here <br/>
+                    {renamed &&
+                    sortQuestions(
+                        spotlight.constrained_answers,
+                        spotlight.freestyle_answers,
+                        "position",
+                        "constrained_questions_option_id").map((item, i) => (
+                        <div key={i} style={{
+                            border: "1px solid lightgrey",
+                            borderRadius: "8px",
+                            padding: "5px",
+                            marginBottom: "5px"
+                        }}>
+                            <p><span
+                                style={{fontWeight: "bold"}}>Question {item.question.position + 1}:</span> {item.question.question_text}
+                            </p>
+                            <p style={{fontSize: "12px"}}>
+                                <span style={{fontWeight: "bold", fontSize: "16px"}}>Answer:</span> <span
+                                style={{fontSize: "16px"}}>{item.question.answer}</span> {item.type === "constrained" ? showOptions(item.question.position) : ""}
+                            </p>
+                        </div>
                     ))}
-                </ul>
-            </div>
-            <div className={"submission_spotlight_selected_sub"}>
-                Spotlight of selected submission here <br/>
-                {renamed &&
-                sortQuestions(
-                    spotlight.constrained_answers,
-                    spotlight.freestyle_answers,
-                    "position",
-                    "constrained_questions_option_id").map((item, i) => (
-                    <div key={i} style={{
-                        border: "1px solid lightgrey",
-                        borderRadius: "8px",
-                        padding: "5px",
-                        marginBottom: "5px"
-                    }}>
-                        <p><span
-                            style={{fontWeight: "bold"}}>Question {item.question.position + 1}:</span> {item.question.question_text}
-                        </p>
-                        <p style={{fontSize: "12px"}}>
-                            <span style={{fontWeight: "bold", fontSize: "16px"}}>Answer:</span> <span
-                            style={{fontSize: "16px"}}>{item.question.answer}</span> {item.type === "constrained" ? showOptions(item.question.position) : ""}
-                        </p>
-                    </div>
-                ))}
-            </div>
+                </div>
+            )}
         </div>
     )
 }

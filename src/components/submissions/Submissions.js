@@ -244,7 +244,6 @@ const Submissions = () => {
                     <div className={"submission_overview_sub_spotlight"}>
                         <SubmissionSpotlight survey={selectedSurvey} submissionCount={selectedSurveySubmissionCount}/>
                     </div>
-
                 }
             </div>
         )
