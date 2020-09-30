@@ -102,8 +102,8 @@ class SurveyAPIHandler {
      * @returns {Promise<{log: string}|AxiosResponse<any>>}
      */
     static async surveyCreate(title, description, start_date, end_date, securedInput, constrainedQuestions, freestyleQuestions) {
-        start_date = new Date(start_date).getUTCMilliseconds();
-        end_date = new Date(end_date).getUTCMilliseconds();
+        const start = new Date(start_date).getUTCMilliseconds();
+        const end = new Date(end_date).getUTCMilliseconds();
         try {
             return await axios({
                 method: "POST",
@@ -115,8 +115,8 @@ class SurveyAPIHandler {
                 data: {
                     title,
                     description,
-                    start_date,
-                    end_date,
+                    start_date: start,
+                    end_date: end,
                     secured: securedInput,
                     constrained_questions: constrainedQuestions,
                     freestyle_questions: freestyleQuestions
@@ -148,8 +148,8 @@ class SurveyAPIHandler {
     }
 
     static async surveyUpdate(id, title, description, start_date, end_date, secured, addedConstrainedQuestions, addedFreestyleQuestions, deletedConstrainedQuestions, deletedFreestyleQuestions) {
-        start_date = new Date(start_date).getUTCMilliseconds();
-        end_date = new Date(end_date).getUTCMilliseconds();
+        const start = new Date(start_date).getUTCMilliseconds();
+        const end = new Date(end_date).getUTCMilliseconds();
         try {
             return await axios({
                 method: "PUT",
@@ -160,8 +160,8 @@ class SurveyAPIHandler {
                 data: {
                     title,
                     description,
-                    start_date,
-                    end_date,
+                    start_date: start,
+                    end_date: end,
                     secured,
                     added_constrained_questions: addedConstrainedQuestions,
                     added_freestyle_questions: addedFreestyleQuestions,
