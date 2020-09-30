@@ -73,7 +73,8 @@ const ChangeUserData = (props) => {
         return {valid: true, message: "Input valid", type: "success"}
     }
 
-    const sendNewUserData = async () => {
+    const sendNewUserData = async (event) => {
+        event.preventDefault();
         const validInput = validateInput();
         if (validInput.valid) {
             let apiResponse;

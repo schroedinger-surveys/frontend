@@ -1,0 +1,13 @@
+@import "../../base/colors";
+
+.used_token_submission_container{
+  width: 40%;
+  margin: 0 auto;
+  color: $font_color-light;
+}
+
+.used_token_sub_label{
+  font-size: 21px;
+  font-weight: 700;
+  color: $font_color-dark;
+}
