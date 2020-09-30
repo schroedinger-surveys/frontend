@@ -15,8 +15,8 @@ import SubmissionAPIHandler from "../../calls/submission";
  * @constructor
  */
 const SubmissionSpotlight = (props) => {
-    const survey = props.location.state.survey;
-    const submissionCount = props.location.state.selectedSurveySubmissionCount;
+    const {survey} = props;
+    const {submissionCount} = props;
     const itemsPerPage = 10;
 
     const [submissions, setSubmissions] = useState([]);
@@ -26,6 +26,7 @@ const SubmissionSpotlight = (props) => {
     const [constrainedOptions, setConstrainedOptions] = useState(new Map());
 
     useEffect(() => {
+        console.log(survey, submissionCount);
         getSubmissions();
         setupConstrainedQuestionOptions()
     }, [])

@@ -8,6 +8,7 @@ import LoadingScreen from "../utils/LoadingScreen";
 import SurveyAPIHandler from "../../calls/survey";
 import SubmissionAPIHandler from "../../calls/submission";
 import AppNavbar from "../menu/AppNavbar";
+import SubmissionSpotlight from "./SubmissionSpotlight";
 
 /**
  * User can choose a Survey he wants to look at the individual submissions
@@ -155,26 +156,9 @@ const Submissions = () => {
 
     }
 
-    /**
-     * If a survey (that has more than zero submissions) of the list is clicked
-     * the user is being redirected to SurveySpotlight
-     * @param survey - the chosen survey the user wants to see the submissions from
-     * @returns {JSX.Element}
-     */
-    const redirectToSpotlight = (survey) => {
-        return (
-            <Redirect to={{
-                pathname: "/survey/submission/spotlight",
-                state: {survey, selectedSurveySubmissionCount}
-            }}/>
-        )
-    }
-
     const SubmissionComponent = () => {
         return (
             <div className={"submission_overview_container"}>
-
-                {choseSurvey && redirectToSpotlight(selectedSurvey)}
 
                 {overallSurveyCount === 0 &&
                 <div className={"no_submission_container"}>
@@ -254,6 +238,13 @@ const Submissions = () => {
                         )}
                     </div>
                 </div>
+                }
+
+                {choseSurvey &&
+                    <div className={"submission_overview_sub_spotlight"}>
+                        <SubmissionSpotlight survey={selectedSurvey} submissionCount={selectedSurveySubmissionCount}/>
+                    </div>
+
                 }
             </div>
         )
