@@ -53,6 +53,10 @@
   width: 100%;
   cursor: pointer;
 }
+.submission_overview_survey_active:hover{
+  color: $font_color-dark;
+  font-weight: 700;
+}
 
 .sub_overview_survey_title{
   width: 80%;

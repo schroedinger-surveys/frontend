@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 import {Redirect} from "react-router-dom";
 import {sortQuestions} from "../utils/SortQuestions";
 import SubmissionAPIHandler from "../../calls/submission";
+import {createPaginationMarker} from "../utils/PageMarker";
 
 /**
  * Shows all submissions belonging to a survey
@@ -17,7 +18,7 @@ import SubmissionAPIHandler from "../../calls/submission";
 const SubmissionSpotlight = (props) => {
     const {survey} = props;
     const {submissionCount} = props;
-    const itemsPerPage = 10;
+    const itemsPerPage = 5;
 
     const [submissions, setSubmissions] = useState([]);
     const [spotlight, setSpotlight] = useState({});
@@ -26,7 +27,6 @@ const SubmissionSpotlight = (props) => {
     const [constrainedOptions, setConstrainedOptions] = useState(new Map());
 
     useEffect(() => {
-        console.log(survey, submissionCount);
         if(survey !== undefined){
             getSubmissions();
             setupConstrainedQuestionOptions()
@@ -116,38 +116,24 @@ const SubmissionSpotlight = (props) => {
         const pages = Math.ceil(submissionCount / itemsPerPage);
         return createPaginationMarker(pages, changePage);
     }
-    const createPaginationMarker = (pages, clickMethod) => {
-        let li = [];
-        for (let i = 0; i < pages; i++) {
-            li.push(<li key={i} style={{display: "inline", marginRight: "10px", cursor: "pointer"}}
-                        onClick={() => clickMethod(i)}>{i + 1}</li>)
-        }
-
-        return (
-            <div style={{width: "100%"}}>
-                <ul style={{listStyle: "none"}}>
-                    {li}
-                </ul>
-            </div>
-        )
-    }
 
     return (
         <div>
             {/* eslint-disable-next-line no-undefined */}
             {survey !== undefined && (
                 <div className={"submission_spotlight_sub_list"}>
-                    Submissions (newest first)
+                    <h3 className={"sub_spotlight_section_title"}>Submissions (newest first)</h3>
                     {submissionCount > itemsPerPage && submissionPagination()}
-                    <ul>
+                    <ul className={"submissions_list_ul"}>
                         {submissions.map((submission, i) => (
-                            <li key={i} style={{cursor: "pointer"}} onClick={() => {
+                            <li key={i} className={"submission_spotlight_list_items"} onClick={() => {
                                 changeSubmission(submission)
                             }}>{submission.created.substr(0, 10)}</li>
                         ))}
                     </ul>
                 </div>
             )}
+            <hr/>
             {survey !== undefined && (
                 <div className={"submission_spotlight_selected_sub"}>
                     Spotlight of selected submission here <br/>
