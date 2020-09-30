@@ -1,0 +1,30 @@
+@import "../../base/colors";
+@import "../../base/universals";
+
+.submission_overview_container{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas:
+          "type surveys";
+  height: 100%;
+  width: 100%;
+}
+
+.submission_overview_chose_type{
+  margin: 5% 2.5% 5% 5%;
+  padding: 20px;
+  grid-area: type;
+  height: 90%;
+  color: $font_color-light;
+  box-shadow: $shadow;
+}
+
+.submission_overview_survey_list{
+  grid-area: surveys;
+  margin: 5% 5% 5% 2.5%;
+  height: 90%;
+}
+
+.chose_type_section_title{
+  color: $font_color-dark;
+}

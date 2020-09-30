@@ -7,6 +7,7 @@ import {Redirect} from "react-router-dom";
 import LoadingScreen from "../utils/LoadingScreen";
 import SurveyAPIHandler from "../../calls/survey";
 import SubmissionAPIHandler from "../../calls/submission";
+import AppNavbar from "../menu/AppNavbar";
 
 /**
  * User can choose a Survey he wants to look at the individual submissions
@@ -169,88 +170,91 @@ const Submissions = () => {
         )
     }
 
-    return (
-        <Container fluid>
-            <Row>
-                <Col xs={1} style={{padding: 0}}>
-                    <SideMenu/>
-                </Col>
+    const SubmissionComponent = () => {
+        return (
+            <div className={"submission_overview_container"}>
+
                 {choseSurvey && redirectToSpotlight(selectedSurvey)}
 
                 {overallSurveyCount === 0 &&
-                <Col xs={11} style={{marginTop: "30px"}}>
+                <div className={"no_submission_container"}>
                     <h3>No Submission yet!</h3>
-                </Col>
+                </div>
                 }
                 {overallSurveyCount > 0 &&
-                <Col xs={3} style={{marginTop: "30px"}}>
-                    <h3>Choose type of survey</h3>
-                    <button style={{
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "orange",
-                        marginRight: "5px",
-                        color: "white"
-                    }} onClick={() => setupPrivateSurveys()}>Private
-                    </button>
-                    <button style={{
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "orange",
-                        marginRight: "5px",
-                        color: "white"
-                    }} onClick={() => setupPublicSurveys()}>Public
-                    </button>
-                </Col>
+                <div className={"submission_overview_chose_type"}>
+                    <div>
+                        <h3 className={"chose_type_section_title"}>Choose type of survey</h3>
+                        <p>You can inspect all submissions individually for each of your surveys. <br/>Choose the type
+                            of survey first. It can be either private or public.</p>
+                        <button className={"submission_overview_chose_type_button"}
+                                onClick={() => setupPrivateSurveys()}>Private
+                        </button>
+                        <button className={"submission_overview_chose_type_button"}
+                                onClick={() => setupPublicSurveys()}>Public
+                        </button>
+                    </div>
+                    <hr/>
+                    <div>
+                        List of survey with chosen type here
+                        {loading && (
+                            <LoadingScreen/>
+                        )}
+                        {(privateSurveys.length > 0 && displayPrivate) && (
+                            <div className={"submission_overview_survey_list_items"}>
+                                {privateSurveysCount > itemsPerPage && privatePagination()}
+                                <ul className={"submission_overview_survey_ul"}>
+                                    {privateSurveys.map((item, i) => {
+                                        if (item.submissionCount > 0) {
+                                            return (
+                                                <li key={i} className={"submission_overview_survey_active"} onClick={() => {
+                                                    setSelectedSurvey(item.survey);
+                                                    setSelectedSurveySubmissionCount(item.submissionCount);
+                                                    setChoseSurvey(true);
+                                                }}>{item.survey.title} - {item.submissionCount} submissions</li>)
+                                        } else {
+                                            return (<li key={i} className={"submission_overview_survey_disabled"}>
+                                                {item.survey.title} - {item.submissionCount} submissions</li>)
+                                        }
+                                    })}
+                                </ul>
+                            </div>
+                        )}
+                        {(publicSurveys.length > 0 && displayPublic) && (
+                            <div className={"submission_overview_survey_list_items"}>
+                                {publicSurveysCount > itemsPerPage && publicPagination()}
+                                <ul className={"submission_overview_survey_ul"}>
+                                    {publicSurveys.map((item, i) => {
+                                        if (item.submissionCount > 0) {
+                                            return (
+                                                <li key={i} className={"submission_overview_survey_active"} onClick={() => {
+                                                    setSelectedSurvey(item.survey);
+                                                    setSelectedSurveySubmissionCount(item.submissionCount);
+                                                    setChoseSurvey(true);
+                                                }}>{item.survey.title} - {item.submissionCount} submissions</li>)
+                                        } else {
+                                            return (<li key={i} className={"submission_overview_survey_disabled"}>
+                                                {item.survey.title} - {item.submissionCount} submissions</li>)
+                                        }
+                                    })}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                </div>
                 }
-                {overallSurveyCount > 0 &&
-                <Col xs={8} style={{marginTop: "30px"}}>
-                    List of survey with chosen type here
-                    {(privateSurveys.length > 0 && displayPrivate) && (
-                        <div>
-                            {privateSurveysCount > itemsPerPage && privatePagination()}
-                            <ul>
-                                {privateSurveys.map((item, i) => {
-                                    if (item.submissionCount > 0) {
-                                        return (<li key={i} style={{cursor: "pointer"}} onClick={() => {
-                                            setSelectedSurvey(item.survey);
-                                            setSelectedSurveySubmissionCount(item.submissionCount);
-                                            setChoseSurvey(true);
-                                        }}>{item.survey.title} - {item.submissionCount} submissions</li>)
-                                    } else {
-                                        return (<li key={i} style={{color: "lightgrey"}}>
-                                            {item.survey.title} - {item.submissionCount} submissions</li>)
-                                    }
-                                })}
-                            </ul>
-                        </div>
-                    )}
-                    {(publicSurveys.length > 0 && displayPublic) && (
-                        <div>
-                            {publicSurveysCount > itemsPerPage && publicPagination()}
-                            <ul>
-                                {publicSurveys.map((item, i) => {
-                                    if (item.submissionCount > 0) {
-                                        return (<li key={i} style={{cursor: "pointer"}} onClick={() => {
-                                            setSelectedSurvey(item.survey);
-                                            setSelectedSurveySubmissionCount(item.submissionCount);
-                                            setChoseSurvey(true);
-                                        }}>{item.survey.title} - {item.submissionCount} submissions</li>)
-                                    } else {
-                                        return (<li key={i} style={{color: "lightgrey"}}>
-                                            {item.survey.title} - {item.submissionCount} submissions</li>)
-                                    }
-                                })}
-                            </ul>
-                        </div>
-                    )}
-                    {loading && (
-                        <LoadingScreen/>
-                    )}
-                </Col>
-                }
-            </Row>
-        </Container>
+            </div>
+        )
+    }
+
+    return (
+        <div className={"app_wrapper"}>
+            <AppNavbar/>
+            <SideMenu/>
+            <div id={"app_page_body"}>
+                {SubmissionComponent()}
+            </div>
+        </div>
     )
 }
 
