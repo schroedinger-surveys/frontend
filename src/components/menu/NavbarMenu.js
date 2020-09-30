@@ -46,8 +46,8 @@ const NavbarMenu = () => {
         <Navbar id={"top_nav"}>
             <Navbar.Brand href="/"><img className={"box_logo"} src={boxLogo}
                                         alt={"schroedingers survey cat box"}/></Navbar.Brand>
-            <input className={"search_input"} type="text" placeholder={"Search public survey..."}/>
-            <button className={"search_btn"}><img className={"search_icon"} src={searchIcon}
+            <input className={"search_input"} type="text" placeholder={"Search public survey..."} disabled/>
+            <button className={"search_btn"} disabled><img className={"search_icon"} src={searchIcon}
                                                   alt={"search public survey"}/></button>
             {(location.pathname.split("/")[1] !== "s" && location.pathname.split("/")[1] !== "pub") && (
                 loggedOut()

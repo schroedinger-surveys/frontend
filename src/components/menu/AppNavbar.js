@@ -62,8 +62,8 @@ const AppNavbar = () => {
 
     return (
         <Navbar id={"app_nav"}>
-            <input className={"search_input"} type="text" placeholder={"Search public survey..."}/>
-            <button className={"search_btn"}><img className={"search_icon"} src={searchIcon}
+            <input className={"search_input"} type="text" placeholder={"Search public survey..."} disabled/>
+            <button className={"search_btn"} disabled><img className={"search_icon"} src={searchIcon}
                                                   alt={"search public survey"}/>
             </button>
             {loggedIn()}
