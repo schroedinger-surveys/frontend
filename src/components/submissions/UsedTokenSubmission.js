@@ -62,14 +62,14 @@ const UsedTokenSubmission = (props) => {
                                     borderRadius: "8px",
                                     padding: "5px"
                                 }}>
-                                    <p><span
-                                        style={{fontWeight: "bold"}}>Question {i + 1}:</span> {item.type === "freestyle" ? item.question.freestyle_question_question_text : item.question.constrained_question_question_text}
-                                    </p>
-                                    <p style={{fontSize: "12px"}}>
-                                        <span style={{fontWeight: "bold", fontSize: "16px"}}>Answer:</span> <span
-                                        style={{fontSize: "16px"}}>
-                                            {item.type === "freestyle" ? item.question.freestyle_question_answer : item.question.constrained_question_chose_option}</span>
-                                    </p>
+                                    <div>
+                                         <p className={"used_token_question"}>Question {i + 1}:</p>
+                                         <p className={"used_token_answer"}>{item.type === "freestyle" ? item.question.freestyle_question_question_text : item.question.constrained_question_question_text}</p>
+                                    </div>
+                                    <div style={{fontSize: "12px"}}>
+                                        <p className={"used_token_question"}>Answer:</p>
+                                        <p className={"used_token_answer"}>{item.type === "freestyle" ? item.question.freestyle_question_answer : item.question.constrained_question_chose_option}</p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
