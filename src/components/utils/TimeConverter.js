@@ -11,33 +11,16 @@ const TimeConverter = (date) => {
     return `${year}-${month}-${day}`;
 }
 
-/**
- *
- * @param date is like "2020-09-12T00:00:00.000Z"
- * @returns {number}
- * @constructor
- */
-const UnixToHumanTime = (date) => {
-    const dateParts = date.substr(0, 10).split("-");
-    const year = dateParts[0];
-    const month = dateParts[1];
-    const day = dateParts[2];
-    return new Date(Date.UTC(year, month, day));
-}
-
 const EuropeanTime = (date) => {
     if(typeof date === "string"){
         if(date.length !== 10) date = date.substr(0, 10);
-        console.log(date.split("-").reverse().join("-"));
         return date.split("-").reverse().join("-");
     } else {
         return ""
     }
-
 }
 
 export {
     TimeConverter,
-    UnixToHumanTime,
     EuropeanTime
 };
