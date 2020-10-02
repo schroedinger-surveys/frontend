@@ -3,5 +3,9 @@ node_modules
 .eslintrc.json
 .gitignore
 .gitlab-ci.yml
-.gitlab-ci.yml
 README.md
+Dockerfile
+docker-compose.yml
+jest.config.js
+tests
+setupProxy.js

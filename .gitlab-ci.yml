@@ -9,11 +9,6 @@ test-stage:
   script:
     - npm install
     - npm run lint
-  cache:
-    untracked: true
-    key: schroedinger_frontend_node_modules
-    paths:
-    - node_modules/
   tags:
     - docker
 
@@ -21,13 +16,11 @@ deploy-stage:
   stage: deploy
   script:
     - cd /schroedinger/frontend
-    - git stash 
+    - git stash
     - git checkout master
-    - git pull 
-    - docker-compose up -d --build 
-    - sleep 10 
-    - curl --silent --show-error --fail http://localhost:3001 --retry 5 --retry-delay 5 --retry-connrefused
+    - git pull
+    - docker-compose up -d --build
   only:
     - master
-  tags: 
+  tags:
     - shell
