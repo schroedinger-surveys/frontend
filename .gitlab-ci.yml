@@ -2,6 +2,7 @@ image: node:14.8.0-stretch
 
 stages:
   - test
+  - build
   - cdn
   - deploy
 
@@ -10,8 +11,34 @@ test-stage:
   script:
     - npm install
     - npm run lint
+    - npm run test
+  coverage: /All\sfiles.*?\s+(\d+.\d+)/
   tags:
     - docker
+
+build-stage:
+  stage: build
+  script:
+    - npm install
+    - PUBLIC_URL=${SCHROEDINGER_CDN_PUBLIC} npm run build
+  tags:
+    - docker
+  only:
+    - master
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - build
+
+cdn-stage:
+  stage: cdn
+  image: amazon/aws-cli
+  script:
+    - aws s3 cp build/ s3://${SCHROEDINGER_CDN_STORAGE}/ --endpoint-url https://s3-${SCHROEDINGER_CDN_REGION}.amazonaws.com --recursive --acl public-read
+  tags:
+    - docker
+  only:
+    - master
 
 deploy-stage:
   stage: deploy
