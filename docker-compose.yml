@@ -12,4 +12,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 120s
+  schroedinger-autoheal:
+    restart: always
+    container_name: schroedinger-frontend-autoheal
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+      - AUTOHEAL_START_PERIOD=120
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
