@@ -11,6 +11,7 @@
 
 <p align="center">
   <img src="https://gitlab.com/Schroedinger1/frontend/badges/master/pipeline.svg"/>
+  <img src="https://gitlab.com/Schroedinger1/frontend/badges/master/coverage.svg"/>
   <img src="https://app.codacy.com/project/badge/Grade/e495a6f3cc7a444a8b31f76489732126"/>
 </p>
 
