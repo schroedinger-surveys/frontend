@@ -15,11 +15,14 @@ test-stage:
   coverage: /All\sfiles.*?\s+(\d+.\d+)/
   tags:
     - docker
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - node_modules
 
 build-stage:
   stage: build
   script:
-    - npm install
     - CI=false PUBLIC_URL=${SCHROEDINGER_CDN_PUBLIC} npm run build
   tags:
     - docker
@@ -34,6 +37,9 @@ cdn-stage:
   stage: cdn
   image: amazon/aws-cli:2.0.6
   script:
+    - ls
+    - echo ${SCHROEDINGER_CDN_STORAGE}
+    - echo ${SCHROEDINGER_CDN_REGION}
     - aws s3 cp build/ s3://${SCHROEDINGER_CDN_STORAGE}/ --endpoint-url https://s3-${SCHROEDINGER_CDN_REGION}.amazonaws.com --recursive --acl public-read
   tags:
     - docker
