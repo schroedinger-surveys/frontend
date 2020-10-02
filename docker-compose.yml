@@ -11,6 +11,7 @@ services:
         - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         - SCHROEDINGER_CDN_PUBLIC=${SCHROEDINGER_CDN_PUBLIC}
         - SCHROEDINGER_CDN_STORAGE=${SCHROEDINGER_CDN_STORAGE}
+        - SCHROEDINGER_CDN_REGION=${SCHROEDINGER_CDN_REGION}
     container_name: schroedinger-frontend
     restart: always
     ports:
