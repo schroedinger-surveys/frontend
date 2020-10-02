@@ -20,7 +20,7 @@ build-stage:
   stage: build
   script:
     - npm install
-    - PUBLIC_URL=${SCHROEDINGER_CDN_PUBLIC} npm run build
+    - CI=false PUBLIC_URL=${SCHROEDINGER_CDN_PUBLIC} npm run build
   tags:
     - docker
   only:
