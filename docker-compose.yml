@@ -1,7 +1,16 @@
 version: "3.7"
 services:
   schroedinger-frontend:
-    build: .
+    env_file:
+      - configurations/.env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - SCHROEDINGER_CDN_PUBLIC=${SCHROEDINGER_CDN_PUBLIC}
+        - SCHROEDINGER_CDN_STORAGE=${SCHROEDINGER_CDN_STORAGE}
     container_name: schroedinger-frontend
     restart: always
     ports:
@@ -12,6 +21,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 120s
+
   schroedinger-autoheal:
     restart: always
     container_name: schroedinger-frontend-autoheal

@@ -9,3 +9,5 @@ docker-compose.yml
 jest.config.js
 tests
 setupProxy.js
+configurations
+.env
