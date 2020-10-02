@@ -35,11 +35,9 @@ build-stage:
 
 cdn-stage:
   stage: cdn
-  image: amazon/aws-cli:2.0.6
+  image: python:latest
   script:
-    - ls
-    - echo ${SCHROEDINGER_CDN_STORAGE}
-    - echo ${SCHROEDINGER_CDN_REGION}
+    - pip install awscli
     - aws s3 cp build/ s3://${SCHROEDINGER_CDN_STORAGE}/ --endpoint-url https://s3-${SCHROEDINGER_CDN_REGION}.amazonaws.com --recursive --acl public-read
   tags:
     - docker
