@@ -15,7 +15,7 @@ test("Converting date string to eu time format works", () => {
 })
 
 test("converting unix timestamp to date string works", () => {
-    const test_timestamp = new Date();
+    const test_timestamp = new Date(1601424000000);
     const converted_timestamp = TimeConverter(test_timestamp);
 
     expect(converted_timestamp).toBe("2020-09-30");
