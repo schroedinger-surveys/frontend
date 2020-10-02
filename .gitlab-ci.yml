@@ -16,8 +16,8 @@ test-stage:
 deploy-stage:
   stage: deploy
   script:
-    - cd /schroedinger/frontend && git stash && git checkout master && git pull
     - cd /schroedinger/frontend/configurations && git stash && git checkout master && git pull
+    - cd /schroedinger/frontend && git stash && git checkout master && git pull
     - docker-compose  --env-file ./configurations/.env up -d --build
   only:
     - master
