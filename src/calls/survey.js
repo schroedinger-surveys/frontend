@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import storageManager from "../storage/StorageManager";
 import log from "../log/Logger";
 
@@ -17,7 +17,7 @@ const InitialCache = {
  */
 class SurveyAPIHandler {
 
-    static cacheMiddleware(func, name) {
+    static cacheMiddleware(func: function, name: string) {
         let Cache = sessionStorage.getItem("SURVEY_CACHE");
         if (Cache === null || JSON.parse(Cache)[name] === null) {
             return func();
@@ -27,7 +27,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static setStorage(name, data) {
+    static setStorage(name: string, data: any) {
         let Cache = sessionStorage.getItem("SURVEY_CACHE");
         if (Cache === null) {
             InitialCache[name] = data;
@@ -69,7 +69,7 @@ class SurveyAPIHandler {
      * scenario: Dashboard displays the number of surveys belonging to the user
      * @returns {Promise<*>}
      */
-    static async publicSurveyCount() {
+    static async publicSurveyCount(): number{
         log.debug("FETCH PUBLIC SURVEY COUNT");
         const jwt = storageManager.getJWTToken();
         const userData = storageManager.getUserData();
@@ -101,7 +101,7 @@ class SurveyAPIHandler {
      * @param freestyleQuestions
      * @returns {Promise<{log: string}|AxiosResponse<any>>}
      */
-    static async surveyCreate(title, description, start_date, end_date, securedInput, constrainedQuestions, freestyleQuestions) {
+    static async surveyCreate(title: string, description: string, start_date, end_date, securedInput: boolean, constrainedQuestions: Array<Record<string, any>>, freestyleQuestions: Array<Record<string, any>>): AxiosResponse{
         const start = new Date(start_date).getUTCMilliseconds();
         const end = new Date(end_date).getUTCMilliseconds();
         try {
@@ -130,7 +130,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static async surveyDelete(id) {
+    static async surveyDelete(id: string) {
         try {
             return await axios({
                 method: "DELETE",
@@ -147,7 +147,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static async surveyUpdate(id, title, description, start_date, end_date, secured, addedConstrainedQuestions, addedFreestyleQuestions, deletedConstrainedQuestions, deletedFreestyleQuestions) {
+    static async surveyUpdate(id: string, title: string, description: string, start_date, end_date, secured: boolean, addedConstrainedQuestions: Array<Record<string, any>>, addedFreestyleQuestions: Array<Record<string, any>>, deletedConstrainedQuestions: Array<Record<string, any>>, deletedFreestyleQuestions: Array<Record<string, any>>): AxiosResponse {
         const start = new Date(start_date).getUTCMilliseconds();
         const end = new Date(end_date).getUTCMilliseconds();
         try {
@@ -238,7 +238,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static async getSinglePrivateSurveyToken(id, token) {
+    static async getSinglePrivateSurveyToken(id: string, token: string) {
         try {
             const response = await axios({
                 method: "GET",
@@ -265,7 +265,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static async getSinglePrivateSurveyJWT(id) {
+    static async getSinglePrivateSurveyJWT(id: string) {
         try {
             const response = await axios({
                 method: "GET",
@@ -296,7 +296,7 @@ class SurveyAPIHandler {
         }
     }
 
-    static async getSinglePublicSurvey(id) {
+    static async getSinglePublicSurvey(id: string) {
         try {
             const response = await axios({
                 method: "GET",
