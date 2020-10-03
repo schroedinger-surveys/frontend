@@ -4,7 +4,7 @@ import SubmissionAPIHandler from "../../calls/submission";
 import {createPaginationMarker} from "../utils/PageMarker";
 import {EuropeanTime} from "../utils/TimeConverter";
 import Logger from "../../utils/Logger";
-const log = Logger("src/components/submissions/SubmissionSpotlight.js");
+const log = new Logger("src/components/submissions/SubmissionSpotlight.js");
 
 
 /**

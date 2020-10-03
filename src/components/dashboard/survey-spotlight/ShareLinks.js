@@ -14,7 +14,7 @@ import {createPaginationMarker} from "../../utils/PageMarker";
 import {EuropeanTime} from "../../utils/TimeConverter";
 
 import Logger from "../../../utils/Logger";
-const log = Logger("src/components/dashboard/survey-spotlight/ShareLinks.js");
+const log = new Logger("src/components/dashboard/survey-spotlight/ShareLinks.js");
 
 const ShareLinks = (props) => {
     const itemsPerPage = 5;

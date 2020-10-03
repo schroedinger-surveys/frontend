@@ -12,7 +12,7 @@ import UserAPIHandler from "../../calls/user";
 import AppNavbar from "../menu/AppNavbar";
 import {EuropeanTime} from "../utils/TimeConverter";
 import Logger from "../../utils/Logger";
-const log = Logger("src/components/user/ChangeUserData.js");
+const log = new Logger("src/components/user/ChangeUserData.js");
 
 const ChangeUserData = (props) => {
     const {history} = props;

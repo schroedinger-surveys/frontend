@@ -9,7 +9,7 @@ import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";
 
 import Logger from "../../utils/Logger";
-const log = Logger("src/components/home/Login.js");
+const log = new Logger("src/components/home/Login.js");
 
 /**
  * Login provides functionalities for a user to log in to the application

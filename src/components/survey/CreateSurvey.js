@@ -12,7 +12,7 @@ import SurveyAPIHandler from "../../calls/survey";
 import storageManager from "../../storage/StorageManager";
 import AppNavbar from "../menu/AppNavbar";
 import Logger from "../../utils/Logger";
-const log = Logger("src/components/survey/CreateSurvey.js");
+const log = new Logger("src/components/survey/CreateSurvey.js");
 
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question

@@ -1,7 +1,7 @@
 import axios from "axios";
 import storageManager from "../storage/StorageManager";
 import Logger from "../utils/Logger";
-const log = Logger("src/calls/submission.js");
+const log = new Logger("src/calls/submission.js");
 const InitialCache = {
     submissions: null
 }

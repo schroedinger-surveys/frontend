@@ -7,7 +7,7 @@ import LoadingScreen from "../utils/LoadingScreen";
 import {sortQuestions} from "../utils/SortQuestions";
 import AppNavbar from "../menu/AppNavbar";
 import Logger from "../../utils/Logger";
-const log = Logger("src/components/submissions/UsedTokenSubmission.js");
+const log = new Logger("src/components/submissions/UsedTokenSubmission.js");
 
 /**
  * scenario: User clicks on used token in ShareLinks and is directed to the submission belonging to it

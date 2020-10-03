@@ -8,7 +8,7 @@ import SurveyAPIHandler from "../../../calls/survey";
 import SubmissionAPIHandler from "../../../calls/submission";
 import boxLogo from "../../menu/icons/open-box.png";
 import Logger from "../../../utils/Logger";
-const log = Logger("src/components/surveys/survey-submission/PrivateSurvey.js");
+const log = new Logger("src/components/surveys/survey-submission/PrivateSurvey.js");
 
 /**
  * If a User opens a private survey over the provided link, this component is shown
