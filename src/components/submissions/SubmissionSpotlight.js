@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from "react";
-import log from "../../log/Logger";
 import {sortQuestions} from "../utils/SortQuestions";
 import SubmissionAPIHandler from "../../calls/submission";
 import {createPaginationMarker} from "../utils/PageMarker";
 import {EuropeanTime} from "../utils/TimeConverter";
+import logFactory from "../../utils/Logger";
+const log = logFactory("src/components/submissions/SubmissionSpotlight.js");
+
 
 /**
  * Shows all submissions belonging to a survey

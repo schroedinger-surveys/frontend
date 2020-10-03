@@ -1,12 +1,14 @@
 import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 
-import log from "../../log/Logger";
 import Message from "../utils/Message";
 import UserAPIHandler from "../../calls/user";
 import {registrationValidator} from "../../validation/user";
 import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";
+
+import logFactory from "../../utils/Logger";
+const log = logFactory("src/components/home/Register.js");
 
 /**
  * Register provides functionalities for a user to register a new user account

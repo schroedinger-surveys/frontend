@@ -4,8 +4,6 @@ import {connect} from "react-redux";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
-
-import log from "../../../log/Logger";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Message from "../../utils/Message";
@@ -14,6 +12,9 @@ import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import {createPaginationMarker} from "../../utils/PageMarker";
 import {EuropeanTime} from "../../utils/TimeConverter";
+
+import logFactory from "../../../utils/Logger";
+const log = logFactory("src/components/dashboard/survey-spotlight/ShareLinks.js");
 
 const ShareLinks = (props) => {
     const itemsPerPage = 5;

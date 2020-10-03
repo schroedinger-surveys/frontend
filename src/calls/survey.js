@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import storageManager from "../storage/StorageManager";
-import log from "../log/Logger";
-
+import logFactory from "../utils/Logger";
+const log = logFactory("src/calls/survey.js");
 const InitialCache = {
     privateSurveyCount: null,
     publicSurveyCount: null,

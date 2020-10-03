@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import log from "../../log/Logger";
 import Message from "../utils/Message";
 import SurveyValidator from "./SurveyValidator";
 import {TimeConverter} from "../utils/TimeConverter";
@@ -12,6 +11,8 @@ import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 import SurveyAPIHandler from "../../calls/survey";
 import storageManager from "../../storage/StorageManager";
 import AppNavbar from "../menu/AppNavbar";
+import logFactory from "../../utils/Logger";
+const log = logFactory("src/components/survey/CreateSurvey.js");
 
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question

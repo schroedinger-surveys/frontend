@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
-import log from "../../log/Logger";
 import Message from "../utils/Message";
 import {confirmDoubleInput} from "../utils/ConfirmInput";
 import UserAPIHandler from "../../calls/user";
 import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";
+import logFactory from "../../utils/Logger";
+const log = logFactory("src/components/home/ResetPassword.js");
 
 const ResetPassword = (props) => {
     const [values, setValues] = useState({

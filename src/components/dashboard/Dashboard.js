@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 
-import log from "../../log/Logger";
+import log from "../../utils/Logger";
 import SurveyList from "./SurveyList";
 import SurveySpotlight from "./survey-spotlight/SurveySpotlight";
 import UserPrompt from "./UserPrompt";
