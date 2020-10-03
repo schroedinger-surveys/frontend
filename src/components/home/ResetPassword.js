@@ -6,7 +6,7 @@ import UserAPIHandler from "../../calls/user";
 import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";
 import Logger from "../../utils/Logger";
-const log = Logger("src/components/home/ResetPassword.js");
+const log = new Logger("src/components/home/ResetPassword.js");
 
 const ResetPassword = (props) => {
     const [values, setValues] = useState({

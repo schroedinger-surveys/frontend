@@ -8,7 +8,7 @@ import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";
 
 import Logger from "../../utils/Logger";
-const log = Logger("src/components/home/Register.js");
+const log = new Logger("src/components/home/Register.js");
 
 /**
  * Register provides functionalities for a user to register a new user account

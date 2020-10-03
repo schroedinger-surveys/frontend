@@ -4,7 +4,7 @@ import {sortQuestions} from "../../utils/SortQuestions";
 import {PendingSurvey} from "./PendingSurvey";
 import {ClosedSurvey} from "./ClosedSurvey";
 import Logger from "../../../utils/Logger";
-const log = Logger("src/components/surveys/survey-submission/Utils.js");
+const log = new Logger("src/components/surveys/survey-submission/Utils.js");
 
 /**
  * Validate the submission attempt of a user
