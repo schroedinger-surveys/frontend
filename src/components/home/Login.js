@@ -1,13 +1,15 @@
 import React, {useState} from "react";
 import {withRouter} from 'react-router-dom';
 import Form from "react-bootstrap/Form";
-import log from "../../log/Logger";
 import Message from "../utils/Message";
 import storageManager from "../../storage/StorageManager";
 import UserAPIHandler from "../../calls/user";
 import {loginValidator} from "../../validation/user";
 import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";
+
+import logFactory from "../../utils/Logger";
+const log = logFactory("src/components/home/Login.js");
 
 /**
  * Login provides functionalities for a user to log in to the application

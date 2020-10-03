@@ -1,6 +1,7 @@
 import axios, {AxiosResponse} from "axios";
-import log from "../log/Logger";
 import storageManager from "../storage/StorageManager";
+import logFactory from "../utils/Logger";
+const log = logFactory("src/calls/user.js");
 
 const InitialCache = {
     userData: {}

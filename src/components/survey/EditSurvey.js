@@ -10,7 +10,7 @@ import Message from "../utils/Message";
 import {DeleteModal} from "./delete-survey-utils";
 import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 import SurveyAPIHandler from "../../calls/survey";
-import log from "../../log/Logger";
+import log from "../../utils/Logger";
 import storageManager from "../../storage/StorageManager";
 import AppNavbar from "../menu/AppNavbar";
 import {useParams} from "react-router-dom";

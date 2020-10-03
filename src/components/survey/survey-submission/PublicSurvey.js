@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 
-import log from "../../../log/Logger";
 import LoadingScreen from "../../utils/LoadingScreen";
 import Message from "../../utils/Message";
 import {checkSurveyStatus, collectAnswers, validateSubmission} from "./Utils";
 import SurveyAPIHandler from "../../../calls/survey";
 import SubmissionAPIHandler from "../../../calls/submission";
 import boxLogo from "../../menu/icons/open-box.png";
+import logFactory from "../../../utils/Logger";
+const log = logFactory("src/components/surveys/survey-submission/PublicSurvey.js");
 
 /**
  * If a user opens a public survey trough the provided link

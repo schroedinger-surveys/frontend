@@ -7,11 +7,12 @@ import ListGroup from "react-bootstrap/ListGroup";
 import storageManager from "../../storage/StorageManager";
 import Message from "../utils/Message";
 import Modal from "react-bootstrap/Modal";
-import log from "../../log/Logger";
 import {confirmDoubleInput} from "../utils/ConfirmInput";
 import UserAPIHandler from "../../calls/user";
 import AppNavbar from "../menu/AppNavbar";
 import {EuropeanTime} from "../utils/TimeConverter";
+import logFactory from "../../utils/Logger";
+const log = logFactory("src/components/user/ChangeUserData.js");
 
 const ChangeUserData = (props) => {
     const {history} = props;

@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
 import SideMenu from "../menu/SideMenu";
-import log from "../../log/Logger";
 import {useParams} from "react-router-dom";
 import SubmissionAPIHandler from "../../calls/submission";
 import ListGroup from "react-bootstrap/ListGroup";
 import LoadingScreen from "../utils/LoadingScreen";
 import {sortQuestions} from "../utils/SortQuestions";
 import AppNavbar from "../menu/AppNavbar";
+import logFactory from "../../utils/Logger";
+const log = logFactory("src/components/submissions/UsedTokenSubmission.js");
 
 /**
  * scenario: User clicks on used token in ShareLinks and is directed to the submission belonging to it

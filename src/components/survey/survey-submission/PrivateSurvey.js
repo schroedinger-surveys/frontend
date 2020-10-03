@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import log from "../../../log/Logger";
 import storageManager from "../../../storage/StorageManager";
 import LoadingScreen from "../../utils/LoadingScreen";
 import {checkSurveyStatus, collectAnswers,validateSubmission} from "./Utils";
@@ -8,6 +7,8 @@ import Message from "../../utils/Message";
 import SurveyAPIHandler from "../../../calls/survey";
 import SubmissionAPIHandler from "../../../calls/submission";
 import boxLogo from "../../menu/icons/open-box.png";
+import logFactory from "../../../utils/Logger";
+const log = logFactory("src/components/surveys/survey-submission/PrivateSurvey.js");
 
 /**
  * If a User opens a private survey over the provided link, this component is shown
