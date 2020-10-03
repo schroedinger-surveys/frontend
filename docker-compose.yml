@@ -9,7 +9,7 @@ services:
     container_name: schroedinger-frontend
     restart: always
     ports:
-      - 3001:80
+      - ${SCHROEDINGER_FRONTEND_PORT}:80
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 5s
