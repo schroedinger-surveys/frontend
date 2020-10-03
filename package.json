@@ -22,81 +22,191 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-flow": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "@jest/globals": "^26.4.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "babel-jest": "^26.3.0",
     "dynamic-cdn-webpack-plugin": "^3.4.1",
+    "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-react": "^7.20.6",
+    "flow-bin": "^0.135.0",
     "http-proxy-middleware": "^1.0.5",
+    "jest": "^26.4.2",
     "react-app-rewired": "^2.1.6",
+    "react-test-renderer": "^16.13.1",
     "redux-devtools-extension": "^2.13.8"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-app-rewired build",
-    "test": "jest --coverage --collectCoverageFrom=./src/**/*.{js,jsx} --color",
+    "test": "jest",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src/**/*.js",
-    "fix": "eslint --fix ./src/**/*.js"
+    "lint": "eslint ./src/**/*.js ./tests/**/*.js",
+    "fix": "eslint --fix ./src/**/*.js ./tests/**/*.js"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "collectCoverage": true,
+    "verbose": true,
+    "testTimeout": 30000,
+    "roots": [
+      "<rootDir>/tests",
+      "<rootDir>/src"
+    ],
+    "testRegex": "((\\.|/*.)(test))\\.js?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "eslint:recommended"
-    ],
+    "settings": {
+      "react": {
+        "version": "detect"
+      },
+      "flowtype": {
+        "onlyFilesWithFlowAnnotation": false
+      }
+    },
     "env": {
+      "browser": true,
       "node": true,
-      "commonjs": true,
       "es2020": true
     },
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:flowtype/recommended"
+    ],
     "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
       "ecmaVersion": 11,
       "sourceType": "module"
     },
+    "plugins": [
+      "react",
+      "flowtype"
+    ],
     "rules": {
-      "quotes": [
-        2,
-        "double"
-      ],
-      "no-unused-vars": 0,
-      "prefer-const": "error",
-      "no-useless-constructor": "error",
       "no-console": "error",
+      "no-dupe-else-if": "error",
+      "no-dupe-args": "error",
       "no-empty": "error",
+      "no-extra-boolean-cast": "error",
+      "no-extra-semi": "error",
       "no-irregular-whitespace": "error",
       "no-unreachable": "error",
       "no-unsafe-negation": "error",
       "array-callback-return": "error",
       "block-scoped-var": "error",
-      "default-case": "warn",
+      "default-case": "error",
+      "dot-notation": "error",
       "eqeqeq": "error",
-      "dot-notation": "warn",
-      "no-else-return": [
-        "error",
-        {
-          "allowElseIf": false
-        }
-      ],
+      "no-alert": "error",
+      "no-empty-function": "error",
+      "no-eq-null": "error",
+      "no-implicit-coercion": "error",
       "no-lone-blocks": "error",
-      "no-param-reassign": "error",
-      "no-self-assign": "error",
-      "no-self-compare": "error",
-      "no-useless-concat": "error",
-      "no-warning-comments": "error",
-      "no-const-assign": "error",
       "radix": "error",
       "yoda": "error",
-      "capitalized-comments": [
-        "error"
-      ],
+      "no-param-reassign": "off",
+      "no-self-assign": "error",
+      "no-self-compare": "error",
+      "no-warning-comments": "error",
+      "require-await": "error",
+      "no-shadow": "off",
+      "no-undef": "error",
+      "no-undefined": "off",
+      "no-unused-vars": "error",
       "comma-dangle": [
         "error",
         "never"
       ],
-      "no-trailing-spaces": "error",
-      "no-unneeded-ternary": "error",
-      "no-var": "error",
-      "no-prototype-builtins": "off"
+      "curly": "error",
+      "react/jsx-no-bind": [
+        "error",
+        {
+          "allowArrowFunctions": true,
+          "allowBind": false,
+          "ignoreRefs": true
+        }
+      ],
+      "react/no-unused-prop-types": "error",
+      "react/no-did-update-set-state": "error",
+      "react/no-unknown-property": "error",
+      "object-shorthand": [
+        2,
+        "always"
+      ],
+      "react/prop-types": "off",
+      "no-useless-concat": "off",
+      "no-prototype-builtins": "off",
+      "react/jsx-no-comment-textnodes": "off",
+      "flowtype/boolean-style": [
+        2,
+        "boolean"
+      ],
+      "flowtype/define-flow-type": 1,
+      "flowtype/delimiter-dangle": [
+        2,
+        "never"
+      ],
+      "flowtype/generic-spacing": [
+        2,
+        "never"
+      ],
+      "flowtype/no-mixed": 2,
+      "flowtype/no-primitive-constructor-types": 2,
+      "flowtype/no-types-missing-file-annotation": 1,
+      "flowtype/no-weak-types": 1,
+      "flowtype/object-type-delimiter": [
+        2,
+        "comma"
+      ],
+      "flowtype/require-parameter-type": 1,
+      "flowtype/require-readonly-react-props": 0,
+      "flowtype/require-return-type": 1,
+      "flowtype/require-valid-file-annotation": 1,
+      "flowtype/semi": [
+        2,
+        "always"
+      ],
+      "flowtype/space-after-type-colon": [
+        2,
+        "always"
+      ],
+      "flowtype/space-before-generic-bracket": [
+        2,
+        "never"
+      ],
+      "flowtype/space-before-type-colon": [
+        2,
+        "never"
+      ],
+      "flowtype/type-id-match": [
+        2,
+        "^([A-Z][a-z0-9]+)+Type$"
+      ],
+      "flowtype/union-intersection-spacing": [
+        2,
+        "always"
+      ],
+      "flowtype/use-flow-type": 1,
+      "flowtype/valid-syntax": 1
     }
   },
   "browserslist": {

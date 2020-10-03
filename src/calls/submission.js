@@ -20,7 +20,7 @@ class SubmissionAPIHandler {
      * @param survey_id
      * @returns {*}
      */
-    static cacheMiddleware(func, name, survey_id){
+    static cacheMiddleware(func: function, name: string, survey_id: string){
         let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
         if(Cache === null || JSON.parse(Cache).submissions === null){
             return func();
@@ -50,7 +50,7 @@ class SubmissionAPIHandler {
      * @param data
      * @param id
      */
-    static setStorage(name, data, id){
+    static setStorage(name: string, data: string, id: string){
         let Cache = sessionStorage.getItem("SUBMISSION_CACHE");
         const now = Math.round(new Date().getTime()/1000);
         if(Cache === null){
@@ -81,7 +81,7 @@ class SubmissionAPIHandler {
      * @param id
      * @returns {Promise<{log: string}|AxiosResponse<any>>}
      */
-    static async submissionCount(id){
+    static async submissionCount(id: string){
         log.debug("GET SUBMISSION COUNT", id);
         try{
             const response = await axios({
@@ -107,7 +107,7 @@ class SubmissionAPIHandler {
      * @param itemsPerPage
      * @returns {Promise<AxiosResponse<any>>}
      */
-    static async submissionGet(id, pageNumber= 0, itemsPerPage= 3){
+    static async submissionGet(id: string, pageNumber= 0, itemsPerPage= 3){
         log.debug("GET ALL SUBMISSIONS FROM A SURVEY");
         try{
             return await axios({
@@ -130,7 +130,7 @@ class SubmissionAPIHandler {
      * @param token - is null for public survey and given for private survey
      * @returns {Promise<{type: string, message: string, status: boolean}>} used for Message
      */
-    static async submitAnsweredSurvey(constrainedAnswers, freestyleAnswers, survey, token){
+    static async submitAnsweredSurvey(constrainedAnswers: Array<Record<string, any>>, freestyleAnswers: Array<string, any>, survey: Record<string, any>, token: string){
         try {
             let submitResponse
             if (survey.secured){
@@ -183,7 +183,7 @@ class SubmissionAPIHandler {
      * @param id of the requested submission
      * @returns {Promise<void>}
      */
-    static async usedTokenSubmissionGet(id){
+    static async usedTokenSubmissionGet(id: string){
         try{
             return await axios({
                 method: "GET",

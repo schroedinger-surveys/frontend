@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import log from "../log/Logger";
 import storageManager from "../storage/StorageManager";
 
@@ -17,7 +17,7 @@ const InitialCache = {
  */
 class UserAPIHandler {
 
-    static cacheMiddleware(func, name){
+    static cacheMiddleware(func: function, name: string){
         let Cache = sessionStorage.getItem("USER_CACHE");
         if(Cache === null || JSON.parse(Cache)[name] === null){
             return func();
@@ -27,7 +27,7 @@ class UserAPIHandler {
         }
     }
 
-    static setStorage(name, data){
+    static setStorage(name: string, data: any){
         let Cache = sessionStorage.getItem("USER_CACHE");
         if(Cache === null){
             InitialCache[name] = data;
@@ -39,10 +39,10 @@ class UserAPIHandler {
         }
     }
 
-    static async userRegistration(username, email, password) {
+    static async userRegistration(username: string, email: string, password: string) {
         log.debug("Someone wants to register a user account");
         try {
-            const apiResponse = await axios({
+            return await axios({
                 method: "POST",
                 url: "/api/v1/user",
                 headers: {
@@ -54,7 +54,6 @@ class UserAPIHandler {
                     password
                 }
             });
-            return apiResponse;
         } catch (e){
             log.error("Error in userRegistration:",e.response);
             log.debug(e.response);
@@ -65,7 +64,7 @@ class UserAPIHandler {
         }
     }
 
-    static async userLogin(username, password) {
+    static async userLogin(username: string, password: string) {
         try {
             return await axios({
                 method: "POST",
@@ -87,7 +86,7 @@ class UserAPIHandler {
         }
     }
 
-    static async userLogout() {
+    static async userLogout(): AxiosResponse{
         try {
             const apiResponse = await axios({
                 method: "POST",

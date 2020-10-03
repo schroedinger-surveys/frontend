@@ -1,4 +1,4 @@
-export const loginValidator = (username, password) => {
+export const loginValidator = (username: string, password: string) => {
     if (username === "") {
         return {status: false, type: "warning", text: "Please insert your username."};
     } else if (password === "") {

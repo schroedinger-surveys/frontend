@@ -7,7 +7,7 @@ import log from "../log/Logger";
  * - ShareLinks
  */
 class TokenAPIHandler {
-    static async createToken(id, amount) {
+    static async createToken(id: string, amount: number) {
         try {
             return await axios({
                 method: "POST",
@@ -28,7 +28,7 @@ class TokenAPIHandler {
         }
     }
 
-    static async sendLinkPerMail(id, mails) {
+    static async sendLinkPerMail(id: string, mails: Array<string>) {
         try {
             return await axios({
                 method: "POST",
@@ -57,7 +57,7 @@ class TokenAPIHandler {
      * @param page_size
      * @returns {Promise<{log: string}|AxiosResponse<any>>}
      */
-    static async getSurveyToken(id, used = null, page_number = 0, page_size = 5) {
+    static async getSurveyToken(id: string, used = null, page_number = 0, page_size = 5) {
         try {
             if (used !== null) {
                 return await axios({
@@ -84,7 +84,7 @@ class TokenAPIHandler {
         }
     }
 
-    static async tokenDelete(id) {
+    static async tokenDelete(id: string) {
         try {
             return await axios({
                 method: "DELETE",
@@ -101,7 +101,7 @@ class TokenAPIHandler {
         }
     }
 
-    static async tokenCount(id, used = null) {
+    static async tokenCount(id: string, used = null) {
         try {
             if (used !== null) {
                 return await axios({
