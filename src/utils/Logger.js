@@ -1,14 +1,41 @@
-const winston = require('winston');
+export default class Logger {
+    constructor(name: string) {
+        this.name = name;
+    }
 
-const logFactory = (name: string) => {
-    return winston.createLogger({
-        level: 'debug',
-        format: winston.format.combine(winston.format.json(), winston.format.prettyPrint()),
-        defaultMeta: {service: name},
-        transports: [
-            new winston.transports.Console()
-        ]
-    });
+    debug = (message: string) => {
+        /*eslint no-console: 0*/
+        console.log(JSON.stringify({
+            "class": this.name,
+            message,
+            "level": "level"
+        }, null, 2));
+    }
+
+    info = (message: string) => {
+        /*eslint no-console: 0*/
+        console.log(JSON.stringify({
+            "class": this.name,
+            message,
+            "level": "info"
+        }, null, 2));
+    }
+
+    warn = (message: string) => {
+        /*eslint no-console: 0*/
+        console.log(JSON.stringify({
+            "class": this.name,
+            message,
+            "level": "warn"
+        }, null, 2));
+    }
+
+    error = (message: string) => {
+        /*eslint no-console: 0*/
+        console.log(JSON.stringify({
+            "class": this.name,
+            message,
+            "level": "error"
+        }, null, 2));
+    }
 }
-
-export default logFactory;

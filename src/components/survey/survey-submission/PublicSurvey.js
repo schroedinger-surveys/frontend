@@ -7,8 +7,8 @@ import {checkSurveyStatus, collectAnswers, validateSubmission} from "./Utils";
 import SurveyAPIHandler from "../../../calls/survey";
 import SubmissionAPIHandler from "../../../calls/submission";
 import boxLogo from "../../menu/icons/open-box.png";
-import logFactory from "../../../utils/Logger";
-const log = logFactory("src/components/surveys/survey-submission/PublicSurvey.js");
+import Logger from "../../../utils/Logger";
+const log = Logger("src/components/surveys/survey-submission/PublicSurvey.js");
 
 /**
  * If a user opens a public survey trough the provided link

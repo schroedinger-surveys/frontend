@@ -11,8 +11,8 @@ import {BasicForm, fillDefaultOptionsArray} from "./form-utils";
 import SurveyAPIHandler from "../../calls/survey";
 import storageManager from "../../storage/StorageManager";
 import AppNavbar from "../menu/AppNavbar";
-import logFactory from "../../utils/Logger";
-const log = logFactory("src/components/survey/CreateSurvey.js");
+import Logger from "../../utils/Logger";
+const log = Logger("src/components/survey/CreateSurvey.js");
 
 const CreateSurvey = () => {
     const minimumOptionsAmount = 2; // At least two options must be given per constrained question

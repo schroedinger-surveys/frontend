@@ -3,8 +3,8 @@ import {sortQuestions} from "../utils/SortQuestions";
 import SubmissionAPIHandler from "../../calls/submission";
 import {createPaginationMarker} from "../utils/PageMarker";
 import {EuropeanTime} from "../utils/TimeConverter";
-import logFactory from "../../utils/Logger";
-const log = logFactory("src/components/submissions/SubmissionSpotlight.js");
+import Logger from "../../utils/Logger";
+const log = Logger("src/components/submissions/SubmissionSpotlight.js");
 
 
 /**

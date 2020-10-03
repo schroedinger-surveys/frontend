@@ -8,8 +8,8 @@ import {loginValidator} from "../../validation/user";
 import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";
 
-import logFactory from "../../utils/Logger";
-const log = logFactory("src/components/home/Login.js");
+import Logger from "../../utils/Logger";
+const log = Logger("src/components/home/Login.js");
 
 /**
  * Login provides functionalities for a user to log in to the application
