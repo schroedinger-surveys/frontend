@@ -5,8 +5,8 @@ import {confirmDoubleInput} from "../utils/ConfirmInput";
 import UserAPIHandler from "../../calls/user";
 import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";
-import logFactory from "../../utils/Logger";
-const log = logFactory("src/components/home/ResetPassword.js");
+import Logger from "../../utils/Logger";
+const log = Logger("src/components/home/ResetPassword.js");
 
 const ResetPassword = (props) => {
     const [values, setValues] = useState({

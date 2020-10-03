@@ -1,7 +1,7 @@
 import axios from "axios";
 import storageManager from "../storage/StorageManager";
-import logFactory from "../utils/Logger";
-const log = logFactory("src/calls/token.js");
+import Logger from "../utils/Logger";
+const log = Logger("src/calls/token.js");
 
 /**
  * used in:

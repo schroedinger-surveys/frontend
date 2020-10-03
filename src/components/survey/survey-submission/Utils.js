@@ -3,8 +3,8 @@ import React from "react";
 import {sortQuestions} from "../../utils/SortQuestions";
 import {PendingSurvey} from "./PendingSurvey";
 import {ClosedSurvey} from "./ClosedSurvey";
-import logFactory from "../../../utils/Logger";
-const log = logFactory("src/components/surveys/survey-submission/Utils.js");
+import Logger from "../../../utils/Logger";
+const log = Logger("src/components/surveys/survey-submission/Utils.js");
 
 /**
  * Validate the submission attempt of a user

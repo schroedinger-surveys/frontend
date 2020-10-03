@@ -11,8 +11,8 @@ import {confirmDoubleInput} from "../utils/ConfirmInput";
 import UserAPIHandler from "../../calls/user";
 import AppNavbar from "../menu/AppNavbar";
 import {EuropeanTime} from "../utils/TimeConverter";
-import logFactory from "../../utils/Logger";
-const log = logFactory("src/components/user/ChangeUserData.js");
+import Logger from "../../utils/Logger";
+const log = Logger("src/components/user/ChangeUserData.js");
 
 const ChangeUserData = (props) => {
     const {history} = props;

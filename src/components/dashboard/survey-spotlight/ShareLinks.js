@@ -13,8 +13,8 @@ import Card from "react-bootstrap/Card";
 import {createPaginationMarker} from "../../utils/PageMarker";
 import {EuropeanTime} from "../../utils/TimeConverter";
 
-import logFactory from "../../../utils/Logger";
-const log = logFactory("src/components/dashboard/survey-spotlight/ShareLinks.js");
+import Logger from "../../../utils/Logger";
+const log = Logger("src/components/dashboard/survey-spotlight/ShareLinks.js");
 
 const ShareLinks = (props) => {
     const itemsPerPage = 5;

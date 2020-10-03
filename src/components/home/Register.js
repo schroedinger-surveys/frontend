@@ -7,8 +7,8 @@ import {registrationValidator} from "../../validation/user";
 import NavbarMenu from "../menu/NavbarMenu";
 import Footer from "./Footer";
 
-import logFactory from "../../utils/Logger";
-const log = logFactory("src/components/home/Register.js");
+import Logger from "../../utils/Logger";
+const log = Logger("src/components/home/Register.js");
 
 /**
  * Register provides functionalities for a user to register a new user account
