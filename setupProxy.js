@@ -4,8 +4,16 @@ module.exports = function(app) {
     app.use(
         '/api/v1',
         createProxyMiddleware({
-            target: 'https://192.168.2.125:3000',
+            target: 'https://schroedinger-survey.de',
             changeOrigin: true
         })
     );
+    app.use(
+        '/api/v2',
+        createProxyMiddleware({
+            target: 'https://schroedinger-survey.de',
+            changeOrigin: true,
+            ws: true
+        })
+    )
 };
