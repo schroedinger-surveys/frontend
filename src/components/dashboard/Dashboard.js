@@ -27,14 +27,8 @@ const log = new Logger("src/components/dashboard/Dashboard.js");
 
 
 socketAPI.connect(storageManager.getJWTToken()).then(async () => {
-    await socketAPI.subscribe("debug", (data) => {
-        log.info("Incoming message from server: " + data);
-        Toaster.green("Incoming message from server", data);
-    });
     await socketAPI.subscribe(`debug/${storageManager.getUserData().id}`, (data) => {
-        const payload = JSON.parse(data);
-        log.info(`${payload.title}: ${payload.content}`);
-        Toaster.green(payload.title, payload.content);
+        Toaster.green("Schroedinger Survey says", data);
     });
     await socketAPI.subscribe(`new-submission/${storageManager.getUserData().id}`, (data) => {
         const payload = JSON.parse(data);
