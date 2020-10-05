@@ -6,7 +6,6 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 
 import searchIcon from "./icons/search.png";
 import UserAPIHandler from "../../calls/user";
-
 /**
  * The Navbar that will be displayed at every page
  * offers different navigational menu depending on state of user - logged in - logged out
