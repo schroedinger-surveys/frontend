@@ -19,6 +19,13 @@ test-stage:
     expire_in: 1 hour
     paths:
       - node_modules
+  except:
+    changes:
+    - README.md
+    - LICENSE
+    - .gitignore
+    - .dockerignore
+    - docs
 
 build-stage:
   stage: build
@@ -32,6 +39,13 @@ build-stage:
     expire_in: 1 hour
     paths:
       - build
+  except:
+    changes:
+    - README.md
+    - LICENSE
+    - .gitignore
+    - .dockerignore
+    - docs
 
 cdn-stage:
   stage: cdn
@@ -43,6 +57,13 @@ cdn-stage:
     - docker
   only:
     - master
+  except:
+    changes:
+    - README.md
+    - LICENSE
+    - .gitignore
+    - .dockerignore
+    - docs
 
 deploy-stage:
   stage: deploy
@@ -54,3 +75,10 @@ deploy-stage:
     - master
   tags:
     - shell
+  except:
+    changes:
+    - README.md
+    - LICENSE
+    - .gitignore
+    - .dockerignore
+    - docs
