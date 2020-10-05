@@ -31,9 +31,15 @@ socketAPI.connect(storageManager.getJWTToken()).then(async () => {
         log.info("Incoming message from server: " + data);
         Toaster.green("Incoming message from server", data);
     });
+    await socketAPI.subscribe(`debug/${storageManager.getUserData().id}`, (data) => {
+        const payload = JSON.parse(data);
+        log.info(`${payload.title}: ${payload.content}`);
+        Toaster.green(payload.title, payload.content);
+    });
     await socketAPI.subscribe(`new-submission/${storageManager.getUserData().id}`, (data) => {
-        log.info("Incoming message from server: " + data);
-        Toaster.green("Incoming message from server", data);
+        const payload = JSON.parse(data);
+        log.info(`${payload.title}: ${payload.content}`);
+        Toaster.green(payload.title, payload.content);
     });
 });
 
