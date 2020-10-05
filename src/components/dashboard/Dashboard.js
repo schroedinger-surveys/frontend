@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 
-import log from "../../utils/Logger";
 import SurveyList from "./SurveyList";
 import SurveySpotlight from "./survey-spotlight/SurveySpotlight";
 import UserPrompt from "./UserPrompt";
@@ -19,6 +18,24 @@ import LoadingScreen from "../utils/LoadingScreen";
 import {setPrivateSurveys, setPublicSurveys} from "../../redux/actions/SurveyList";
 import {setSurveySpotlight} from "../../redux/actions/SurveySpotlight";
 import AppNavbar from "../menu/AppNavbar";
+import storageManager from "../../storage/StorageManager";
+import socketAPI from "../../utils/SocketClient";
+import Logger from "../../utils/Logger";
+import Toaster from "../../utils/Toaster";
+
+const log = new Logger("src/components/dashboard/Dashboard.js");
+
+
+socketAPI.connect(storageManager.getJWTToken()).then(async () => {
+    await socketAPI.subscribe("debug", (data) => {
+        log.info("Incoming message from server: " + data);
+        Toaster.green("Incoming message from server", data);
+    });
+    await socketAPI.subscribe(`new-submission/${storageManager.getUserData().id}`, (data) => {
+        log.info("Incoming message from server: " + data);
+        Toaster.green("Incoming message from server", data);
+    });
+});
 
 /**
  * User Dashboard containing multiple elements to give user an overview of his acocunt
@@ -57,7 +74,7 @@ const Dashboard = (props) => {
             props.setOverallCount(privateSurveys + publicSurveys); // Sets the count of overall surveys belonging to the user
 
             const allSurveys = [...listPrivateSurveys, ...listPublicSurveys];
-            if (allSurveys.length >= 1){
+            if (allSurveys.length >= 1) {
                 props.setSurveySpotlight(allSurveys[0]);
             }
             setLoading(false);
@@ -71,7 +88,6 @@ const Dashboard = (props) => {
     }, []);
 
 
-
     return (
         <div>
             {loading && (
@@ -81,26 +97,26 @@ const Dashboard = (props) => {
                 <div className={"app_wrapper"}>
                     <AppNavbar/>
                     <SideMenu/>
-                    <div id={"dashboard_page_body"} >
-                            <div id={"survey_overview-dashboard"}>
-                                <div>
-                                    {props.counts.overallSurveys > 0 && (
-                                        <SurveyList/>
-                                    )}
-                                    {props.counts.overallSurveys === 0 && (
-                                        <UserPrompt size={"small"}/>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div id={"survey_spotlight-dashboard"}>
-                                {props.counts.overallSurveys > 0 && ( // Check submission count, NOT Survey Count
-                                    <SurveySpotlight/>
+                    <div id={"dashboard_page_body"}>
+                        <div id={"survey_overview-dashboard"}>
+                            <div>
+                                {props.counts.overallSurveys > 0 && (
+                                    <SurveyList/>
                                 )}
                                 {props.counts.overallSurveys === 0 && (
-                                    <UserPrompt size={"large"}/>
+                                    <UserPrompt size={"small"}/>
                                 )}
                             </div>
+                        </div>
+
+                        <div id={"survey_spotlight-dashboard"}>
+                            {props.counts.overallSurveys > 0 && ( // Check submission count, NOT Survey Count
+                                <SurveySpotlight/>
+                            )}
+                            {props.counts.overallSurveys === 0 && (
+                                <UserPrompt size={"large"}/>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
